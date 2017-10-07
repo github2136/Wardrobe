@@ -129,7 +129,7 @@ public abstract class BaseListActivity<T, P extends BasePresenter> extends BaseA
 
     protected abstract void getListData();
 
-    protected void itemClick(T t, int position) {    }
+    protected void itemClick(T t, int position) { }
 
-    protected void itemLongClick(T t, int position) {    }
+    protected void itemLongClick(T t, int position) { }
 }

@@ -10,19 +10,34 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
-            android:name="project_path"
+            android:name="util_project_path"
             android:value="wardrobe"/>
         <meta-data
-            android:name="sp_name"
+            android:name="util_sp_name"
             android:value="wardrobe"/>
-
-        <activity android:name=".ui.activity.MainActivity">
+        <meta-data
+            android:name="select_photo_path"
+            android:value="wardrobe/photo"/>
+        <meta-data
+            android:name="com.github2136.wardrobe.util.glide.ProjectGlideModule"
+            android:value="GlideModule"/>
+        <!--主页-->
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <!--添加服装-->
+        <activity
+            android:name=".ui.activity.AddClothingActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
+        </activity>
+
     </application>
 
 </manifest>

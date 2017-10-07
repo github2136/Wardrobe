@@ -8,6 +8,8 @@
     android:orientation="vertical"
     tools:context="com.github2136.wardrobe.ui.activity.MainActivity">
 
+    <include layout="@layout/view_title"/>
+
     <TextView
         android:id="@+id/tv_total"
         android:layout_width="match_parent"

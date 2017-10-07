@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 
+import com.github2136.util.ThreadUtil;
 import com.github2136.wardrobe.base.BaseModel;
 import com.github2136.wardrobe.database.SQL.ClothingSQL;
 import com.github2136.wardrobe.database.SQL.MediaFileSQL;
@@ -27,6 +28,25 @@ public class ClothingInfoModel extends BaseModel {
         super(activity);
         mClothingDao = new ClothingSQL(mActivity);
         mMediaFileSQL = new MediaFileSQL(mActivity);
+    }
+
+    public void saveClothing(final ClothingInfo clothingInfo, final RequestCallback callback) {
+        ThreadUtil.getInstance().execute(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mClothingDao.insertClothing(clothingInfo)) {
+                            Response response = new Response();
+                            response.setRequestCode(Response.CODE_SUCCESSFUL);
+                            callback.onResponse(mJsonUtil.toJsonStr(response));
+                        }else{
+                            Response response = new Response();
+                            response.setRequestCode(Response.CODE_FAILURE);
+                            callback.onResponse(mJsonUtil.toJsonStr(response));
+                        }
+                    }
+                }
+        );
     }
 
     public void getClothing(final int pagerNumber, final int pagerSize, final RequestCallback callback) {

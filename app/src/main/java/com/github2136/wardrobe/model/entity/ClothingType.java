@@ -9,6 +9,7 @@ import java.util.Date;
  * 服装类型
  * Created by yubin on 2017/8/17.
  */
+@Deprecated
 @Table
 public class ClothingType {
     @Column

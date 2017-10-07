@@ -17,6 +17,8 @@ public class ClothingInfo {
     private String ciId;//主键
     @Column
     private String ciType;//服装类型
+    // @Column
+    private String ciColor;//服装颜色
     @Column
     private String ciSeason;//季节
     @Column
@@ -103,4 +105,11 @@ public class ClothingInfo {
         this.mediaFiles = mediaFiles;
     }
 
+    public String getCiColor() {
+        return ciColor == null ? "" : ciColor;
+    }
+
+    public void setCiColor(String ciColor) {
+        this.ciColor = ciColor;
+    }
 }
