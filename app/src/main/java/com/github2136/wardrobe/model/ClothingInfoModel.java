@@ -39,7 +39,7 @@ public class ClothingInfoModel extends BaseModel {
                             Response response = new Response();
                             response.setRequestCode(Response.CODE_SUCCESSFUL);
                             callback.onResponse(mJsonUtil.toJsonStr(response));
-                        }else{
+                        } else {
                             Response response = new Response();
                             response.setRequestCode(Response.CODE_FAILURE);
                             callback.onResponse(mJsonUtil.toJsonStr(response));
@@ -66,14 +66,8 @@ public class ClothingInfoModel extends BaseModel {
                     @Override
                     public void run() {
                         Response<List<ClothingInfo>> response = new Response<>();
-                        if (new Random().nextBoolean()) {
-                            response.setRequestCode(Response.CODE_SUCCESSFUL);
-                        } else {
-                            response.setRequestCode(Response.CODE_FAILURE);
-                        }
-                        if (new Random().nextBoolean()) {
-                            response.setData(clothingInfos);
-                        }
+                        response.setRequestCode(Response.CODE_SUCCESSFUL);
+                        response.setData(clothingInfos);
                         callback.onResponse(mJsonUtil.toJsonStr(response));
                     }
                 });

@@ -73,6 +73,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:checked="true"
                     android:text="春"/>
 
                 <CheckBox
@@ -113,7 +114,7 @@
             </com.wefika.flowlayout.FlowLayout>
 
             <EditText
-                android:id="@+id/et_memo"
+                android:id="@+id/et_remark"
                 style="@style/EditTextMulti"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

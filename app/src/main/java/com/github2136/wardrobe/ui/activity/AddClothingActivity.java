@@ -14,12 +14,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.github2136.selectimamge.activity.CaptureActivity;
 import com.github2136.selectimamge.activity.PhotoViewActivity;
 import com.github2136.selectimamge.activity.SelectImageActivity;
 import com.github2136.util.BitmapUtil;
+import com.github2136.util.CollectionsUtil;
 import com.github2136.util.CommonUtil;
 import com.github2136.util.FileUtil;
 import com.github2136.wardrobe.R;
@@ -32,6 +34,7 @@ import com.wefika.flowlayout.FlowLayout;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,6 +42,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class AddClothingActivity extends BaseActivity<AddClothingPresenter> implements IAddClothingView {
+    public static final String ARG_CLOTHING = "CLOTHING";
     private static final int REQUEST_SELECT_IMG = 509;
     private static final int REQUEST_CAPTURE = 896;
     private ArrayList<String> mImgs;//原图地址
@@ -49,6 +53,7 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
     private LayoutInflater mLayoutInflater;
     private int mMargin;
     private int mMaxLimit;
+    private ClothingInfo mClothingInfo;
     @BindView(R.id.tb_title)
     Toolbar tbTitle;
     @BindView(R.id.sp_type)
@@ -65,8 +70,8 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
     CheckBox cbWinter;
     @BindView(R.id.fl_imgs)
     FlowLayout flImgs;
-    @BindView(R.id.et_memo)
-    EditText etMemo;
+    @BindView(R.id.et_remark)
+    EditText etRemark;
     @BindView(R.id.ib_add)
     ImageButton ibAdd;
 
@@ -83,7 +88,6 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
     @Override
     protected void initData(Bundle savedInstanceState) {
         setSupportActionBar(tbTitle);
-        setTitle("添加");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mMargin = CommonUtil.dp2px(mContext, 4);
         mImgWidth = (getResources().getDisplayMetrics().widthPixels - CommonUtil.dp2px(mContext, 36)) / 4;
@@ -95,6 +99,12 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
         mImgsIndex = new ArrayList<>();
         mLayoutInflater = getLayoutInflater();
         mMaxLimit = getResources().getDisplayMetrics().widthPixels;
+        if (getIntent().hasExtra(ARG_CLOTHING)) {
+            mClothingInfo = getIntent().getParcelableExtra(ARG_CLOTHING);
+            setTitle("修改");
+        } else {
+            setTitle("添加");
+        }
     }
 
     @Override
@@ -110,11 +120,15 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
                 finish();
                 break;
             case R.id.menu_ok:
-                mSaveIndex = 0;
-                mSaveImgs = new ArrayList<>();
-                getBitmap();
-
-
+                if (CollectionsUtil.isEmpty(mImgs)) {
+                    showToast("请至少添加一张图片");
+                } else if (!cbSpring.isChecked() && !cbSummer.isChecked() && !cbAutumn.isChecked() && !cbWinter.isChecked()) {
+                    showToast("请至少选择一个季节");
+                } else {
+                    mSaveIndex = 0;
+                    mSaveImgs = new ArrayList<>();
+                    getBitmap();
+                }
                 break;
         }
         return true;
@@ -133,6 +147,8 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
                                 mSaveImgs.add(filePath);
                                 mSaveIndex++;
                                 if (mImgs.size() > mSaveIndex + 1) {
+                                    getBitmap();
+                                } else {
                                     ClothingInfo clothingInfo = new ClothingInfo();
                                     clothingInfo.setCiType(spType.getSelectedItem().toString());
                                     clothingInfo.setCiColor(spColor.getSelectedItem().toString());
@@ -153,7 +169,7 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
                                         sb.deleteCharAt(sb.length() - 1);
                                     }
                                     clothingInfo.setCiSeason(sb.toString());
-                                    clothingInfo.setCiRemark(etMemo.getText().toString());
+                                    clothingInfo.setCiRemark(etRemark.getText().toString());
                                     List<MediaFile> mfs = new ArrayList<>();
                                     for (int i = 0; i < mSaveImgs.size(); i++) {
                                         MediaFile mf = new MediaFile();
@@ -161,9 +177,9 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
                                         mfs.add(mf);
                                     }
                                     clothingInfo.setMediaFiles(mfs);
+                                    clothingInfo.setValid("1");
+                                    clothingInfo.setModifyDate(new Date());
                                     mPresenter.saveClothing(clothingInfo);
-                                } else {
-                                    getBitmap();
                                 }
                             }
                         });

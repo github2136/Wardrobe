@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.github2136.sqliteutil.BaseSQLData;
 import com.github2136.wardrobe.database.SQLHelper;
 import com.github2136.wardrobe.model.entity.ClothingInfo;
+import com.github2136.wardrobe.model.entity.ClothingInfo_;
 import com.github2136.wardrobe.model.entity.MediaFile;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class ClothingSQL extends BaseSQLData<ClothingInfo> {
     }
 
     public List<ClothingInfo> queryByLimit(int pageNum, int pageSize) {
-        return query(null, null, null, null, null, String.format("%d,%d", pageNum * pageSize, pageSize));
+        return query(ClothingInfo_.DATA_valid + "=?", new String[]{"1"}, null, null, null, String.format("%d,%d", pageNum * pageSize, pageSize));
     }
 
     public boolean insertClothing(ClothingInfo clothingInfo) {
@@ -54,6 +55,7 @@ public class ClothingSQL extends BaseSQLData<ClothingInfo> {
                 dbWrite.setTransactionSuccessful();
                 success = true;
             }
+            dbWrite.endTransaction();
         }
         dbWrite.close();
         return success;

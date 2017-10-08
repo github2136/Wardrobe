@@ -2,6 +2,7 @@ package com.github2136.wardrobe.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +40,7 @@ public class MainActivity extends BaseListActivity<ClothingInfo, MainPresenter> 
         setSupportActionBar(tbTitle);
         setTitle("衣橱");
         srContent.setColorSchemeResources(R.color.primaryColor);
+        rvContent.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
     }
 
     @Override
@@ -75,5 +77,23 @@ public class MainActivity extends BaseListActivity<ClothingInfo, MainPresenter> 
                 break;
         }
         return true;
+    }
+
+    @Override
+    protected void itemClick(ClothingInfo clothingInfo, int position) {
+        Intent intent = new Intent(mContext, AddClothingActivity.class);
+        intent.putExtra(AddClothingActivity.ARG_CLOTHING, clothingInfo);
+//        startActivityForResult(intent, REQUEST_ADD);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_ADD:
+                    getFirstPage();
+                    break;
+            }
+        }
     }
 }

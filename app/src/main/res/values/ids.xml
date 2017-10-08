@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item name="tv_total" type="id"/>
+    <item name="sr_content" type="id"/>
+    <item name="rv_content" type="id"/>
+
     <item name="tag_add_img" type="id"/>
 </resources>
