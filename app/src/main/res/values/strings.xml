@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">wardrobe</string>
+    <string name="dialog_title_prompt">提示</string>
 </resources>

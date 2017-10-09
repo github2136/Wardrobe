@@ -1,5 +1,8 @@
 package com.github2136.wardrobe.model.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.github2136.sqliteutil.Column;
 import com.github2136.sqliteutil.Table;
 
@@ -10,7 +13,7 @@ import java.util.Date;
  * Created by yubin on 2017/8/17.
  */
 @Table
-public class MediaFile {
+public class MediaFile implements Parcelable {
     @Column
     private String fmId;//文件主键
     @Column
@@ -82,4 +85,38 @@ public class MediaFile {
         this.viewSeq = viewSeq;
     }
 
+    @Override
+    public int describeContents() { return 0; }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.fmId);
+        dest.writeString(this.fmPath);
+        dest.writeString(this.ciId);
+        dest.writeString(this.valid);
+        dest.writeLong(this.modifyDate != null ? this.modifyDate.getTime() : -1);
+        dest.writeString(this.modifyer);
+        dest.writeValue(this.viewSeq);
+    }
+
+    public MediaFile() {}
+
+    protected MediaFile(Parcel in) {
+        this.fmId = in.readString();
+        this.fmPath = in.readString();
+        this.ciId = in.readString();
+        this.valid = in.readString();
+        long tmpModifyDate = in.readLong();
+        this.modifyDate = tmpModifyDate == -1 ? null : new Date(tmpModifyDate);
+        this.modifyer = in.readString();
+        this.viewSeq = (Byte) in.readValue(Byte.class.getClassLoader());
+    }
+
+    public static final Creator<MediaFile> CREATOR = new Creator<MediaFile>() {
+        @Override
+        public MediaFile createFromParcel(Parcel source) {return new MediaFile(source);}
+
+        @Override
+        public MediaFile[] newArray(int size) {return new MediaFile[size];}
+    };
 }

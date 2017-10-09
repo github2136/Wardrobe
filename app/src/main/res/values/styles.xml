@@ -6,6 +6,26 @@
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/secondaryColor</item>
+        <item name="android:actionBarSize">56dp</item>
+        <item name="android:textViewStyle">@style/DefTextView</item>
     </style>
 
+    <style name="DefTextView" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/colorTextPrimaryLight</item>
+        <item name="android:textSize">@dimen/text_size_body</item>
+    </style>
+
+    <style name="EditTextMulti" parent="Base.Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/bg_edit_multi</item>
+    </style>
+
+    <style name="ToolBar.Theme" parent="@style/ThemeOverlay.AppCompat.Dark">
+    </style>
+
+    <style name="ToolBar.PopTheme" parent="@style/ThemeOverlay.AppCompat.Light">
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 </resources>

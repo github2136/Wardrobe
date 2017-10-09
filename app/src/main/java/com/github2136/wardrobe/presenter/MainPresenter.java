@@ -31,10 +31,6 @@ public class MainPresenter extends BasePresenter<IMainView> {
         mClothingInfoModel = new ClothingInfoModel(activity);
     }
 
-    public void addClothing(ClothingInfo clothingInfo) {
-
-    }
-
     public void getClothing(int pageNumber) {
         mClothingInfoModel.getClothing(pageNumber, Constant.PAGE_SIZE, new RequestCallback() {
             @Override
@@ -53,26 +49,6 @@ public class MainPresenter extends BasePresenter<IMainView> {
             }
         });
     }
-
-//    public void addClothings() {
-//        List<ClothingInfo> clothingInfos = new ArrayList<>();
-//        for (int i = 0; i < 15; i++) {
-//            ClothingInfo c = new ClothingInfo();
-//            c.setCiId(new Random().nextInt() + "");
-//            clothingInfos.add(c);
-//        }
-//        mClothingInfoModel.addClothing(clothingInfos, new RequestCallback() {
-//            @Override
-//            public void onFailure(Exception e) {
-//
-//            }
-//
-//            @Override
-//            public void onResponse(String response) {
-//
-//            }
-//        });
-//    }
 
     @Override
     public void cancelRequest() {
