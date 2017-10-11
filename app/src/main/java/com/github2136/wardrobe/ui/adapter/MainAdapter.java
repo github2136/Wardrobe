@@ -10,6 +10,7 @@ import com.github2136.wardrobe.R;
 import com.github2136.wardrobe.model.entity.ClothingInfo;
 import com.github2136.wardrobe.util.Constant;
 import com.github2136.wardrobe.util.glide.CircleTransform;
+import com.github2136.wardrobe.util.glide.RectCircleTransform;
 
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class MainAdapter extends BaseLoadMoreRecyclerAdapter<ClothingInfo> {
         ImageView ivImage = viewHolderRecyclerView.getView(R.id.iv_image);
         Glide.with(mContext)
                 .load(clothingInfo.getMediaFiles().get(0).getFmPath())
-                .transform(new CircleTransform(mContext))
+                .transform(new RectCircleTransform(mContext))
                 .into(ivImage);
         String clothing = "类型：" + clothingInfo.getCiType() + "   颜色：" + clothingInfo.getCiColor();
         viewHolderRecyclerView.setText(R.id.tv_clothing, clothing);

@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -29,12 +28,13 @@ import com.github2136.wardrobe.R;
 import com.github2136.wardrobe.base.BaseActivity;
 import com.github2136.wardrobe.model.entity.ClothingInfo;
 import com.github2136.wardrobe.model.entity.MediaFile;
-import com.github2136.wardrobe.presenter.AddClothingPresenter;
-import com.github2136.wardrobe.ui.view.IAddClothingView;
+import com.github2136.wardrobe.presenter.EditClothingPresenter;
+import com.github2136.wardrobe.ui.view.IEditClothingView;
 import com.wefika.flowlayout.FlowLayout;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -42,17 +42,20 @@ import java.util.UUID;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class AddClothingActivity extends BaseActivity<AddClothingPresenter> implements IAddClothingView {
+public class EditClothingActivity extends BaseActivity<EditClothingPresenter> implements IEditClothingView {
+    public static final String ARG_CLOTHING = "CLOTHING";
     private static final int REQUEST_SELECT_IMG = 509;
     private static final int REQUEST_CAPTURE = 896;
     private ArrayList<String> mImgs;//原图地址
     private ArrayList<String> mSaveImgs;//压缩后的图片地址
     private ArrayList<String> mImgsIndex;//图片tag
+    private List<MediaFile> mMediaFiles;
     private int mSaveIndex;//图片保存
     private int mImgWidth;
     private LayoutInflater mLayoutInflater;
     private int mMargin;
     private int mMaxLimit;
+    private ClothingInfo mClothingInfo;
     @BindView(R.id.tb_title)
     Toolbar tbTitle;
     @BindView(R.id.sp_type)
@@ -75,13 +78,13 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
     ImageButton ibAdd;
 
     @Override
-    protected AddClothingPresenter getPresenter() {
-        return new AddClothingPresenter(this, this);
+    protected EditClothingPresenter getPresenter() {
+        return new EditClothingPresenter(this, this);
     }
 
     @Override
     protected int getViewResId() {
-        return R.layout.activity_add_clothing;
+        return R.layout.activity_edit_clothing;
     }
 
     @Override
@@ -98,12 +101,41 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
         mImgsIndex = new ArrayList<>();
         mLayoutInflater = getLayoutInflater();
         mMaxLimit = getResources().getDisplayMetrics().widthPixels;
-        setTitle("添加");
+        if (getIntent().hasExtra(ARG_CLOTHING)) {
+            mClothingInfo = getIntent().getParcelableExtra(ARG_CLOTHING);
+            setTitle("修改");
+            mMediaFiles = mClothingInfo.getMediaFiles();
+            for (int i = 0; i < mMediaFiles.size(); i++) {
+                MediaFile mediaFile = mMediaFiles.get(i);
+                mImgs.add(mediaFile.getFmPath());
+                addImgView(mediaFile.getFmPath(), mediaFile.getFmId());
+            }
+            int typeIndex = Arrays.asList(getResources().getStringArray(R.array.arr_clothing_type)).indexOf(mClothingInfo.getCiType());
+            spType.setSelection(typeIndex);
+            int colorIndex = Arrays.asList(getResources().getStringArray(R.array.arr_clothing_color)).indexOf(mClothingInfo.getCiColor());
+            spColor.setSelection(colorIndex);
+            if (mClothingInfo.getCiSeason().contains("春")) {
+                cbSpring.setChecked(true);
+            }
+            if (mClothingInfo.getCiSeason().contains("夏")) {
+                cbSummer.setChecked(true);
+            }
+            if (mClothingInfo.getCiSeason().contains("秋")) {
+                cbAutumn.setChecked(true);
+            }
+            if (mClothingInfo.getCiSeason().contains("冬")) {
+                cbWinter.setChecked(true);
+            }
+            etRemark.setText(mClothingInfo.getCiRemark());
+        } else {
+            showToast("参数错误");
+            finish();
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_add_clothing, menu);
+        getMenuInflater().inflate(R.menu.menu_edit_clothing, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -125,59 +157,89 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
                     getBitmap();
                 }
                 break;
+            case R.id.menu_delete:
+                new AlertDialog.Builder(mContext)
+                        .setTitle(R.string.dialog_title_prompt)
+                        .setMessage("是否删除该服饰？")
+                        .setPositiveButton("删除", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mClothingInfo.setValid("0");
+                                mClothingInfo.setModifyDate(new Date());
+                                mPresenter.deleteClothing(mClothingInfo);
+                            }
+                        })
+                        .setNegativeButton("取消", null)
+                        .show();
+                break;
         }
         return true;
     }
 
     private void getBitmap() {
         String path = mImgs.get(mSaveIndex);
-        BitmapUtil.getInstance(path)
-                .rotation()
-                .limit(mMaxLimit)
-                .save(FileUtil.getExternalStoragePrivatePicPath(mContext) + File.separator + "photo" + File.separator +
-                                FileUtil.createFileName(".jpg")
-                        , new BitmapUtil.BitmapSaveCallBack() {
-                            @Override
-                            public void callback(String filePath) {
-                                mSaveImgs.add(filePath);
-                                mSaveIndex++;
-                                if (mImgs.size() > mSaveIndex + 1) {
-                                    getBitmap();
-                                } else {
-                                    ClothingInfo clothingInfo = new ClothingInfo();
-                                    clothingInfo.setCiType(spType.getSelectedItem().toString());
-                                    clothingInfo.setCiColor(spColor.getSelectedItem().toString());
-                                    StringBuilder sb = new StringBuilder();
-                                    if (cbSpring.isChecked()) {
-                                        sb.append("春,");
-                                    }
-                                    if (cbSummer.isChecked()) {
-                                        sb.append("夏,");
-                                    }
-                                    if (cbAutumn.isChecked()) {
-                                        sb.append("秋,");
-                                    }
-                                    if (cbWinter.isChecked()) {
-                                        sb.append("冬,");
-                                    }
-                                    if (sb.length() > 1) {
-                                        sb.deleteCharAt(sb.length() - 1);
-                                    }
-                                    clothingInfo.setCiSeason(sb.toString());
-                                    clothingInfo.setCiRemark(etRemark.getText().toString());
-                                    List<MediaFile> mfs = new ArrayList<>();
-                                    for (int i = 0; i < mSaveImgs.size(); i++) {
-                                        MediaFile mf = new MediaFile();
-                                        mf.setFmPath(mSaveImgs.get(i));
-                                        mfs.add(mf);
-                                    }
-                                    clothingInfo.setMediaFiles(mfs);
-                                    clothingInfo.setValid("1");
-                                    clothingInfo.setModifyDate(new Date());
-                                    mPresenter.saveClothing(clothingInfo);
+        boolean old = false;
+        for (int i = 0; i < mMediaFiles.size(); i++) {
+            MediaFile mediaFile = mMediaFiles.get(i);
+            if (mediaFile.getFmPath().equals(path)) {
+                old = true;
+                mMediaFiles.remove(mediaFile);
+                break;
+            }
+        }
+        if (old) {
+            getNext(path);
+        } else {
+            BitmapUtil.getInstance(path)
+                    .rotation()
+                    .limit(mMaxLimit)
+                    .save(FileUtil.getExternalStorageProjectPath(mContext) + File.separator + "photo" + File.separator +
+                                    FileUtil.createFileName(".jpg")
+                            , new BitmapUtil.BitmapSaveCallBack() {
+                                @Override
+                                public void callback(String filePath) {
+                                    getNext(filePath);
                                 }
-                            }
-                        });
+                            });
+        }
+    }
+
+    private void getNext(String filePath) {
+        mSaveImgs.add(filePath);
+        mSaveIndex++;
+        if (mImgs.size() > mSaveIndex) {
+            getBitmap();
+        } else {
+            mClothingInfo.setCiType(spType.getSelectedItem().toString());
+            mClothingInfo.setCiColor(spColor.getSelectedItem().toString());
+            StringBuilder sb = new StringBuilder();
+            if (cbSpring.isChecked()) {
+                sb.append("春,");
+            }
+            if (cbSummer.isChecked()) {
+                sb.append("夏,");
+            }
+            if (cbAutumn.isChecked()) {
+                sb.append("秋,");
+            }
+            if (cbWinter.isChecked()) {
+                sb.append("冬,");
+            }
+            if (sb.length() > 1) {
+                sb.deleteCharAt(sb.length() - 1);
+            }
+            mClothingInfo.setCiSeason(sb.toString());
+            mClothingInfo.setCiRemark(etRemark.getText().toString());
+            List<MediaFile> mfs = new ArrayList<>();
+            for (int i = 0; i < mSaveImgs.size(); i++) {
+                MediaFile mf = new MediaFile();
+                mf.setFmPath(mSaveImgs.get(i));
+                mfs.add(mf);
+            }
+            mClothingInfo.setMediaFiles(mfs);
+            mClothingInfo.setModifyDate(new Date());
+            mPresenter.editClothing(mClothingInfo);
+        }
     }
 
     @OnClick(R.id.ib_add)
@@ -209,11 +271,13 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
         }
     }
 
-    private void addImgView(final String path) {
+    private void addImgView(final String path, String tag) {
         int index = flImgs.getChildCount() - 1;
         View view = mLayoutInflater.inflate(R.layout.view_add_view, null);
         ImageView iv = (ImageView) view.findViewById(R.id.iv_add_image);
-        String tag = UUID.randomUUID().toString();
+        if (tag == null) {
+            tag = UUID.randomUUID().toString();
+        }
         iv.setTag(R.id.tag_add_img, tag);
         mImgsIndex.add(tag);
         iv.setOnClickListener(new View.OnClickListener() {
@@ -268,14 +332,14 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
                     mImgs.addAll(img);
                     for (int i = 0; i < img.size(); i++) {
                         String path = img.get(i);
-                        addImgView(path);
+                        addImgView(path, null);
                     }
                 }
                 break;
                 case REQUEST_CAPTURE: {
                     String img = data.getStringExtra(CaptureActivity.ARG_RESULT);
                     mImgs.add(img);
-                    addImgView(img);
+                    addImgView(img, null);
                 }
                 break;
             }
@@ -283,14 +347,26 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
     }
 
     @Override
-    public void addClothingSuccessful() {
-        showToast("添加成功");
+    public void editClothingSuccessful() {
+        showToast("修改成功");
         setResult(RESULT_OK);
         finish();
     }
 
     @Override
-    public void addClothingFailure(String msg) {
+    public void editClothingFailure(String msg) {
+        showToast(msg);
+    }
+
+    @Override
+    public void deleteClothingSuccessful() {
+        showToast("删除成功");
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    @Override
+    public void deleteClothingFailure(String msg) {
         showToast(msg);
     }
 }

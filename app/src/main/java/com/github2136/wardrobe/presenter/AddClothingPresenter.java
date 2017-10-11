@@ -25,24 +25,29 @@ public class AddClothingPresenter extends BasePresenter<IAddClothingView> {
         mClothingInfoModel.saveClothing(clothingInfo, new RequestCallback() {
             @Override
             public void onFailure(Exception e) {
-                mView.dismissDialogDialog();
-                mView.addClothingFailure(failedStr);
+                postMain(new Runnable() {
+                    @Override
+                    public void run() {
+                        mView.dismissDialog();
+                        mView.addClothingFailure(failedStr);
+                    }
+                });
             }
 
             @Override
             public void onResponse(String response) {
-                mView.dismissDialogDialog();
                 final Response res = mJsonUtil.getObjectByStr(response, Response.class);
-postMain(new Runnable() {
-    @Override
-    public void run() {
-        if (isSuccess(res)) {
-            mView.addClothingSuccessful();
-        } else {
-            mView.addClothingFailure(getFailedStr(res));
-        }
-    }
-});
+                postMain(new Runnable() {
+                    @Override
+                    public void run() {
+                        mView.dismissDialog();
+                        if (isSuccess(res)) {
+                            mView.addClothingSuccessful();
+                        } else {
+                            mView.addClothingFailure(getFailedStr(res));
+                        }
+                    }
+                });
 
             }
         });

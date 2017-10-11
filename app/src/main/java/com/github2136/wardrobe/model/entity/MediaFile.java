@@ -14,7 +14,7 @@ import java.util.Date;
  */
 @Table
 public class MediaFile implements Parcelable {
-    @Column
+    @Column(primaryKey = true)
     private String fmId;//文件主键
     @Column
     private String fmPath;//文件路径

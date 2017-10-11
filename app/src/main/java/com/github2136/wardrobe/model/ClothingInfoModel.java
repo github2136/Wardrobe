@@ -35,7 +35,60 @@ public class ClothingInfoModel extends BaseModel {
                 new Runnable() {
                     @Override
                     public void run() {
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         if (mClothingDao.insertClothing(clothingInfo)) {
+                            Response response = new Response();
+                            response.setRequestCode(Response.CODE_SUCCESSFUL);
+                            callback.onResponse(mJsonUtil.toJsonStr(response));
+                        } else {
+                            Response response = new Response();
+                            response.setRequestCode(Response.CODE_FAILURE);
+                            callback.onResponse(mJsonUtil.toJsonStr(response));
+                        }
+                    }
+                }
+        );
+    }
+
+    public void editClothing(final ClothingInfo clothingInfo, final RequestCallback callback) {
+        ThreadUtil.getInstance().execute(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        if (mClothingDao.editClothing(clothingInfo)) {
+                            Response response = new Response();
+                            response.setRequestCode(Response.CODE_SUCCESSFUL);
+                            callback.onResponse(mJsonUtil.toJsonStr(response));
+                        } else {
+                            Response response = new Response();
+                            response.setRequestCode(Response.CODE_FAILURE);
+                            callback.onResponse(mJsonUtil.toJsonStr(response));
+                        }
+                    }
+                }
+        );
+    }
+
+    public void deleteClothing(final ClothingInfo clothingInfo, final RequestCallback callback) {
+        ThreadUtil.getInstance().execute(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        if (mClothingDao.updateByPrimaryKey(clothingInfo)) {
                             Response response = new Response();
                             response.setRequestCode(Response.CODE_SUCCESSFUL);
                             callback.onResponse(mJsonUtil.toJsonStr(response));
@@ -54,7 +107,7 @@ public class ClothingInfoModel extends BaseModel {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -73,28 +126,6 @@ public class ClothingInfoModel extends BaseModel {
                 });
             }
         }).start();
-    }
-
-    public void addClothing(ClothingInfo clothingInfo, RequestCallback callback) {
-        boolean result = mClothingDao.insert(clothingInfo);
-        Response response = new Response();
-        if (result) {
-            response.setRequestCode(Response.CODE_SUCCESSFUL);
-        } else {
-            response.setRequestCode(Response.CODE_FAILURE);
-        }
-        callback.onResponse(mJsonUtil.toJsonStr(response));
-    }
-
-    public void addClothing(List<ClothingInfo> clothingInfos, RequestCallback callback) {
-        boolean result = mClothingDao.insert(clothingInfos);
-        Response response = new Response();
-        if (result) {
-            response.setRequestCode(Response.CODE_SUCCESSFUL);
-        } else {
-            response.setRequestCode(Response.CODE_FAILURE);
-        }
-        callback.onResponse(mJsonUtil.toJsonStr(response));
     }
 
     @Override

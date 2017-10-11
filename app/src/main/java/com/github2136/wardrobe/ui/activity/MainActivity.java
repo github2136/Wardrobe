@@ -21,6 +21,7 @@ import butterknife.BindView;
 
 public class MainActivity extends BaseListActivity<ClothingInfo, MainPresenter> implements IMainView {
     private static final int REQUEST_ADD = 764;
+    private static final int REQUEST_EDIT = 288;
     @BindView(R.id.tb_title)
     Toolbar tbTitle;
 
@@ -81,9 +82,11 @@ public class MainActivity extends BaseListActivity<ClothingInfo, MainPresenter> 
 
     @Override
     protected void itemClick(ClothingInfo clothingInfo, int position) {
-        Intent intent = new Intent(mContext, AddClothingActivity.class);
-        intent.putExtra(AddClothingActivity.ARG_CLOTHING, clothingInfo);
-//        startActivityForResult(intent, REQUEST_ADD);
+        if (!srContent.isRefreshing()) {
+            Intent intent = new Intent(mContext, EditClothingActivity.class);
+            intent.putExtra(EditClothingActivity.ARG_CLOTHING, clothingInfo);
+            startActivityForResult(intent, REQUEST_EDIT);
+        }
     }
 
     @Override
@@ -91,6 +94,7 @@ public class MainActivity extends BaseListActivity<ClothingInfo, MainPresenter> 
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_ADD:
+                case REQUEST_EDIT:
                     getFirstPage();
                     break;
             }

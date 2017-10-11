@@ -17,7 +17,7 @@ import java.util.List;
 
 @Table
 public class ClothingInfo implements Parcelable {
-    @Column
+    @Column(primaryKey = true)
     private String ciId;//主键
     @Column
     private String ciType;//服装类型
