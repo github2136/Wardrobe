@@ -141,7 +141,7 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
                             public void callback(String filePath) {
                                 mSaveImgs.add(filePath);
                                 mSaveIndex++;
-                                if (mImgs.size() > mSaveIndex + 1) {
+                                if (mImgs.size() > mSaveIndex) {
                                     getBitmap();
                                 } else {
                                     ClothingInfo clothingInfo = new ClothingInfo();
