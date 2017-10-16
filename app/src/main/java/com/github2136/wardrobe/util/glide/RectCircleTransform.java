@@ -11,11 +11,11 @@ import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 
 /**
- * 正方形圆角变形
+ * 矩形圆角变形
  * Created by yubin on 2016/3/23.
  */
-public class CircleTransform extends BitmapTransformation {
-    public CircleTransform(Context context) {
+public class RectCircleTransform extends BitmapTransformation {
+    public RectCircleTransform(Context context) {
         super(context);
     }
 
@@ -25,12 +25,21 @@ public class CircleTransform extends BitmapTransformation {
         int size = Math.min(toTransform.getWidth(), toTransform.getHeight());
         Bitmap mBitmap;
         Matrix matrix = new Matrix();
-
+        int w;
+        w = toTransform.getWidth() > toTransform.getHeight() ? toTransform.getHeight() : toTransform.getWidth();
+        int x, y;
+        if (toTransform.getWidth() > toTransform.getHeight()) {
+            x = (toTransform.getWidth() - toTransform.getHeight()) / 2;
+            y = 0;
+        } else {
+            x = 0;
+            y = (toTransform.getHeight() - toTransform.getWidth()) / 2;
+        }
+//                        ? toTransform.getHeight() : toTransform.getWidth();
         //放大或缩小图片
         float scale = ((float) outWidth) / size;
         matrix.setScale(scale, scale);
-        mBitmap = Bitmap.createBitmap(toTransform, 0, 0, toTransform.getWidth(), toTransform.getHeight(), matrix,
-                false);
+        mBitmap = Bitmap.createBitmap(toTransform, x, y, w, w, matrix, false);
 
 //        int x = (toTransform.getWidth() - size) / 2;
 //        int y = (toTransform.getHeight() - size) / 2;

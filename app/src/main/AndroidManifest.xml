@@ -21,23 +21,26 @@
         <meta-data
             android:name="com.github2136.wardrobe.util.glide.ProjectGlideModule"
             android:value="GlideModule"/>
-        <!--主页-->
+        <!-- 主页 -->
         <activity
             android:name=".ui.activity.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <!--添加服装-->
+        <!-- 添加服装 -->
         <activity
             android:name=".ui.activity.AddClothingActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
         </activity>
-
+        <activity
+            android:name=".ui.activity.EditClothingActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
+        </activity>
     </application>
 
 </manifest>
