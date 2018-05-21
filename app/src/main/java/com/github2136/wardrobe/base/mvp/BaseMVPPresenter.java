@@ -53,7 +53,6 @@ public abstract class BaseMVPPresenter<V extends IBaseMVPView> {
 
     protected String getFailedStr(String response) {
         ErrorResponse errorResponse = mJsonUtil.getObjectByStr(response, ErrorResponse.class);
-//        return errorResponse != null && errorResponse.getCode() == null;
         if (response == null) {
             return failedStr;
         } else {

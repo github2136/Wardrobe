@@ -9,10 +9,11 @@ import com.github2136.wardrobe.base.mvp.BaseMVPModel;
 import com.github2136.wardrobe.database.SQL.ClothingSQL;
 import com.github2136.wardrobe.database.SQL.MediaFileSQL;
 import com.github2136.wardrobe.model.entity.ClothingInfo;
-import com.github2136.wardrobe.model.util.ErrorResponse;
 import com.github2136.wardrobe.model.util.RequestCallback;
 
 import java.util.List;
+
+//import com.github2136.wardrobe.model.util.RequestCallback;
 
 /**
  * 服装

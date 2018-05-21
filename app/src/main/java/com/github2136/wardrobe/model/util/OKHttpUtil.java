@@ -1,78 +1,306 @@
 package com.github2136.wardrobe.model.util;
 
+import android.app.Service;
+import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.v4.app.Fragment;
+import android.support.v4.util.ArrayMap;
+import android.support.v7.app.AppCompatActivity;
+
+
+import com.github2136.util.JsonUtil;
 import com.github2136.util.ThreadUtil;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
-import okhttp3.*;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- * Created by yb on 2018/5/18.
+ * OKHTTP请求类
  */
 public class OKHttpUtil {
     private String mAppId = "c6DtXIFY5bVgUE1PoL2OpADl-gzGzoHsz";
     private String mAppKey = "jvu3zeRhzIHFPqj2oQSnXpoM";
-    //    md5( 1453014943466UtOCzqb67d3sN12Kts4URwy8 )
     MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    OkHttpClient client = new OkHttpClient();
+
+    private OkHttpClient mOkHttpClient;
+    Handler mHandler;
+    WeakReference<AppCompatActivity> weakActivity;
+    WeakReference<Fragment> weakFragment;
+    WeakReference<Service> weakService;
+    String mTag;
     ThreadUtil threadUtil;
-    private static OKHttpUtil ourInstance = new OKHttpUtil();
 
-    public static OKHttpUtil getInstance() {
-        return ourInstance;
+    public OKHttpUtil(AppCompatActivity activity, String tag) {
+        weakActivity = new WeakReference<>(activity);
+        init(tag);
     }
 
-    private OKHttpUtil() {
-        threadUtil = ThreadUtil.getNewInstance();
+    public OKHttpUtil(Fragment fragment, String tag) {
+        weakFragment = new WeakReference<>(fragment);
+        init(tag);
     }
 
-    public void get(final String url, final RequestCallback callback) {
+    public OKHttpUtil(Service service, String tag) {
+        weakService = new WeakReference<>(service);
+        init(tag);
+    }
+
+    private void init(String tag) {
+        mTag = tag;
+        mOkHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
+                .writeTimeout(15, TimeUnit.SECONDS)
+                .build();
+        mHandler = new Handler(Looper.getMainLooper());
+        threadUtil = ThreadUtil.getInstance();
+    }
+
+    /**
+     * GET请求
+     */
+    public void doGetRequest(final String url,
+                             final String method,
+                             final ArrayMap<String, Object> params,
+                             final HttpCallback callback) {
         threadUtil.execute(new Runnable() {
             @Override
             public void run() {
-                try {
-                    String timestamp = String.valueOf(getUTCTime());
-                    Request request = new Request.Builder()
-                            .url(url)
-                            .addHeader("X-LC-Id", mAppId)
-                            .addHeader("X-LC-Sign", getMD5(timestamp + mAppKey) + "," + timestamp)
-                            .build();
-                    Response response = client.newCall(request).execute();
-                    callback.onResponse(response.body().string());
-                } catch (IOException e) {
-                    e.printStackTrace();
+                StringBuilder urlSb = new StringBuilder(url + method);
+                if (params != null && !params.isEmpty()) {
+                    urlSb.append("?");
+                    for (Map.Entry<String, Object> entry : params.entrySet()) {
+                        urlSb.append(entry.getKey());
+                        urlSb.append("=");
+                        urlSb.append(entry.getValue());
+                        urlSb.append("&");
+                    }
+                    urlSb.deleteCharAt(urlSb.length() - 1);
                 }
+                String timestamp = String.valueOf(getUTCTime());
+                Request request = new Request.Builder()
+                        .url(urlSb.toString())
+                        .addHeader("X-LC-Id", mAppId)
+                        .addHeader("X-LC-Sign", getMD5(timestamp + mAppKey) + "," + timestamp)
+                        .tag(mTag)
+                        .build();
+                Call call = mOkHttpClient.newCall(request);
+                call.enqueue(new Callback() {
+                    @Override
+                    public void onFailure(final Call call, final IOException e) {
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!isViewGone()) {
+                                    callback.onFailure(call, e);
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(final Call call, final Response response) throws IOException {
+                        final String bodyStr = response.body().string();
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!isViewGone()) {
+//                                    try {
+//                                        if (response.isSuccessful()) {
+                                            callback.onResponse(call, response, bodyStr);
+//                                        } else {
+//                                            callback.onFailure(call, new RuntimeException("http status:" + response.code()));
+//                                        }
+//                                    } catch (IOException e) {
+//                                        callback.onFailure(call, e);
+//                                    }
+                                }
+                            }
+                        });
+                    }
+                });
             }
         });
-
     }
 
-    public void post(final String url, final String json, final RequestCallback callback) {
+    /**
+     * POST请求Form
+     */
+    public void doPostFormRequest(final String url,
+                                  final String method,
+                                  final ArrayMap<String, Object> params,
+                                  final HttpCallback callback) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                FormBody.Builder body = new FormBody.Builder();
+                if (params != null && !params.isEmpty()) {
+                    for (Map.Entry<String, Object> entry : params.entrySet()) {
+                        body.add(entry.getKey(), entry.getValue().toString());
+                    }
+                }
+                Request request = new Request.Builder()
+                        .url(url + method)
+                        .tag(mTag)
+                        .post(body.build())
+                        .build();
+
+                Call call = mOkHttpClient.newCall(request);
+                call.enqueue(new Callback() {
+                    @Override
+                    public void onFailure(final Call call, final IOException e) {
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!isViewGone()) {
+                                    callback.onFailure(call, e);
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(final Call call, final Response response) throws IOException {
+                        final String bodyStr = response.body().string();
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!isViewGone()) {
+//                                    try {
+                                        if (response.isSuccessful()) {
+                                            callback.onResponse(call, response, bodyStr);
+                                        } else {
+                                            callback.onFailure(call, new RuntimeException("http status:" + response.code()));
+                                        }
+//                                    } catch (IOException e) {
+//                                        callback.onFailure(call, e);
+//                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        }).start();
+    }
+
+    /**
+     * POST请求Json
+     */
+    public void doPostJsonRequest(final String url,
+                                  final String method,
+                                  final ArrayMap<String, Object> params,
+                                  final HttpCallback callback) {
         threadUtil.execute(new Runnable() {
             @Override
             public void run() {
-                try {
-                    String timestamp = String.valueOf(getUTCTime());
-                    RequestBody body = RequestBody.create(JSON, json);
-                    Request request = new Request.Builder()
-                            .url(url)
-                            .addHeader("X-LC-Id", mAppId)
-                            .addHeader("X-LC-Sign", getMD5(timestamp + mAppKey) + "," + timestamp)
-                            .post(body)
-                            .build();
-                    Response response = client.newCall(request).execute();
-                    callback.onResponse(response.body().string());
-                } catch (IOException e) {
-                    e.printStackTrace();
+
+                String json = "";
+                if (params != null && !params.isEmpty()) {
+                    json = JsonUtil.getInstance().getGson().toJson(params);
                 }
+                RequestBody body = RequestBody.create(JSON, json);
+                String timestamp = String.valueOf(getUTCTime());
+                Request request = new Request.Builder()
+                        .url(url + method)
+                        .addHeader("X-LC-Id", mAppId)
+                        .addHeader("X-LC-Sign", getMD5(timestamp + mAppKey) + "," + timestamp)
+                        .tag(mTag)
+                        .post(body)
+                        .build();
+
+                Call call = mOkHttpClient.newCall(request);
+                call.enqueue(new Callback() {
+                    @Override
+                    public void onFailure(final Call call, final IOException e) {
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!isViewGone()) {
+                                    callback.onFailure(call, e);
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(final Call call, final Response response) throws IOException {
+                        final String bodyStr = response.body().string();
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!isViewGone()) {
+//                                    try {
+//                                        if (response.isSuccessful()) {
+                                            callback.onResponse(call, response, bodyStr);
+//                                        } else {
+//                                            callback.onFailure(call, new RuntimeException("http status:" + response.code()));
+//                                        }
+//                                    } catch (IOException e) {
+//                                        callback.onFailure(call, e);
+//                                    }
+                                }
+                            }
+                        });
+                    }
+                });
             }
         });
+    }
+
+    /**
+     * 界面已销毁
+     */
+    private boolean isViewGone() {
+        Fragment fragment = null;
+        AppCompatActivity activity = null;
+        if (weakFragment != null) {
+            fragment = weakFragment.get();
+        } else if (weakActivity != null) {
+            activity = weakActivity.get();
+        }
+
+        if (fragment != null) {
+            return fragment.isDetached();
+        } else if (activity != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                return activity.isFinishing() || activity.isDestroyed();
+            } else {
+                return activity.isFinishing();
+            }
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 取消请求
+     */
+    public void cancelCallWithTag(String tag) {
+        for (Call call : mOkHttpClient.dispatcher().queuedCalls()) {
+            if (call.request().tag().equals(tag))
+                call.cancel();
+        }
+        for (Call call : mOkHttpClient.dispatcher().runningCalls()) {
+            if (call.request().tag().equals(tag))
+                call.cancel();
+        }
     }
 
     /**

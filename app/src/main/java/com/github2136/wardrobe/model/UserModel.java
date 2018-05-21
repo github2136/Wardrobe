@@ -1,13 +1,11 @@
 package com.github2136.wardrobe.model;
 
+import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 
 import com.github2136.wardrobe.base.mvp.BaseMVPModel;
+import com.github2136.wardrobe.model.util.HttpCallback;
 import com.github2136.wardrobe.model.util.OKHttpUtil;
-import com.github2136.wardrobe.model.util.RequestCallback;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by yb on 2018/5/16.
@@ -18,18 +16,19 @@ public class UserModel extends BaseMVPModel {
 
     public UserModel(AppCompatActivity activity) {
         super(activity);
-        mOkHttpUtil = OKHttpUtil.getInstance();
+        mOkHttpUtil = new OKHttpUtil(activity, mTag);
     }
 
-    public void login(String username, String password, RequestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("username", username);
-        params.put("password", password);
-        mOkHttpUtil.get(mBaseUrl + mLogin + getParams(params), callback);
+    public void login(ArrayMap<String, Object> params, HttpCallback callback) {
+        mOkHttpUtil.doGetRequest(mBaseUrl, mLogin, params, callback);
+    }
+
+    public void registered(ArrayMap<String, Object> params, HttpCallback callback) {
+        mOkHttpUtil.doPostJsonRequest(mBaseUrl, mUser, params, callback);
     }
 
     @Override
     public void cancelRequest() {
-
+        mOkHttpUtil.cancelCallWithTag(mTag);
     }
 }

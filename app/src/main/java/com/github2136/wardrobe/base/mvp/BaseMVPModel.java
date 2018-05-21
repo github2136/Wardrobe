@@ -18,6 +18,7 @@ import java.util.Map;
 public abstract class BaseMVPModel {
     protected String mBaseUrl = "https://leancloud.cn:443/1.1/";
     protected String mLogin = "login";
+    protected String mUser= "users";
     protected AppCompatActivity mActivity;
     protected Fragment mFragment;
     protected Service mService;
