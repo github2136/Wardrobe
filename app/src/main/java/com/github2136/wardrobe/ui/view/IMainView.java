@@ -1,6 +1,6 @@
 package com.github2136.wardrobe.ui.view;
 
-import com.github2136.base.mvp.IBaseMVPView;
+import com.github2136.wardrobe.base.mvp.IBaseMVPView;
 import com.github2136.wardrobe.model.entity.ClothingInfo;
 
 import java.util.List;

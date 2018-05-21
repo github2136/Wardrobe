@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.github2136.wardrobe">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name=".base.BaseApplication"
         android:allowBackup="true"
@@ -21,14 +22,21 @@
         <meta-data
             android:name="com.github2136.wardrobe.util.glide.ProjectGlideModule"
             android:value="GlideModule"/>
+
+        <!--登录-->
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
         <!-- 主页 -->
         <activity
             android:name=".ui.activity.MainActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <!-- 添加服装 -->
         <activity
@@ -41,6 +49,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
         </activity>
+
     </application>
 
 </manifest>

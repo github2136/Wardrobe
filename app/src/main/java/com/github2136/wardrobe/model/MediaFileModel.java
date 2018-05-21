@@ -3,7 +3,7 @@ package com.github2136.wardrobe.model;
 import android.support.v7.app.AppCompatActivity;
 
 import com.github2136.util.ThreadUtil;
-import com.github2136.wardrobe.base.BaseModel;
+import com.github2136.wardrobe.base.mvp.BaseMVPModel;
 import com.github2136.wardrobe.database.SQL.MediaFileSQL;
 import com.github2136.wardrobe.model.entity.MediaFile;
 import com.github2136.wardrobe.model.util.RequestCallback;
@@ -14,7 +14,7 @@ import java.util.List;
  * Created by yb on 2017/10/7.
  */
 
-public class MediaFileModel extends BaseModel {
+public class MediaFileModel extends BaseMVPModel {
     private MediaFileSQL mMediaFileSQL;
 
     public MediaFileModel(AppCompatActivity activity) {

@@ -1,29 +1,23 @@
 package com.github2136.wardrobe.presenter;
 
-import android.database.DatabaseUtils;
-import android.support.v4.database.DatabaseUtilsCompat;
 import android.support.v7.app.AppCompatActivity;
 
-import com.github2136.util.DateUtil;
-import com.github2136.util.JsonUtil;
-import com.github2136.wardrobe.base.BasePresenter;
+import com.github2136.wardrobe.base.mvp.BaseMVPPresenter;
 import com.github2136.wardrobe.model.ClothingInfoModel;
 import com.github2136.wardrobe.model.entity.ClothingInfo;
+import com.github2136.wardrobe.model.util.ErrorResponse;
 import com.github2136.wardrobe.model.util.RequestCallback;
-import com.github2136.wardrobe.model.util.Response;
 import com.github2136.wardrobe.ui.view.IMainView;
 import com.github2136.wardrobe.util.Constant;
 import com.google.gson.reflect.TypeToken;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by yubin on 2017/7/18.
  */
 
-public class MainPresenter extends BasePresenter<IMainView> {
+public class MainPresenter extends BaseMVPPresenter<IMainView> {
     private ClothingInfoModel mClothingInfoModel;
 
     public MainPresenter(AppCompatActivity activity, IMainView view) {
@@ -40,12 +34,12 @@ public class MainPresenter extends BasePresenter<IMainView> {
 
             @Override
             public void onResponse(String response) {
-                Response<List<ClothingInfo>> resp = mJsonUtil.getObjectByStr(response, new TypeToken<Response<List<ClothingInfo>>>() {}.getType());
-                if (isSuccess(resp)) {
-                    mView.getClothingSuccessful(resp.getData());
-                } else {
-                    mView.getClothingFailure(getFailedStr(resp));
-                }
+//                ErrorResponse<List<ClothingInfo>> resp = mJsonUtil.getObjectByStr(response, new TypeToken<ErrorResponse<List<ClothingInfo>>>() {}.getType());
+//                if (isSuccess(resp)) {
+//                    mView.getClothingSuccessful(resp.getData());
+//                } else {
+//                    mView.getClothingFailure(getFailedStr(resp));
+//                }
             }
         });
     }

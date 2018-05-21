@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.github2136.base.BaseLoadMoreRecyclerAdapter;
 import com.github2136.base.BaseRecyclerAdapter;
 import com.github2136.wardrobe.R;
+import com.github2136.wardrobe.base.mvp.BaseMVPPresenter;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  * Created by yubin on 2017/7/18.
  */
 
-public abstract class BaseListActivity<T, P extends BasePresenter> extends BaseActivity<P> {
+public abstract class BaseListActivity<T, P extends BaseMVPPresenter> extends BaseActivity<P> {
     protected TextView tvTotalSum;
     protected RecyclerView rvContent;
     protected SwipeRefreshLayout srContent;

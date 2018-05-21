@@ -4,14 +4,20 @@ import android.app.Service;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
+import com.github2136.util.CollectionsUtil;
+import com.github2136.util.CommonUtil;
 import com.github2136.util.JsonUtil;
 import com.github2136.util.SPUtil;
+
+import java.util.Map;
 
 
 /**
  * model基础类
  */
 public abstract class BaseMVPModel {
+    protected String mBaseUrl = "https://leancloud.cn:443/1.1/";
+    protected String mLogin = "login";
     protected AppCompatActivity mActivity;
     protected Fragment mFragment;
     protected Service mService;
@@ -43,11 +49,24 @@ public abstract class BaseMVPModel {
         if (mActivity != null) {
             mSpUtil = SPUtil.getInstance(mActivity);
         } else if (mFragment != null) {
-
             mSpUtil = SPUtil.getInstance(mFragment.getContext());
         } else if (mService != null) {
             mSpUtil = SPUtil.getInstance(mService);
         }
+    }
+
+    public String getParams(Map<String, Object> params) {
+        StringBuilder sbStr = new StringBuilder("?");
+        if (CollectionsUtil.isNotEmpty(params)) {
+            for (Map.Entry<String, Object> par : params.entrySet()) {
+                sbStr.append(par.getKey());
+                sbStr.append("=");
+                sbStr.append(par.getValue());
+                sbStr.append("&");
+            }
+        }
+        sbStr.deleteCharAt(sbStr.length() - 1);
+        return sbStr.toString();
     }
 
     public abstract void cancelRequest();

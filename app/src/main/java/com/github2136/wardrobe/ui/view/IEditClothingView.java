@@ -1,6 +1,6 @@
 package com.github2136.wardrobe.ui.view;
 
-import com.github2136.base.mvp.IBaseMVPView;
+import com.github2136.wardrobe.base.mvp.IBaseMVPView;
 
 /**
  * Created by yb on 2017/10/10.

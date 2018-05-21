@@ -7,12 +7,13 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.github2136.base.mvp.IBaseMVPView;
-import com.github2136.util.CommonUtil;
+import com.github2136.wardrobe.base.mvp.BaseMVPPresenter;
+import com.github2136.wardrobe.base.mvp.IBaseMVPView;
 
 import java.lang.ref.WeakReference;
 
@@ -22,7 +23,7 @@ import butterknife.ButterKnife;
  * Activity基础类
  * Created by yubin on 2016/2/23.
  */
-public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity implements IBaseMVPView {
+public abstract class BaseActivity<P extends BaseMVPPresenter> extends AppCompatActivity implements IBaseMVPView {
     protected P mPresenter;
     protected final String TAG = this.getClass().getName();
     protected BaseApplication mApp;
@@ -31,6 +32,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     protected InputMethodManager im;
     protected Handler mHandler;
     protected Toast mToast;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,11 +68,11 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
 
 
-
     @Override
     protected void onStop() {
         super.onStop();
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -87,10 +89,12 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         mApp.removeActivity(this);
         super.onDestroy();
     }
+
     @Override
     public void showProgressDialog() {
         showProgressDialog(null);
     }
+
     @Override
     public void showProgressDialog(@StringRes int resId) {
         showProgressDialog(getString(resId));
@@ -99,7 +103,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     @Override
     public void showProgressDialog(String msg) {
         String message;
-        if (CommonUtil.isNotEmpty(msg)) {
+        if (!TextUtils.isEmpty(msg)) {
             message = msg;
         } else {
             message = "请稍候……";

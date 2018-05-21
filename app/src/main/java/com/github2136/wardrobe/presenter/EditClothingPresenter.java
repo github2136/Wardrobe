@@ -2,18 +2,18 @@ package com.github2136.wardrobe.presenter;
 
 import android.support.v7.app.AppCompatActivity;
 
-import com.github2136.wardrobe.base.BasePresenter;
+import com.github2136.wardrobe.base.mvp.BaseMVPPresenter;
 import com.github2136.wardrobe.model.ClothingInfoModel;
 import com.github2136.wardrobe.model.entity.ClothingInfo;
+import com.github2136.wardrobe.model.util.ErrorResponse;
 import com.github2136.wardrobe.model.util.RequestCallback;
-import com.github2136.wardrobe.model.util.Response;
 import com.github2136.wardrobe.ui.view.IEditClothingView;
 
 /**
  * Created by yb on 2017/10/10.
  */
 
-public class EditClothingPresenter extends BasePresenter<IEditClothingView> {
+public class EditClothingPresenter extends BaseMVPPresenter<IEditClothingView> {
     private ClothingInfoModel mClothingInfoModel;
 
     public EditClothingPresenter(AppCompatActivity activity, IEditClothingView view) {
@@ -36,16 +36,16 @@ public class EditClothingPresenter extends BasePresenter<IEditClothingView> {
 
             @Override
             public void onResponse(String response) {
-                final Response res = mJsonUtil.getObjectByStr(response, Response.class);
+                final ErrorResponse res = mJsonUtil.getObjectByStr(response, ErrorResponse.class);
                 postMain(new Runnable() {
                     @Override
                     public void run() {
                         mView.dismissDialog();
-                        if (isSuccess(res)) {
-                            mView.editClothingSuccessful();
-                        } else {
-                            mView.editClothingFailure(getFailedStr(res));
-                        }
+//                        if (isSuccess(res)) {
+//                            mView.editClothingSuccessful();
+//                        } else {
+//                            mView.editClothingFailure(getFailedStr(res));
+//                        }
                     }
                 });
             }
@@ -68,16 +68,16 @@ public class EditClothingPresenter extends BasePresenter<IEditClothingView> {
 
             @Override
             public void onResponse(String response) {
-                final Response res = mJsonUtil.getObjectByStr(response, Response.class);
+                final ErrorResponse res = mJsonUtil.getObjectByStr(response, ErrorResponse.class);
                 postMain(new Runnable() {
                     @Override
                     public void run() {
                         mView.dismissDialog();
-                        if (isSuccess(res)) {
-                            mView.deleteClothingSuccessful();
-                        } else {
-                            mView.deleteClothingFailure(getFailedStr(res));
-                        }
+//                        if (isSuccess(res)) {
+//                            mView.deleteClothingSuccessful();
+//                        } else {
+//                            mView.deleteClothingFailure(getFailedStr(res));
+//                        }
                     }
                 });
             }

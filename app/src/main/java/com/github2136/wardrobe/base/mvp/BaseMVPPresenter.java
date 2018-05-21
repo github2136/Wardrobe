@@ -5,9 +5,9 @@ import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
-import com.github2136.hotshelper.ui.view.IBaseMVPView;
 import com.github2136.util.JsonUtil;
 import com.github2136.util.SPUtil;
+import com.github2136.wardrobe.model.util.ErrorResponse;
 
 import java.util.Set;
 
@@ -45,6 +45,21 @@ public abstract class BaseMVPPresenter<V extends IBaseMVPView> {
         }
     }
 
+    protected boolean isSuccess(String response) {
+        ErrorResponse errorResponse = mJsonUtil.getObjectByStr(response, ErrorResponse.class);
+        return errorResponse != null && errorResponse.getCode() == null;
+    }
+
+
+    protected String getFailedStr(String response) {
+        ErrorResponse errorResponse = mJsonUtil.getObjectByStr(response, ErrorResponse.class);
+//        return errorResponse != null && errorResponse.getCode() == null;
+        if (response == null) {
+            return failedStr;
+        } else {
+            return errorResponse.getErrorMsg();
+        }
+    }
     public String getSPString(String key) {
         return mSpUtil.getString(key);
     }

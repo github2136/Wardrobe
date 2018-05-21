@@ -82,11 +82,11 @@ public class MainActivity extends BaseListActivity<ClothingInfo, MainPresenter> 
 
     @Override
     protected void itemClick(ClothingInfo clothingInfo, int position) {
-        if (!srContent.isRefreshing()) {
-            Intent intent = new Intent(mContext, EditClothingActivity.class);
-            intent.putExtra(EditClothingActivity.ARG_CLOTHING, clothingInfo);
-            startActivityForResult(intent, REQUEST_EDIT);
-        }
+//        if (!srContent.isRefreshing()) {
+//            Intent intent = new Intent(mContext, EditClothingActivity.class);
+//            intent.putExtra(EditClothingActivity.ARG_CLOTHING, clothingInfo);
+//            startActivityForResult(intent, REQUEST_EDIT);
+//        }
     }
 
     @Override

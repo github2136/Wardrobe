@@ -7,4 +7,6 @@ import com.github2136.wardrobe.base.mvp.IBaseMVPView;
  */
 
 public interface ILoginView extends IBaseMVPView {
+    void loginSuccseeful();
+    void loginFailure(String msg);
 }
