@@ -9,8 +9,8 @@ import com.github2136.wardrobe.ui.view.user.IRegisteredView;
  * Created by yb on 2018/5/17.
  */
 
-public class Registered1Presenter extends BaseMVPPresenter<IRegisteredView> {
-    public Registered1Presenter(AppCompatActivity activity, IRegisteredView view) {
+public class RegisteredPresenter extends BaseMVPPresenter<IRegisteredView> {
+    public RegisteredPresenter(AppCompatActivity activity, IRegisteredView view) {
         super(activity, view);
     }
 
