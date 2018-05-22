@@ -10,7 +10,7 @@ import java.util.Date;
 
 /**
  * 图片文件
- * Created by yubin on 2017/8/17.
+ * Created by yb on 2017/8/17.
  */
 @Table
 public class MediaFile implements Parcelable {

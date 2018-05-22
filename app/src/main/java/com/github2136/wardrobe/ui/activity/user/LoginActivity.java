@@ -15,6 +15,7 @@ import com.github2136.wardrobe.R;
 import com.github2136.wardrobe.base.BaseActivity;
 import com.github2136.wardrobe.model.entity.UserInfo;
 import com.github2136.wardrobe.presenter.user.LoginPresenters;
+import com.github2136.wardrobe.ui.activity.MainActivity;
 import com.github2136.wardrobe.ui.view.user.ILoginView;
 
 import butterknife.BindView;
@@ -74,6 +75,8 @@ public class LoginActivity extends BaseActivity<LoginPresenters> implements ILog
     @Override
     public void loginSuccessful(UserInfo userInfo) {
         showToast("登录成功");
+        finish();
+        startActivity(new Intent(mContext, MainActivity.class));
     }
 
     @Override

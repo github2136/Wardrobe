@@ -7,11 +7,18 @@ import java.util.Date;
 
 /**
  * 服装类型
- * Created by yubin on 2017/8/17.
+ * Created by yb on 2017/8/17.
  */
 @Deprecated
 @Table
 public class ClothingType {
+    @Column
+    private String objectId;
+    @Column
+    private Date createdAt;
+    @Column
+    private Date updatedAt;
+    /**********************************************************/
     @Column
     private String ctId;//类型主键
     @Column

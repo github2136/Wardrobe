@@ -12,7 +12,7 @@ import com.github2136.wardrobe.model.entity.MediaFile_;
 import java.util.List;
 
 /**
- * Created by yubin on 2017/8/18.
+ * Created by yb on 2017/8/18.
  */
 
 public class MediaFileSQL extends BaseSQLData<MediaFile> {

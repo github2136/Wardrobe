@@ -8,6 +8,7 @@ import com.github2136.wardrobe.model.UserModel;
 import com.github2136.wardrobe.model.entity.UserInfo;
 import com.github2136.wardrobe.model.util.HttpCallback;
 import com.github2136.wardrobe.ui.view.user.IRegisteredView;
+import com.github2136.wardrobe.util.Constant;
 
 import java.io.IOException;
 
@@ -28,10 +29,7 @@ public class RegisteredPresenter extends BaseMVPPresenter<IRegisteredView> {
 
     public void registered(String username, String password) {
         mView.showProgressDialog();
-        ArrayMap<String, Object> params = new ArrayMap<>();
-        params.put("username", username);
-        params.put("password", password);
-        mUserModel.registered(params, new HttpCallback() {
+        mUserModel.registered(username, password, new HttpCallback() {
             @Override
             public void onFailure(Call call, Exception e) {
                 mView.dismissDialog();
@@ -43,6 +41,10 @@ public class RegisteredPresenter extends BaseMVPPresenter<IRegisteredView> {
                 mView.dismissDialog();
                 if (isSuccess(bodyStr)) {
                     UserInfo userInfo = mJsonUtil.getObjectByStr(bodyStr, UserInfo.class);
+                    mSpUtil.edit()
+                            .putValue(Constant.SP_SESSION_TOKEN, userInfo.getSessionToken())
+                            .putValue(Constant.SP_OBJECT_ID, userInfo.getObjectId())
+                            .apply();
                     mView.registeredSuccessful(userInfo);
                 } else {
                     mView.registeredFailure(getFailedStr(bodyStr));

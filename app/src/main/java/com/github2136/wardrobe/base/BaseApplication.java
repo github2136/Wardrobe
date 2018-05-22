@@ -8,7 +8,7 @@ import com.github2136.wardrobe.util.CrashHandler;
 import java.util.ArrayList;
 
 /**
- * Created by yubin on 2016/2/23.
+ * Created by yb on 2016/2/23.
  */
 public class BaseApplication extends Application {
     private ArrayList<AppCompatActivity> mActivitys;

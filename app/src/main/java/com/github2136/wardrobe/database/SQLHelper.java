@@ -12,7 +12,7 @@ import com.github2136.wardrobe.model.entity.MediaFile;
 
 
 /**
- * Created by yubin on 2017/3/28.
+ * Created by yb on 2017/3/28.
  */
 
 public class SQLHelper extends SQLiteOpenHelper {

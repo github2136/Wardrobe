@@ -12,18 +12,24 @@ import com.github2136.wardrobe.model.util.OKHttpUtil;
  */
 
 public class UserModel extends BaseMVPModel {
-    OKHttpUtil mOkHttpUtil;
+    private OKHttpUtil mOkHttpUtil;
 
     public UserModel(AppCompatActivity activity) {
         super(activity);
         mOkHttpUtil = new OKHttpUtil(activity, mTag);
     }
 
-    public void login(ArrayMap<String, Object> params, HttpCallback callback) {
+    public void login(String username, String password, HttpCallback callback) {
+        ArrayMap<String, Object> params = new ArrayMap<>();
+        params.put("username", username);
+        params.put("password", password);
         mOkHttpUtil.doGetRequest(mBaseUrl, mLogin, params, callback);
     }
 
-    public void registered(ArrayMap<String, Object> params, HttpCallback callback) {
+    public void registered(String username, String password, HttpCallback callback) {
+        ArrayMap<String, Object> params = new ArrayMap<>();
+        params.put("username", username);
+        params.put("password", password);
         mOkHttpUtil.doPostJsonRequest(mBaseUrl, mUser, params, callback);
     }
 
