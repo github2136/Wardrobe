@@ -9,19 +9,15 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.github2136.wardrobe.R;
 import com.github2136.wardrobe.base.BaseActivity;
 import com.github2136.wardrobe.model.entity.UserInfo;
 import com.github2136.wardrobe.presenter.user.LoginPresenters;
-import com.github2136.wardrobe.ui.activity.AddClothingActivity;
 import com.github2136.wardrobe.ui.view.user.ILoginView;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class LoginActivity extends BaseActivity<LoginPresenters> implements ILoginView {
@@ -50,14 +46,30 @@ public class LoginActivity extends BaseActivity<LoginPresenters> implements ILog
     protected void initData(Bundle savedInstanceState) {
         setSupportActionBar(tbTitle);
         setTitle("登录");
-        etPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                onViewClicked();
-                return true;
-            }
-        });
+        etUsername.setOnEditorActionListener(mOnEditorActionListener);
+        etPassword.setOnEditorActionListener(mOnEditorActionListener);
     }
+
+    TextView.OnEditorActionListener mOnEditorActionListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            switch (v.getId()) {
+                case R.id.et_username:
+                    String username = v.getText().toString().trim();
+                    return !verifyUsername(username);
+                case R.id.et_password:
+                    String password = etPassword.getText().toString();
+                    if (verifyPassword(password)) {
+                        onViewClicked();
+                        return false;
+                    } else {
+                        return true;
+                    }
+            }
+            return false;
+        }
+    };
+
 
     @Override
     public void loginSuccessful(UserInfo userInfo) {
@@ -87,16 +99,30 @@ public class LoginActivity extends BaseActivity<LoginPresenters> implements ILog
 
     @OnClick(R.id.btn_login)
     public void onViewClicked() {
-        tlUsername.setError(null);
-        tlPassword.setError(null);
         String username = etUsername.getText().toString().trim();
         String password = etPassword.getText().toString();
+        if (verifyUsername(username) && verifyPassword(password)) {
+            mPresenter.login(username, password);
+        }
+    }
+
+    private boolean verifyUsername(String username) {
+        tlUsername.setError(null);
         if (TextUtils.isEmpty(username)) {
             tlUsername.setError("输入账号");
-        } else if (TextUtils.isEmpty(password)) {
-            tlPassword.setError("输入密码");
+            return false;
         } else {
-            mPresenter.login(username, password);
+            return true;
+        }
+    }
+
+    private boolean verifyPassword(String password) {
+        tlPassword.setError(null);
+        if (TextUtils.isEmpty(password)) {
+            tlPassword.setError("输入密码");
+            return false;
+        } else {
+            return true;
         }
     }
 }

@@ -6,8 +6,6 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.github2136.wardrobe.R;
@@ -17,7 +15,6 @@ import com.github2136.wardrobe.presenter.user.RegisteredPresenter;
 import com.github2136.wardrobe.ui.view.user.IRegisteredView;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class RegisteredActivity extends BaseActivity<RegisteredPresenter> implements IRegisteredView {
@@ -50,33 +47,79 @@ public class RegisteredActivity extends BaseActivity<RegisteredPresenter> implem
     protected void initData(Bundle savedInstanceState) {
         setSupportActionBar(tbTitle);
         setTitle("注册");
-        etConfirmPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                onViewClicked();
-                return true;
-            }
-        });
+        etUsername.setOnEditorActionListener(mOnEditorActionListener);
+        etPassword.setOnEditorActionListener(mOnEditorActionListener);
+        etConfirmPassword.setOnEditorActionListener(mOnEditorActionListener);
     }
+
+    TextView.OnEditorActionListener mOnEditorActionListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            switch (v.getId()) {
+                case R.id.et_username:
+                    String username = v.getText().toString().trim();
+                    return !verifyUsername(username);
+                case R.id.et_password:
+                    String password = v.getText().toString();
+                    return !verifyPassword(password);
+                case R.id.et_confirm_password:
+                    password = etPassword.getText().toString();
+                    String confirmPassword = v.getText().toString();
+                    if (verifyConfirmPassword(password, confirmPassword)) {
+                        onViewClicked();
+                        return false;
+                    } else {
+                        return true;
+                    }
+            }
+            return false;
+        }
+    };
 
     @OnClick(R.id.btn_registered)
     public void onViewClicked() {
-        tlUsername.setError(null);
-        tlPassword.setError(null);
-        tlConfirmPassword.setError(null);
+        registered();
+    }
+
+    private void registered() {
         String username = etUsername.getText().toString().trim();
         String password = etPassword.getText().toString();
         String confirmPassword = etConfirmPassword.getText().toString();
-        if (TextUtils.isEmpty(username)) {
-            tlUsername.setError("输入账号");
-        } else if (TextUtils.isEmpty(password)) {
-            tlPassword.setError("输入密码");
-        } else if (TextUtils.equals(password, confirmPassword)) {
-            tlConfirmPassword.setError("两次密码不一致");
-        } else {
+        if (verifyUsername(username) && verifyPassword(password) && verifyConfirmPassword(password, confirmPassword)) {
             mPresenter.registered(username, password);
         }
     }
+
+    private boolean verifyUsername(String username) {
+        tlUsername.setError(null);
+        if (TextUtils.isEmpty(username)) {
+            tlUsername.setError("输入账号");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private boolean verifyPassword(String password) {
+        tlPassword.setError(null);
+        if (TextUtils.isEmpty(password)) {
+            tlPassword.setError("输入密码");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private boolean verifyConfirmPassword(String password, String confirmPassword) {
+        tlConfirmPassword.setError(null);
+        if (TextUtils.equals(password, confirmPassword)) {
+            return true;
+        } else {
+            tlConfirmPassword.setError("两次密码不一致");
+            return false;
+        }
+    }
+
 
     @Override
     public void registeredSuccessful(UserInfo userInfo) {
