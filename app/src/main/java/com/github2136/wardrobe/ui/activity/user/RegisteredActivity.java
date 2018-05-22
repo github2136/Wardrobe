@@ -6,6 +6,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.github2136.wardrobe.R;
@@ -46,6 +47,7 @@ public class RegisteredActivity extends BaseActivity<RegisteredPresenter> implem
     @Override
     protected void initData(Bundle savedInstanceState) {
         setSupportActionBar(tbTitle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("注册");
         etUsername.setOnEditorActionListener(mOnEditorActionListener);
         etPassword.setOnEditorActionListener(mOnEditorActionListener);
@@ -120,6 +122,16 @@ public class RegisteredActivity extends BaseActivity<RegisteredPresenter> implem
         }
     }
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return true;
+    }
 
     @Override
     public void registeredSuccessful(UserInfo userInfo) {
