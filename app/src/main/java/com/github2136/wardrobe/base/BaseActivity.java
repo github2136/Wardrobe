@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
 
 /**
  * Activity基础类
- * Created by yubin on 2016/2/23.
+ * Created by yb on 2016/2/23.
  */
 public abstract class BaseActivity<P extends BaseMVPPresenter> extends AppCompatActivity implements IBaseMVPView {
     protected P mPresenter;

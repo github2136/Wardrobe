@@ -11,7 +11,7 @@ import com.github2136.wardrobe.util.Constant;
 import java.util.List;
 
 /**
- * Created by yubin on 2017/7/18.
+ * Created by yb on 2017/7/18.
  */
 
 public class MainAdapter extends BaseLoadMoreRecyclerAdapter<ClothingInfo> {

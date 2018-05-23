@@ -1,5 +1,6 @@
 package com.github2136.wardrobe.ui.activity.user;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -13,6 +14,7 @@ import com.github2136.wardrobe.R;
 import com.github2136.wardrobe.base.BaseActivity;
 import com.github2136.wardrobe.model.entity.UserInfo;
 import com.github2136.wardrobe.presenter.user.RegisteredPresenter;
+import com.github2136.wardrobe.ui.activity.MainActivity;
 import com.github2136.wardrobe.ui.view.user.IRegisteredView;
 
 import butterknife.BindView;
@@ -136,6 +138,8 @@ public class RegisteredActivity extends BaseActivity<RegisteredPresenter> implem
     @Override
     public void registeredSuccessful(UserInfo userInfo) {
         showToast("注册成功");
+        finish();
+        startActivity(new Intent(mContext, MainActivity.class));
     }
 
     @Override

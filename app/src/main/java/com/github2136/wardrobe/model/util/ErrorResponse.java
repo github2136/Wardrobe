@@ -2,7 +2,7 @@ package com.github2136.wardrobe.model.util;
 
 /**
  * 错误响应
- * Created by yubin on 2017/8/18.
+ * Created by yb on 2017/8/18.
  */
 
 public class ErrorResponse {

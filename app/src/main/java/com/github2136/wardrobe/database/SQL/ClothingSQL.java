@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by yubin on 2017/8/7.
+ * Created by yb on 2017/8/7.
  */
 
 public class ClothingSQL extends BaseSQLData<ClothingInfo> {
@@ -32,13 +32,13 @@ public class ClothingSQL extends BaseSQLData<ClothingInfo> {
     }
 
     public List<ClothingInfo> queryByLimit(int pageNum, int pageSize) {
-        return query(ClothingInfo_.DATA_valid + "=?", new String[]{"1"}, null, null, ClothingInfo_.DATA_modifyDate + " desc", String.format("%d,%d", pageNum * pageSize, pageSize));
+        return null;//query(ClothingInfo_.DATA_valid + "=?", new String[]{"1"}, null, null, ClothingInfo_.DATA_modifyDate + " desc", String.format("%d,%d", pageNum * pageSize, pageSize));
     }
 
     public boolean insertClothing(ClothingInfo clothingInfo) {
         boolean success = false;
         String ciId = UUID.randomUUID().toString();
-        clothingInfo.setCiId(ciId);
+//        clothingInfo.setCiId(ciId);
         SQLiteDatabase dbWrite = this.mSQLHelper.getWritableDatabase();
         dbWrite.beginTransaction();
         if (insert(dbWrite, clothingInfo) > 0) {
@@ -67,11 +67,11 @@ public class ClothingSQL extends BaseSQLData<ClothingInfo> {
         SQLiteDatabase dbWrite = this.mSQLHelper.getWritableDatabase();
         dbWrite.beginTransaction();
         if (updateByPrimaryKey(dbWrite, clothingInfo) > 0) {
-            mMediaFileSQL.delete(dbWrite, MediaFile_.DATA_ciId + "=?", new String[]{clothingInfo.getCiId()});
+//            mMediaFileSQL.delete(dbWrite, MediaFile_.DATA_ciId + "=?", new String[]{clothingInfo.getCiId()});
             int count = 0;
             for (int i = 0; i < clothingInfo.getMediaFiles().size(); i++) {
                 MediaFile mediaFile = clothingInfo.getMediaFiles().get(i);
-                mediaFile.setCiId(clothingInfo.getCiId());
+//                mediaFile.setCiId(clothingInfo.getCiId());
                 String fmId = UUID.randomUUID().toString();
                 mediaFile.setFmId(fmId);
                 if (mMediaFileSQL.insert(dbWrite, mediaFile) > 0) {
