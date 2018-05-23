@@ -6,6 +6,7 @@ import com.bumptech.glide.module.AppGlideModule;
 /**
  * Created by yb on 2018/5/16.
  */
+
 @GlideModule
-public class Glide extends AppGlideModule {
+public class WGlideModule extends AppGlideModule {
 }
