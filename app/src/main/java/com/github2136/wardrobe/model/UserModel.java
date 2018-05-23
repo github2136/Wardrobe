@@ -19,6 +19,10 @@ public class UserModel extends BaseMVPModel {
         mOkHttpUtil = new OKHttpUtil(activity, mTag);
     }
 
+    public void autoLogin(HttpCallback callback) {
+        mOkHttpUtil.doGetRequest(mBaseUrl, mUser + "/me", null, callback);
+    }
+
     public void login(String username, String password, HttpCallback callback) {
         ArrayMap<String, Object> params = new ArrayMap<>();
         params.put("username", username);
