@@ -49,6 +49,9 @@ public class LoginActivity extends BaseActivity<LoginPresenters> implements ILog
         setTitle("登录");
         etUsername.setOnEditorActionListener(mOnEditorActionListener);
         etPassword.setOnEditorActionListener(mOnEditorActionListener);
+        if (mPresenter.isAutoLogin()) {
+            mPresenter.autoLogin();
+        }
     }
 
     TextView.OnEditorActionListener mOnEditorActionListener = new TextView.OnEditorActionListener() {

@@ -21,8 +21,8 @@
             android:name="select_photo_path"
             android:value="wardrobe/photo"/>
         <meta-data
-            android:name="com.github2136.wardrobe.util.glide.ProjectGlideModule"
-            android:value="GlideModule"/>
+            android:name="com.github2136.wardrobe.util.glide.GlideLoader"
+            android:value="picker_image_loader"/>
 
         <!-- 登录 -->
         <activity

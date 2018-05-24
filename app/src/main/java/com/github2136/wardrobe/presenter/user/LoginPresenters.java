@@ -29,7 +29,7 @@ public class LoginPresenters extends BaseMVPPresenter<ILoginView> {
 
     public void login(String username, String password) {
         mView.showProgressDialog();
-        mUserModel.login(username,password, new HttpCallback() {
+        mUserModel.login(username, password, new HttpCallback() {
                     @Override
                     public void onFailure(Call call, Exception e) {
                         mView.dismissDialog();
@@ -52,6 +52,37 @@ public class LoginPresenters extends BaseMVPPresenter<ILoginView> {
                     }
                 }
         );
+    }
+
+    public void autoLogin() {
+        mView.showProgressDialog();
+        mUserModel.autoLogin(new HttpCallback() {
+                                 @Override
+                                 public void onFailure(Call call, Exception e) {
+                                     mView.dismissDialog();
+                                     mView.loginFailure(failedStr);
+                                 }
+
+                                 @Override
+                                 public void onResponse(Call call, Response response, String bodyStr) {
+                                     mView.dismissDialog();
+                                     if (isSuccess(bodyStr)) {
+                                         UserInfo userInfo = mJsonUtil.getObjectByStr(bodyStr, UserInfo.class);
+                                         mSpUtil.edit()
+                                                 .putValue(Constant.SP_SESSION_TOKEN, userInfo.getSessionToken())
+                                                 .putValue(Constant.SP_OBJECT_ID, userInfo.getObjectId())
+                                                 .apply();
+                                         mView.loginSuccessful(userInfo);
+                                     } else {
+                                         mView.loginFailure(getFailedStr(bodyStr));
+                                     }
+                                 }
+                             }
+        );
+    }
+
+    public boolean isAutoLogin() {
+        return mSpUtil.contains(Constant.SP_SESSION_TOKEN);
     }
 
     @Override
