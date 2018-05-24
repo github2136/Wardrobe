@@ -10,12 +10,26 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
+            buildConfigField 'String' , 'APP_ID','"c6DtXIFY5bVgUE1PoL2OpADl-gzGzoHsz"'
+            buildConfigField 'String' , 'APP_KEY','"jvu3zeRhzIHFPqj2oQSnXpoM"'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug{
+            buildConfigField 'String' , 'APP_ID','"c6DtXIFY5bVgUE1PoL2OpADl-gzGzoHsz"'
+            buildConfigField 'String' , 'APP_KEY','"jvu3zeRhzIHFPqj2oQSnXpoM"'
+        }
+    }
+    packagingOptions{
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+    lintOptions {
+        abortOnError false
     }
 }
 
@@ -25,6 +39,8 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    // LeanCloud 基础包
+    compile ('cn.leancloud.android:avoscloud-sdk:v4.6.4')
     compile 'com.squareup.okhttp3:okhttp:3.10.0'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'

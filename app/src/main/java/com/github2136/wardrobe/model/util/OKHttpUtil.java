@@ -9,13 +9,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.webkit.MimeTypeMap;
 
 
+import com.github2136.util.FileUtil;
 import com.github2136.util.JsonUtil;
 import com.github2136.util.SPUtil;
 import com.github2136.util.ThreadUtil;
+import com.github2136.wardrobe.BuildConfig;
 import com.github2136.wardrobe.util.Constant;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.security.MessageDigest;
@@ -38,9 +42,10 @@ import okhttp3.Response;
  * OKHTTP请求类
  */
 public class OKHttpUtil {
-    private String mAppId = "c6DtXIFY5bVgUE1PoL2OpADl-gzGzoHsz";
-    private String mAppKey = "jvu3zeRhzIHFPqj2oQSnXpoM";
+    private String mAppId = BuildConfig.APP_ID;
+    private String mAppKey = BuildConfig.APP_KEY;
     private MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
     private SPUtil mSpUtil;
     private OkHttpClient mOkHttpClient;
     Handler mHandler;
@@ -133,15 +138,7 @@ public class OKHttpUtil {
                             @Override
                             public void run() {
                                 if (!isViewGone()) {
-//                                    try {
-//                                        if (response.isSuccessful()) {
                                     callback.onResponse(call, response, bodyStr);
-//                                        } else {
-//                                            callback.onFailure(call, new RuntimeException("http status:" + response.code()));
-//                                        }
-//                                    } catch (IOException e) {
-//                                        callback.onFailure(call, e);
-//                                    }
                                 }
                             }
                         });
@@ -262,15 +259,7 @@ public class OKHttpUtil {
                             @Override
                             public void run() {
                                 if (!isViewGone()) {
-//                                    try {
-//                                        if (response.isSuccessful()) {
                                     callback.onResponse(call, response, bodyStr);
-//                                        } else {
-//                                            callback.onFailure(call, new RuntimeException("http status:" + response.code()));
-//                                        }
-//                                    } catch (IOException e) {
-//                                        callback.onFailure(call, e);
-//                                    }
                                 }
                             }
                         });
@@ -279,6 +268,134 @@ public class OKHttpUtil {
             }
         });
     }
+
+    /**
+     * DELETE请求
+     */
+    public void doDeleteRequest(final String url,
+                                final String method,
+                                final ArrayMap<String, Object> params,
+                                final HttpCallback callback) {
+        threadUtil.execute(new Runnable() {
+            @Override
+            public void run() {
+                StringBuilder urlSb = new StringBuilder(url + method);
+                if (params != null && !params.isEmpty()) {
+                    urlSb.append("?");
+                    for (Map.Entry<String, Object> entry : params.entrySet()) {
+                        String value = entry.getValue().toString();
+                        if (!TextUtils.isEmpty(value)) {
+                            urlSb.append(entry.getKey());
+                            urlSb.append("=");
+                            urlSb.append(entry.getValue());
+                            urlSb.append("&");
+                        }
+                    }
+                    urlSb.deleteCharAt(urlSb.length() - 1);
+                }
+                String timestamp = String.valueOf(getUTCTime());
+
+                Request.Builder builder = new Request.Builder()
+                        .url(urlSb.toString())
+                        .addHeader("X-LC-Id", mAppId)
+                        .addHeader("X-LC-Sign", getMD5(timestamp + mAppKey) + "," + timestamp)
+                        .tag(mTag)
+                        .delete();
+                if (mSpUtil.contains(Constant.SP_SESSION_TOKEN)) {
+                    builder.addHeader("X-LC-Session", mSpUtil.getString(Constant.SP_SESSION_TOKEN));
+                }
+                Request request = builder.build();
+                Call call = mOkHttpClient.newCall(request);
+                call.enqueue(new Callback() {
+                    @Override
+                    public void onFailure(final Call call, final IOException e) {
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!isViewGone()) {
+                                    callback.onFailure(call, e);
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(final Call call, final Response response) throws IOException {
+                        final String bodyStr = response.body().string();
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!isViewGone()) {
+                                    callback.onResponse(call, response, bodyStr);
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 上传文件
+     */
+    public void doUploadFile(final String url,
+                             final String method,
+                             final File file,
+                             final HttpCallback callback) {
+        threadUtil.execute(new Runnable() {
+            @Override
+            public void run() {
+                String suffix = FileUtil.getSuffix(file.getAbsolutePath());
+                //获取文件后缀
+                MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+                String contentType = mimeTypeMap.getMimeTypeFromExtension(suffix);
+                RequestBody body = RequestBody.create(MediaType.parse(contentType), file);
+                String timestamp = String.valueOf(getUTCTime());
+
+                Request.Builder builder = new Request.Builder()
+                        .url(url + method)
+                        .addHeader("X-LC-Id", mAppId)
+                        .addHeader("X-LC-Sign", getMD5(timestamp + mAppKey) + "," + timestamp)
+                        .addHeader("Content-Type", contentType)
+                        .tag(mTag)
+                        .post(body);
+                if (mSpUtil.contains(Constant.SP_SESSION_TOKEN)) {
+                    builder.addHeader("X-LC-Session", mSpUtil.getString(Constant.SP_SESSION_TOKEN));
+                }
+                Request request = builder.build();
+
+                Call call = mOkHttpClient.newCall(request);
+                call.enqueue(new Callback() {
+                    @Override
+                    public void onFailure(final Call call, final IOException e) {
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!isViewGone()) {
+                                    callback.onFailure(call, e);
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(final Call call, final Response response) throws IOException {
+                        final String bodyStr = response.body().string();
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!isViewGone()) {
+                                    callback.onResponse(call, response, bodyStr);
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+
 
     /**
      * 界面已销毁

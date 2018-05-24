@@ -27,7 +27,7 @@ public class LoginPresenters extends BaseMVPPresenter<ILoginView> {
         mUserModel = new UserModel(activity);
     }
 
-    public void login(String username, String password) {
+    public void login(final String username, String password) {
         mView.showProgressDialog();
         mUserModel.login(username, password, new HttpCallback() {
                     @Override
@@ -42,6 +42,7 @@ public class LoginPresenters extends BaseMVPPresenter<ILoginView> {
                         if (isSuccess(bodyStr)) {
                             UserInfo userInfo = mJsonUtil.getObjectByStr(bodyStr, UserInfo.class);
                             mSpUtil.edit()
+                                    .putValue(Constant.SP_USER_NAME, username)
                                     .putValue(Constant.SP_SESSION_TOKEN, userInfo.getSessionToken())
                                     .putValue(Constant.SP_OBJECT_ID, userInfo.getObjectId())
                                     .apply();
@@ -59,6 +60,7 @@ public class LoginPresenters extends BaseMVPPresenter<ILoginView> {
         mUserModel.autoLogin(new HttpCallback() {
                                  @Override
                                  public void onFailure(Call call, Exception e) {
+                                     mSpUtil.remove(Constant.SP_SESSION_TOKEN,Constant.SP_OBJECT_ID);
                                      mView.dismissDialog();
                                      mView.loginFailure(failedStr);
                                  }
@@ -74,6 +76,7 @@ public class LoginPresenters extends BaseMVPPresenter<ILoginView> {
                                                  .apply();
                                          mView.loginSuccessful(userInfo);
                                      } else {
+                                         mSpUtil.remove(Constant.SP_SESSION_TOKEN,Constant.SP_OBJECT_ID);
                                          mView.loginFailure(getFailedStr(bodyStr));
                                      }
                                  }

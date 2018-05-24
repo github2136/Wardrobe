@@ -65,24 +65,6 @@ public class MainPresenter extends BaseMVPPresenter<IMainView> {
                         }
                     }
                 });
-
-
-//        mClothingInfoModel.getClothing(pageNumber, Constant.PAGE_SIZE, new RequestCallback() {
-//            @Override
-//            public void onFailure(Exception e) {
-//                mView.getClothingFailure(failedStr);
-//            }
-//
-//            @Override
-//            public void onResponse(String response) {
-////                ErrorResponse<List<ClothingInfo>> resp = mJsonUtil.getObjectByStr(response, new TypeToken<ErrorResponse<List<ClothingInfo>>>() {}.getType());
-////                if (isSuccess(resp)) {
-////                    mView.getClothingSuccessful(resp.getData());
-////                } else {
-////                    mView.getClothingFailure(getFailedStr(resp));
-////                }
-//            }
-//        });
     }
 
     @Override

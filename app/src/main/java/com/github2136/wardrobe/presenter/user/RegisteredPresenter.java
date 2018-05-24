@@ -27,7 +27,7 @@ public class RegisteredPresenter extends BaseMVPPresenter<IRegisteredView> {
         mUserModel = new UserModel(activity);
     }
 
-    public void registered(String username, String password) {
+    public void registered(final String username, String password) {
         mView.showProgressDialog();
         mUserModel.registered(username, password, new HttpCallback() {
             @Override
@@ -42,6 +42,7 @@ public class RegisteredPresenter extends BaseMVPPresenter<IRegisteredView> {
                 if (isSuccess(bodyStr)) {
                     UserInfo userInfo = mJsonUtil.getObjectByStr(bodyStr, UserInfo.class);
                     mSpUtil.edit()
+                            .putValue(Constant.SP_USER_NAME, username)
                             .putValue(Constant.SP_SESSION_TOKEN, userInfo.getSessionToken())
                             .putValue(Constant.SP_OBJECT_ID, userInfo.getObjectId())
                             .apply();

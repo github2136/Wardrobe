@@ -41,7 +41,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class EditClothingActivity extends BaseActivity<EditClothingPresenter> implements IEditClothingView {
-//    public static final String ARG_CLOTHING = "CLOTHING";
+    public static final String ARG_CLOTHING = "CLOTHING";
 //    private static final int REQUEST_SELECT_IMG = 509;
 //    private static final int REQUEST_CAPTURE = 896;
 //    private ArrayList<String> mImgs;//原图地址

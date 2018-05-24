@@ -6,6 +6,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.MimeTypeMap;
 
 import com.github2136.base.BaseLoadMoreRecyclerAdapter;
 import com.github2136.wardrobe.R;
@@ -82,11 +83,11 @@ public class MainActivity extends BaseListActivity<ClothingInfo, MainPresenter> 
 
     @Override
     protected void itemClick(ClothingInfo clothingInfo, int position) {
-//        if (!srContent.isRefreshing()) {
-//            Intent intent = new Intent(mContext, EditClothingActivity.class);
-//            intent.putExtra(EditClothingActivity.ARG_CLOTHING, clothingInfo);
-//            startActivityForResult(intent, REQUEST_EDIT);
-//        }
+        if (!srContent.isRefreshing()) {
+            Intent intent = new Intent(mContext, EditClothingActivity.class);
+            intent.putExtra(EditClothingActivity.ARG_CLOTHING, clothingInfo);
+            startActivityForResult(intent, REQUEST_EDIT);
+        }
     }
 
     @Override

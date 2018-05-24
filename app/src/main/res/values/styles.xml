@@ -20,6 +20,7 @@
     </style>
 
     <style name="ToolBar.Theme" parent="@style/ThemeOverlay.AppCompat.Dark">
+        <item name="android:tint">@android:color/white</item>
     </style>
 
     <style name="ToolBar.PopTheme" parent="@style/ThemeOverlay.AppCompat.Light">
