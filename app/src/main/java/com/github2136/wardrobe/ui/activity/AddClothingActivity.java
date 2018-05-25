@@ -27,6 +27,7 @@ import com.github2136.util.FileUtil;
 import com.github2136.wardrobe.R;
 import com.github2136.wardrobe.base.BaseActivity;
 import com.github2136.wardrobe.model.entity.ClothingInfo;
+import com.github2136.wardrobe.model.entity.MediaFile;
 import com.github2136.wardrobe.presenter.AddClothingPresenter;
 import com.github2136.wardrobe.ui.view.IAddClothingView;
 import com.github2136.wardrobe.util.glide.GlideApp;
@@ -43,7 +44,7 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
     private static final int REQUEST_SELECT_IMG = 509;
     private static final int REQUEST_CAPTURE = 896;
     private ArrayList<String> mImgs;//原图地址
-    private ArrayList<AVFile> mFileObject;//上传后的File
+    private ArrayList<MediaFile> mFileObject;//上传后的File
     private ArrayList<String> mImgsIndex;//图片tag
     private int mSaveIndex;//图片保存
     private LayoutInflater mLayoutInflater;
@@ -146,54 +147,6 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
                         });
     }
 
-//    ClothingInfo clothingInfo = new ClothingInfo();
-
-    //                                    clothingInfo.setCiType(spType.getSelectedItem().toString());
-//                                    clothingInfo.setCiColor(spColor.getSelectedItem().toString());
-////                                    StringBuilder sb = new StringBuilder();
-////                                    if (cbSpring.isChecked()) {
-////                                        sb.append("春,");
-////                                    }
-////                                    if (cbSummer.isChecked()) {
-////                                        sb.append("夏,");
-////                                    }
-////                                    if (cbAutumn.isChecked()) {
-////                                        sb.append("秋,");
-////                                    }
-////                                    if (cbWinter.isChecked()) {
-////                                        sb.append("冬,");
-////                                    }
-////                                    if (sb.length() > 1) {
-////                                        sb.deleteCharAt(sb.length() - 1);
-////                                    }
-////                                    clothingInfo.setCiSeason(sb.toString());
-//                                    clothingInfo.setCiRemark(etRemark.getText().toString());
-//                                    List<MediaFile> mfs = new ArrayList<>();
-//                                    for (int i = 0; i < mFileObject.size(); i++) {
-//                                        try {
-//                                            AVFile file = AVFile.withAbsoluteLocalPath("LeanCloud.png",mFileObject.get(i));
-//                                            file.saveInBackground(new SaveCallback() {
-//                                                @Override
-//                                                public void done(AVException e) {
-////                                                    Log.d(TAG, file.getUrl());//返回一个唯一的 Url 地址
-//                                                }
-//                                            },new ProgressCallback() {
-//                                                @Override
-//                                                public void done(Integer integer) {
-//                                                    // 上传进度数据，integer 介于 0 和 100。
-//                                                }
-//                                            });
-//                                        } catch (FileNotFoundException e) {
-//                                            e.printStackTrace();
-//                                        }
-////                                        MediaFile mf = new MediaFile();
-////                                        mf.setFmPath(mFileObject.get(i));
-////                                        mfs.add(mf);
-//                                    }
-//                                    clothingInfo.setMediaFiles(mfs);
-//                                    clothingInfo.setValid("1");
-////                                    clothingInfo.setModifyDate(new Date());
-//                                    mPresenter.saveClothing(clothingInfo);
     @OnClick(R.id.ib_add)
     public void onViewClicked() {
         if (mImgs.size() < mPicCount) {
@@ -309,26 +262,41 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
     }
 
     @Override
-    public void uploadFileSuccessful(AVFile file) {
+    public void uploadFileSuccessful(MediaFile file) {
         mFileObject.add(file);
         mSaveIndex++;
         if (mImgs.size() > mSaveIndex) {
             getBitmap();
         } else {
             ClothingInfo clothingInfo = new ClothingInfo();
+            StringBuilder sb = new StringBuilder();
+            if (cbSpring.isChecked()) {
+                sb.append("春,");
+            }
+            if (cbSummer.isChecked()) {
+                sb.append("夏,");
+            }
+            if (cbAutumn.isChecked()) {
+                sb.append("秋,");
+            }
+            if (cbWinter.isChecked()) {
+                sb.append("冬,");
+            }
+            if (sb.length() > 1) {
+                sb.deleteCharAt(sb.length() - 1);
+            }
             clothingInfo.setCiType(spType.getSelectedItem().toString());
-            clothingInfo.setCiColor(spColor.getSelectedItem().toString());
-
             clothingInfo.setCiRemark(etRemark.getText().toString());
-
-            clothingInfo.setCiPicId(mFileObject);
+            clothingInfo.setCiPicture(mFileObject);
             clothingInfo.setValid(true);
+
+            clothingInfo.setCiSeason(sb.toString());
             mPresenter.saveClothing(clothingInfo);
         }
     }
 
     @Override
     public void uploadFileFailure(String msg) {
-
+        showToast(msg);
     }
 }

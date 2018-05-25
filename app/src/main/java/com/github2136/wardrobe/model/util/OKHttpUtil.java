@@ -270,6 +270,65 @@ public class OKHttpUtil {
     }
 
     /**
+     * PUT请求Json
+     */
+    public void doPutJsonRequest(final String url,
+                                  final String method,
+                                  final ArrayMap<String, Object> params,
+                                  final HttpCallback callback) {
+        threadUtil.execute(new Runnable() {
+            @Override
+            public void run() {
+                String json = "";
+                if (params != null && !params.isEmpty()) {
+                    json = JsonUtil.getInstance().getGson().toJson(params);
+                }
+                RequestBody body = RequestBody.create(JSON, json);
+                String timestamp = String.valueOf(getUTCTime());
+
+                Request.Builder builder = new Request.Builder()
+                        .url(url + method)
+                        .addHeader("X-LC-Id", mAppId)
+                        .addHeader("X-LC-Sign", getMD5(timestamp + mAppKey) + "," + timestamp)
+                        .tag(mTag)
+                        .put(body);
+                if (mSpUtil.contains(Constant.SP_SESSION_TOKEN)) {
+                    builder.addHeader("X-LC-Session", mSpUtil.getString(Constant.SP_SESSION_TOKEN));
+                }
+                Request request = builder.build();
+
+                Call call = mOkHttpClient.newCall(request);
+                call.enqueue(new Callback() {
+                    @Override
+                    public void onFailure(final Call call, final IOException e) {
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!isViewGone()) {
+                                    callback.onFailure(call, e);
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(final Call call, final Response response) throws IOException {
+                        final String bodyStr = response.body().string();
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!isViewGone()) {
+                                    callback.onResponse(call, response, bodyStr);
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    /**
      * DELETE请求
      */
     public void doDeleteRequest(final String url,

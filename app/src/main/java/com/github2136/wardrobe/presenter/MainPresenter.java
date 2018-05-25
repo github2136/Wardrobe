@@ -7,20 +7,11 @@ import com.github2136.wardrobe.base.mvp.BaseMVPPresenter;
 import com.github2136.wardrobe.model.ClothingInfoModel;
 import com.github2136.wardrobe.model.entity.ClothingInfo;
 import com.github2136.wardrobe.model.entity.ClothingInfo_;
-import com.github2136.wardrobe.model.entity.ClothingType;
-import com.github2136.wardrobe.model.entity.ClothingType_;
-import com.github2136.wardrobe.model.entity.UserInfo;
-import com.github2136.wardrobe.model.util.ErrorResponse;
 import com.github2136.wardrobe.model.util.HttpCallback;
-import com.github2136.wardrobe.model.util.RequestCallback;
 import com.github2136.wardrobe.model.util.Results;
 import com.github2136.wardrobe.ui.view.IMainView;
 import com.github2136.wardrobe.util.Constant;
 import com.google.gson.reflect.TypeToken;
-
-import java.util.List;
-
-import javax.xml.transform.Result;
 
 import okhttp3.Call;
 import okhttp3.Response;

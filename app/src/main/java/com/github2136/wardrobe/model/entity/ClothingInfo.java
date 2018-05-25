@@ -36,14 +36,14 @@ public class ClothingInfo implements Parcelable {
     @Column
     private String ciRemark;//备注
     @Column
-    private List<AVFile> ciPicId;//图片ID
+    private List<MediaFile> ciPicture;//图片
     @Column
     private Boolean valid;//是否启用
     @Column
     private Byte viewSeq;//排序
 
     public String getObjectId() {
-        return objectId == null ? "" : objectId;
+        return objectId;
     }
 
     public void setObjectId(String objectId) {
@@ -67,7 +67,7 @@ public class ClothingInfo implements Parcelable {
     }
 
     public String getUserId() {
-        return userId == null ? "" : userId;
+        return userId;
     }
 
     public void setUserId(String userId) {
@@ -75,7 +75,7 @@ public class ClothingInfo implements Parcelable {
     }
 
     public String getCiType() {
-        return ciType == null ? "" : ciType;
+        return ciType;
     }
 
     public void setCiType(String ciType) {
@@ -83,7 +83,7 @@ public class ClothingInfo implements Parcelable {
     }
 
     public String getCiColor() {
-        return ciColor == null ? "" : ciColor;
+        return ciColor;
     }
 
     public void setCiColor(String ciColor) {
@@ -91,7 +91,7 @@ public class ClothingInfo implements Parcelable {
     }
 
     public String getCiSeason() {
-        return ciSeason == null ? "" : ciSeason;
+        return ciSeason;
     }
 
     public void setCiSeason(String ciSeason) {
@@ -99,19 +99,19 @@ public class ClothingInfo implements Parcelable {
     }
 
     public String getCiRemark() {
-        return ciRemark == null ? "" : ciRemark;
+        return ciRemark;
     }
 
     public void setCiRemark(String ciRemark) {
         this.ciRemark = ciRemark;
     }
 
-    public List<AVFile> getCiPicId() {
-        return ciPicId;
+    public List<MediaFile> getCiPicture() {
+        return ciPicture;
     }
 
-    public void setCiPicId(List<AVFile> ciPicId) {
-        this.ciPicId = ciPicId;
+    public void setCiPicture(List<MediaFile> ciPicture) {
+        this.ciPicture = ciPicture;
     }
 
     public Boolean getValid() {
@@ -143,7 +143,7 @@ public class ClothingInfo implements Parcelable {
         dest.writeString(this.ciColor);
         dest.writeString(this.ciSeason);
         dest.writeString(this.ciRemark);
-        dest.writeList(this.ciPicId);
+        dest.writeTypedList(this.ciPicture);
         dest.writeValue(this.valid);
         dest.writeValue(this.viewSeq);
     }
@@ -161,8 +161,7 @@ public class ClothingInfo implements Parcelable {
         this.ciColor = in.readString();
         this.ciSeason = in.readString();
         this.ciRemark = in.readString();
-        this.ciPicId = new ArrayList<AVFile>();
-        in.readList(this.ciPicId, AVFile.class.getClassLoader());
+        this.ciPicture = in.createTypedArrayList(MediaFile.CREATOR);
         this.valid = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.viewSeq = (Byte) in.readValue(Byte.class.getClassLoader());
     }

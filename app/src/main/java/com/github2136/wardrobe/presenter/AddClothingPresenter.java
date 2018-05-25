@@ -9,6 +9,7 @@ import com.avos.avoscloud.SaveCallback;
 import com.github2136.wardrobe.base.mvp.BaseMVPPresenter;
 import com.github2136.wardrobe.model.ClothingInfoModel;
 import com.github2136.wardrobe.model.entity.ClothingInfo;
+import com.github2136.wardrobe.model.entity.MediaFile;
 import com.github2136.wardrobe.model.entity.UserInfo;
 import com.github2136.wardrobe.model.util.ErrorResponse;
 import com.github2136.wardrobe.model.util.HttpCallback;
@@ -49,7 +50,6 @@ public class AddClothingPresenter extends BaseMVPPresenter<IAddClothingView> {
                         } else {
                             mView.addClothingFailure(getFailedStr(bodyStr));
                         }
-
                     }
                 }
         );
@@ -62,7 +62,11 @@ public class AddClothingPresenter extends BaseMVPPresenter<IAddClothingView> {
             file.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(AVException e) {
-                    mView.uploadFileSuccessful(file);
+                    MediaFile mediaFile=new MediaFile();
+                    mediaFile.setUrl(file.getUrl());
+                    mediaFile.setName(file.getName());
+                    mediaFile.setObjectId(file.getObjectId());
+                    mView.uploadFileSuccessful(mediaFile);
                 }
             }, new ProgressCallback() {
                 @Override
@@ -72,6 +76,7 @@ public class AddClothingPresenter extends BaseMVPPresenter<IAddClothingView> {
             });
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            mView.uploadFileFailure(failedStr);
         }
     }
 

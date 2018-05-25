@@ -36,12 +36,12 @@ public class MainAdapter extends BaseLoadMoreRecyclerAdapter<ClothingInfo> {
     @Override
     protected void onBindView(ClothingInfo clothingInfo, ViewHolderRecyclerView viewHolderRecyclerView, int i) {
         ImageView ivImage = viewHolderRecyclerView.getView(R.id.iv_image);
-//        GlideApp.with(mContext)
-//                .load(clothingInfo.getCiPicId().get(0).getUrl())
-//                .error(R.drawable.img_picker_fail)
-//                .placeholder(R.drawable.img_picker_place)
-//                .into(ivImage);
-        String clothing = "类型：" + clothingInfo.getCiType() + "   颜色：" + clothingInfo.getCiColor();
+        GlideApp.with(mContext)
+                .load(clothingInfo.getCiPicture().get(0).getUrl())
+                .error(R.drawable.img_picker_fail)
+                .placeholder(R.drawable.img_picker_place)
+                .into(ivImage);
+        String clothing = "类型：" + clothingInfo.getCiType();
         viewHolderRecyclerView.setText(R.id.tv_clothing, clothing);
         viewHolderRecyclerView.setText(R.id.tv_season, "季节：" + clothingInfo.getCiSeason());
         viewHolderRecyclerView.setText(R.id.tv_remark, "备注：" + clothingInfo.getCiRemark());
