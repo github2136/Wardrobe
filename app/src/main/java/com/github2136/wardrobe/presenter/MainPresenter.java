@@ -58,6 +58,10 @@ public class MainPresenter extends BaseMVPPresenter<IMainView> {
                 });
     }
 
+    public void logout() {
+        mSpUtil.remove(Constant.SP_SESSION_TOKEN, Constant.SP_OBJECT_ID);
+    }
+
     @Override
     public void cancelRequest() {
         mClothingInfoModel.cancelRequest();

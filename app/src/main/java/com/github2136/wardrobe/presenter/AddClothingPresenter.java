@@ -10,12 +10,8 @@ import com.github2136.wardrobe.base.mvp.BaseMVPPresenter;
 import com.github2136.wardrobe.model.ClothingInfoModel;
 import com.github2136.wardrobe.model.entity.ClothingInfo;
 import com.github2136.wardrobe.model.entity.MediaFile;
-import com.github2136.wardrobe.model.entity.UserInfo;
-import com.github2136.wardrobe.model.util.ErrorResponse;
 import com.github2136.wardrobe.model.util.HttpCallback;
-import com.github2136.wardrobe.model.util.RequestCallback;
 import com.github2136.wardrobe.ui.view.IAddClothingView;
-import com.github2136.wardrobe.util.Constant;
 
 import java.io.FileNotFoundException;
 

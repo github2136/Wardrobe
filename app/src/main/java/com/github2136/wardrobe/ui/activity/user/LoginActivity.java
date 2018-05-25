@@ -17,6 +17,7 @@ import com.github2136.wardrobe.model.entity.UserInfo;
 import com.github2136.wardrobe.presenter.user.LoginPresenters;
 import com.github2136.wardrobe.ui.activity.MainActivity;
 import com.github2136.wardrobe.ui.view.user.ILoginView;
+import com.github2136.wardrobe.util.Constant;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -51,6 +52,11 @@ public class LoginActivity extends BaseActivity<LoginPresenters> implements ILog
         etPassword.setOnEditorActionListener(mOnEditorActionListener);
         if (mPresenter.isAutoLogin()) {
             mPresenter.autoLogin();
+        }
+        String username = mPresenter.getSPString(Constant.SP_USER_NAME);
+        if (!TextUtils.isEmpty(username)) {
+            etUsername.setText(mPresenter.getSPString(Constant.SP_USER_NAME));
+            etPassword.requestFocus();
         }
     }
 

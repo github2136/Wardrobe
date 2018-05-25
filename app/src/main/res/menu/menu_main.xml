@@ -6,4 +6,8 @@
         android:icon="@drawable/ic_title_add"
         android:title="添加"
         app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_title_logout"
+        android:title="注销"
+        app:showAsAction="never"/>
 </menu>

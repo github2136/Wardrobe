@@ -1,7 +1,9 @@
 package com.github2136.wardrobe.ui.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -9,10 +11,13 @@ import android.view.MenuItem;
 import android.webkit.MimeTypeMap;
 
 import com.github2136.base.BaseLoadMoreRecyclerAdapter;
+import com.github2136.picturepicker.activity.CaptureActivity;
+import com.github2136.picturepicker.activity.PicturePickerActivity;
 import com.github2136.wardrobe.R;
 import com.github2136.wardrobe.base.BaseListActivity;
 import com.github2136.wardrobe.model.entity.ClothingInfo;
 import com.github2136.wardrobe.presenter.MainPresenter;
+import com.github2136.wardrobe.ui.activity.user.LoginActivity;
 import com.github2136.wardrobe.ui.adapter.MainAdapter;
 import com.github2136.wardrobe.ui.view.IMainView;
 
@@ -76,6 +81,21 @@ public class MainActivity extends BaseListActivity<ClothingInfo, MainPresenter> 
         switch (item.getItemId()) {
             case R.id.menu_title_add:
                 startActivityForResult(new Intent(mContext, AddClothingActivity.class), REQUEST_ADD);
+                break;
+            case R.id.menu_title_logout:
+                new AlertDialog.Builder(mContext)
+                        .setTitle(R.string.dialog_title_prompt)
+                        .setMessage("确认注销？")
+                        .setPositiveButton("注销", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mPresenter.logout();
+                                finish();
+                                startActivity(new Intent(mContext, LoginActivity.class));
+                            }
+                        })
+                        .setNegativeButton("取消", null)
+                        .show();
                 break;
         }
         return true;
