@@ -21,6 +21,7 @@ public abstract class BaseMVPModel {
     protected String mUser = "users";
     protected String mCClothingType = "classes/ClothingType";
     protected String mCClothingInfo = "classes/ClothingInfo";
+    protected String mCFile= "classes/_File";
     protected AppCompatActivity mActivity;
     protected Fragment mFragment;
     protected Service mService;

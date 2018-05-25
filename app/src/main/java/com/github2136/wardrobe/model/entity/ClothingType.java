@@ -12,7 +12,7 @@ import java.util.Date;
 @Deprecated
 @Table
 public class ClothingType {
-    @Column
+    @Column(primaryKey = true)
     private String objectId;
     @Column
     private Date createdAt;

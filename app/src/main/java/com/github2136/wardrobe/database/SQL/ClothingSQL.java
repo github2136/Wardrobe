@@ -42,21 +42,21 @@ public class ClothingSQL extends BaseSQLData<ClothingInfo> {
         SQLiteDatabase dbWrite = this.mSQLHelper.getWritableDatabase();
         dbWrite.beginTransaction();
         if (insert(dbWrite, clothingInfo) > 0) {
-            int count = 0;
-            for (int i = 0; i < clothingInfo.getMediaFiles().size(); i++) {
-                MediaFile mediaFile = clothingInfo.getMediaFiles().get(i);
-                mediaFile.setCiId(ciId);
-                String fmId = UUID.randomUUID().toString();
-                mediaFile.setFmId(fmId);
-                if (mMediaFileSQL.insert(dbWrite, mediaFile) > 0) {
-                    count++;
-                }
-            }
-            if (count == clothingInfo.getMediaFiles().size()) {
-                dbWrite.setTransactionSuccessful();
-                success = true;
-            }
-            dbWrite.endTransaction();
+//            int count = 0;
+//            for (int i = 0; i < clothingInfo.getMediaFiles().size(); i++) {
+////                MediaFile mediaFile = clothingInfo.getMediaFiles().get(i);
+////                mediaFile.setCiId(ciId);
+////                String fmId = UUID.randomUUID().toString();
+////                mediaFile.setFmId(fmId);
+////                if (mMediaFileSQL.insert(dbWrite, mediaFile) > 0) {
+////                    count++;
+////                }
+//            }
+//            if (count == clothingInfo.getMediaFiles().size()) {
+//                dbWrite.setTransactionSuccessful();
+//                success = true;
+//            }
+//            dbWrite.endTransaction();
         }
         dbWrite.close();
         return success;
@@ -64,27 +64,27 @@ public class ClothingSQL extends BaseSQLData<ClothingInfo> {
 
     public boolean editClothing(ClothingInfo clothingInfo) {
         boolean success = false;
-        SQLiteDatabase dbWrite = this.mSQLHelper.getWritableDatabase();
-        dbWrite.beginTransaction();
-        if (updateByPrimaryKey(dbWrite, clothingInfo) > 0) {
-//            mMediaFileSQL.delete(dbWrite, MediaFile_.DATA_ciId + "=?", new String[]{clothingInfo.getCiId()});
-            int count = 0;
-            for (int i = 0; i < clothingInfo.getMediaFiles().size(); i++) {
-                MediaFile mediaFile = clothingInfo.getMediaFiles().get(i);
-//                mediaFile.setCiId(clothingInfo.getCiId());
-                String fmId = UUID.randomUUID().toString();
-                mediaFile.setFmId(fmId);
-                if (mMediaFileSQL.insert(dbWrite, mediaFile) > 0) {
-                    count++;
-                }
-            }
-            if (count == clothingInfo.getMediaFiles().size()) {
-                dbWrite.setTransactionSuccessful();
-                success = true;
-            }
-            dbWrite.endTransaction();
-        }
-        dbWrite.close();
+//        SQLiteDatabase dbWrite = this.mSQLHelper.getWritableDatabase();
+//        dbWrite.beginTransaction();
+//        if (updateByPrimaryKey(dbWrite, clothingInfo) > 0) {
+////            mMediaFileSQL.delete(dbWrite, MediaFile_.DATA_ciId + "=?", new String[]{clothingInfo.getCiId()});
+//            int count = 0;
+//            for (int i = 0; i < clothingInfo.getMediaFiles().size(); i++) {
+//                MediaFile mediaFile = clothingInfo.getMediaFiles().get(i);
+////                mediaFile.setCiId(clothingInfo.getCiId());
+//                String fmId = UUID.randomUUID().toString();
+////                mediaFile.setFmId(fmId);
+//                if (mMediaFileSQL.insert(dbWrite, mediaFile) > 0) {
+//                    count++;
+//                }
+//            }
+//            if (count == clothingInfo.getMediaFiles().size()) {
+//                dbWrite.setTransactionSuccessful();
+//                success = true;
+//            }
+//            dbWrite.endTransaction();
+//        }
+//        dbWrite.close();
         return success;
     }
 }

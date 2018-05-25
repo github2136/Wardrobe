@@ -37,8 +37,8 @@ public class MainAdapter extends BaseLoadMoreRecyclerAdapter<ClothingInfo> {
     protected void onBindView(ClothingInfo clothingInfo, ViewHolderRecyclerView viewHolderRecyclerView, int i) {
         ImageView ivImage = viewHolderRecyclerView.getView(R.id.iv_image);
 //        GlideApp.with(mContext)
-//                .load(clothingInfo.getMediaFiles().get(0).getFmPath())
-//        .error(R.drawable.img_picker_fail)
+//                .load(clothingInfo.getCiPicId().get(0).getUrl())
+//                .error(R.drawable.img_picker_fail)
 //                .placeholder(R.drawable.img_picker_place)
 //                .into(ivImage);
         String clothing = "类型：" + clothingInfo.getCiType() + "   颜色：" + clothingInfo.getCiColor();

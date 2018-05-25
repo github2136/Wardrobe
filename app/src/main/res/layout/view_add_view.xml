@@ -16,6 +16,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:background="@android:color/transparent"
-        android:padding="8dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="8dp"
+        android:tint="#fd2525"
         app:srcCompat="@drawable/img_add_delete"/>
 </RelativeLayout>

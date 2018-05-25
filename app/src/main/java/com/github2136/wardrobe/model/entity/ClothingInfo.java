@@ -3,9 +3,11 @@ package com.github2136.wardrobe.model.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.avos.avoscloud.AVFile;
 import com.github2136.sqliteutil.Column;
 import com.github2136.sqliteutil.Table;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,13 +36,14 @@ public class ClothingInfo implements Parcelable {
     @Column
     private String ciRemark;//备注
     @Column
-    private String valid;//是否启用
+    private List<AVFile> ciPicId;//图片ID
+    @Column
+    private Boolean valid;//是否启用
     @Column
     private Byte viewSeq;//排序
-    private List<MediaFile> mediaFiles;//图片
 
     public String getObjectId() {
-        return objectId;
+        return objectId == null ? "" : objectId;
     }
 
     public void setObjectId(String objectId) {
@@ -64,7 +67,7 @@ public class ClothingInfo implements Parcelable {
     }
 
     public String getUserId() {
-        return userId;
+        return userId == null ? "" : userId;
     }
 
     public void setUserId(String userId) {
@@ -72,7 +75,7 @@ public class ClothingInfo implements Parcelable {
     }
 
     public String getCiType() {
-        return ciType;
+        return ciType == null ? "" : ciType;
     }
 
     public void setCiType(String ciType) {
@@ -80,7 +83,7 @@ public class ClothingInfo implements Parcelable {
     }
 
     public String getCiColor() {
-        return ciColor;
+        return ciColor == null ? "" : ciColor;
     }
 
     public void setCiColor(String ciColor) {
@@ -88,7 +91,7 @@ public class ClothingInfo implements Parcelable {
     }
 
     public String getCiSeason() {
-        return ciSeason;
+        return ciSeason == null ? "" : ciSeason;
     }
 
     public void setCiSeason(String ciSeason) {
@@ -96,18 +99,26 @@ public class ClothingInfo implements Parcelable {
     }
 
     public String getCiRemark() {
-        return ciRemark;
+        return ciRemark == null ? "" : ciRemark;
     }
 
     public void setCiRemark(String ciRemark) {
         this.ciRemark = ciRemark;
     }
 
-    public String getValid() {
+    public List<AVFile> getCiPicId() {
+        return ciPicId;
+    }
+
+    public void setCiPicId(List<AVFile> ciPicId) {
+        this.ciPicId = ciPicId;
+    }
+
+    public Boolean getValid() {
         return valid;
     }
 
-    public void setValid(String valid) {
+    public void setValid(Boolean valid) {
         this.valid = valid;
     }
 
@@ -117,14 +128,6 @@ public class ClothingInfo implements Parcelable {
 
     public void setViewSeq(Byte viewSeq) {
         this.viewSeq = viewSeq;
-    }
-
-    public List<MediaFile> getMediaFiles() {
-        return mediaFiles;
-    }
-
-    public void setMediaFiles(List<MediaFile> mediaFiles) {
-        this.mediaFiles = mediaFiles;
     }
 
     @Override
@@ -140,9 +143,9 @@ public class ClothingInfo implements Parcelable {
         dest.writeString(this.ciColor);
         dest.writeString(this.ciSeason);
         dest.writeString(this.ciRemark);
-        dest.writeString(this.valid);
+        dest.writeList(this.ciPicId);
+        dest.writeValue(this.valid);
         dest.writeValue(this.viewSeq);
-        dest.writeTypedList(this.mediaFiles);
     }
 
     public ClothingInfo() {}
@@ -158,9 +161,10 @@ public class ClothingInfo implements Parcelable {
         this.ciColor = in.readString();
         this.ciSeason = in.readString();
         this.ciRemark = in.readString();
-        this.valid = in.readString();
+        this.ciPicId = new ArrayList<AVFile>();
+        in.readList(this.ciPicId, AVFile.class.getClassLoader());
+        this.valid = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.viewSeq = (Byte) in.readValue(Byte.class.getClassLoader());
-        this.mediaFiles = in.createTypedArrayList(MediaFile.CREATOR);
     }
 
     public static final Creator<ClothingInfo> CREATOR = new Creator<ClothingInfo>() {

@@ -15,9 +15,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
-import com.bumptech.glide.Glide;
+import com.avos.avoscloud.AVFile;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-
 import com.github2136.picturepicker.activity.CaptureActivity;
 import com.github2136.picturepicker.activity.PicturePickerActivity;
 import com.github2136.picturepicker.activity.PictureViewActivity;
@@ -28,7 +27,6 @@ import com.github2136.util.FileUtil;
 import com.github2136.wardrobe.R;
 import com.github2136.wardrobe.base.BaseActivity;
 import com.github2136.wardrobe.model.entity.ClothingInfo;
-import com.github2136.wardrobe.model.entity.MediaFile;
 import com.github2136.wardrobe.presenter.AddClothingPresenter;
 import com.github2136.wardrobe.ui.view.IAddClothingView;
 import com.github2136.wardrobe.util.glide.GlideApp;
@@ -36,8 +34,6 @@ import com.wefika.flowlayout.FlowLayout;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -47,15 +43,14 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
     private static final int REQUEST_SELECT_IMG = 509;
     private static final int REQUEST_CAPTURE = 896;
     private ArrayList<String> mImgs;//原图地址
-    private ArrayList<String> mSaveImgs;//压缩后的图片地址
+    private ArrayList<AVFile> mFileObject;//上传后的File
     private ArrayList<String> mImgsIndex;//图片tag
     private int mSaveIndex;//图片保存
     private LayoutInflater mLayoutInflater;
     private int mImgWidth;//每张图片宽度
     private int mMargin;//图片左右间距
     private int mMaxLimit;//图片尺寸最大限制
-    private int mPicCount = 9;//上传图片上限
-    private int mPicColCount = 4;//每行图片数量
+    private int mPicCount = 7;//上传图片上限
     @BindView(R.id.tb_title)
     Toolbar tbTitle;
     @BindView(R.id.sp_type)
@@ -97,7 +92,7 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
         layoutParams.setMargins(mMargin, mMargin, 0, 0);
         ibAdd.setLayoutParams(layoutParams);
         mImgs = new ArrayList<>();
-        mSaveImgs = new ArrayList<>();
+        mFileObject = new ArrayList<>();
         mImgsIndex = new ArrayList<>();
         mLayoutInflater = getLayoutInflater();
         mMaxLimit = getResources().getDisplayMetrics().widthPixels;
@@ -124,7 +119,7 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
                 } else {
                     showProgressDialog();
                     mSaveIndex = 0;
-                    mSaveImgs = new ArrayList<>();
+                    mFileObject = new ArrayList<>();
                     getBitmap();
                 }
                 break;
@@ -132,57 +127,73 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
         return true;
     }
 
+    /**
+     * 图片压缩
+     */
     private void getBitmap() {
         String path = mImgs.get(mSaveIndex);
         BitmapUtil.getInstance(path)
                 .rotation()
                 .limit(mMaxLimit)
-                .save(FileUtil.getExternalStoragePrivatePicPath(mContext) + File.separator + "photo" + File.separator +
+                .save(FileUtil.getExternalStorageRootPath() + File.separator +
+                                "wardrobe/photo/upload" + File.separator +
                                 FileUtil.createFileName(".jpg")
                         , new BitmapUtil.BitmapSaveCallBack() {
                             @Override
                             public void callback(String filePath) {
-                                mSaveImgs.add(filePath);
-                                mSaveIndex++;
-                                if (mImgs.size() > mSaveIndex) {
-                                    getBitmap();
-                                } else {
-                                    ClothingInfo clothingInfo = new ClothingInfo();
-                                    clothingInfo.setCiType(spType.getSelectedItem().toString());
-                                    clothingInfo.setCiColor(spColor.getSelectedItem().toString());
-                                    StringBuilder sb = new StringBuilder();
-                                    if (cbSpring.isChecked()) {
-                                        sb.append("春,");
-                                    }
-                                    if (cbSummer.isChecked()) {
-                                        sb.append("夏,");
-                                    }
-                                    if (cbAutumn.isChecked()) {
-                                        sb.append("秋,");
-                                    }
-                                    if (cbWinter.isChecked()) {
-                                        sb.append("冬,");
-                                    }
-                                    if (sb.length() > 1) {
-                                        sb.deleteCharAt(sb.length() - 1);
-                                    }
-                                    clothingInfo.setCiSeason(sb.toString());
-                                    clothingInfo.setCiRemark(etRemark.getText().toString());
-                                    List<MediaFile> mfs = new ArrayList<>();
-                                    for (int i = 0; i < mSaveImgs.size(); i++) {
-                                        MediaFile mf = new MediaFile();
-                                        mf.setFmPath(mSaveImgs.get(i));
-                                        mfs.add(mf);
-                                    }
-                                    clothingInfo.setMediaFiles(mfs);
-                                    clothingInfo.setValid("1");
-//                                    clothingInfo.setModifyDate(new Date());
-                                    mPresenter.saveClothing(clothingInfo);
-                                }
+                                mPresenter.uploadFile(filePath);
                             }
                         });
     }
 
+//    ClothingInfo clothingInfo = new ClothingInfo();
+
+    //                                    clothingInfo.setCiType(spType.getSelectedItem().toString());
+//                                    clothingInfo.setCiColor(spColor.getSelectedItem().toString());
+////                                    StringBuilder sb = new StringBuilder();
+////                                    if (cbSpring.isChecked()) {
+////                                        sb.append("春,");
+////                                    }
+////                                    if (cbSummer.isChecked()) {
+////                                        sb.append("夏,");
+////                                    }
+////                                    if (cbAutumn.isChecked()) {
+////                                        sb.append("秋,");
+////                                    }
+////                                    if (cbWinter.isChecked()) {
+////                                        sb.append("冬,");
+////                                    }
+////                                    if (sb.length() > 1) {
+////                                        sb.deleteCharAt(sb.length() - 1);
+////                                    }
+////                                    clothingInfo.setCiSeason(sb.toString());
+//                                    clothingInfo.setCiRemark(etRemark.getText().toString());
+//                                    List<MediaFile> mfs = new ArrayList<>();
+//                                    for (int i = 0; i < mFileObject.size(); i++) {
+//                                        try {
+//                                            AVFile file = AVFile.withAbsoluteLocalPath("LeanCloud.png",mFileObject.get(i));
+//                                            file.saveInBackground(new SaveCallback() {
+//                                                @Override
+//                                                public void done(AVException e) {
+////                                                    Log.d(TAG, file.getUrl());//返回一个唯一的 Url 地址
+//                                                }
+//                                            },new ProgressCallback() {
+//                                                @Override
+//                                                public void done(Integer integer) {
+//                                                    // 上传进度数据，integer 介于 0 和 100。
+//                                                }
+//                                            });
+//                                        } catch (FileNotFoundException e) {
+//                                            e.printStackTrace();
+//                                        }
+////                                        MediaFile mf = new MediaFile();
+////                                        mf.setFmPath(mFileObject.get(i));
+////                                        mfs.add(mf);
+//                                    }
+//                                    clothingInfo.setMediaFiles(mfs);
+//                                    clothingInfo.setValid("1");
+////                                    clothingInfo.setModifyDate(new Date());
+//                                    mPresenter.saveClothing(clothingInfo);
     @OnClick(R.id.ib_add)
     public void onViewClicked() {
         if (mImgs.size() < mPicCount) {
@@ -207,7 +218,7 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
                         }
                     }).show();
         } else {
-            showToast("最多11张图片");
+            showToast("最多" + mPicCount + "张图片");
         }
     }
 
@@ -295,5 +306,29 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
     @Override
     public void addClothingFailure(String msg) {
         showToast(msg);
+    }
+
+    @Override
+    public void uploadFileSuccessful(AVFile file) {
+        mFileObject.add(file);
+        mSaveIndex++;
+        if (mImgs.size() > mSaveIndex) {
+            getBitmap();
+        } else {
+            ClothingInfo clothingInfo = new ClothingInfo();
+            clothingInfo.setCiType(spType.getSelectedItem().toString());
+            clothingInfo.setCiColor(spColor.getSelectedItem().toString());
+
+            clothingInfo.setCiRemark(etRemark.getText().toString());
+
+            clothingInfo.setCiPicId(mFileObject);
+            clothingInfo.setValid(true);
+            mPresenter.saveClothing(clothingInfo);
+        }
+    }
+
+    @Override
+    public void uploadFileFailure(String msg) {
+
     }
 }
