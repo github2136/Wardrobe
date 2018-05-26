@@ -15,7 +15,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
-import com.avos.avoscloud.AVFile;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github2136.picturepicker.activity.CaptureActivity;
 import com.github2136.picturepicker.activity.PicturePickerActivity;

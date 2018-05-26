@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/secondaryColor</item>
         <item name="android:actionBarSize">56dp</item>
         <item name="android:textViewStyle">@style/DefTextView</item>
+        <item name="android:spinnerItemStyle">@style/SpStype</item>
     </style>
 
     <style name="DefTextView" parent="@android:style/Widget.TextView">
@@ -29,4 +30,8 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="SpStype" parent="Widget.AppCompat.TextView.SpinnerItem">
+        <item name="android:textSize">18sp</item>
+    </style>
 </resources>

@@ -35,7 +35,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="类型"/>
+                        android:text="类型"
+                        android:textSize="18sp"/>
 
                     <Spinner
                         android:id="@+id/sp_type"
@@ -76,28 +77,32 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:checked="true"
-                    android:text="春"/>
+                    android:text="春"
+                    android:textSize="18sp"/>
 
                 <CheckBox
                     android:id="@+id/cb_summer"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="夏"/>
+                    android:text="夏"
+                    android:textSize="18sp"/>
 
                 <CheckBox
                     android:id="@+id/cb_autumn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="秋"/>
+                    android:text="秋"
+                    android:textSize="18sp"/>
 
                 <CheckBox
                     android:id="@+id/cb_winter"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="冬"/>
+                    android:text="冬"
+                    android:textSize="18sp"/>
             </LinearLayout>
 
             <com.wefika.flowlayout.FlowLayout
