@@ -16,10 +16,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
-import com.avos.avoscloud.AVFile;
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-
 import com.github2136.picturepicker.activity.CaptureActivity;
 import com.github2136.picturepicker.activity.PicturePickerActivity;
 import com.github2136.picturepicker.activity.PictureViewActivity;
@@ -39,7 +36,6 @@ import com.wefika.flowlayout.FlowLayout;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
