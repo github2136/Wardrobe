@@ -136,8 +136,8 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
         BitmapUtil.getInstance(path)
                 .rotation()
                 .limit(mMaxLimit)
-                .save(FileUtil.getExternalStorageRootPath() + File.separator +
-                                "wardrobe/photo/upload" + File.separator +
+                .save(getCacheDir() + File.separator +
+                                "upload" + File.separator +
                                 FileUtil.createFileName(".jpg")
                         , new BitmapUtil.BitmapSaveCallBack() {
                             @Override
