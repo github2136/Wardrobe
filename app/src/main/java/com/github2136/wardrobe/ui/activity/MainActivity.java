@@ -8,11 +8,10 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.MimeTypeMap;
+import android.view.View;
+import android.widget.CheckBox;
 
 import com.github2136.base.BaseLoadMoreRecyclerAdapter;
-import com.github2136.picturepicker.activity.CaptureActivity;
-import com.github2136.picturepicker.activity.PicturePickerActivity;
 import com.github2136.wardrobe.R;
 import com.github2136.wardrobe.base.BaseListActivity;
 import com.github2136.wardrobe.model.entity.ClothingInfo;
@@ -21,6 +20,7 @@ import com.github2136.wardrobe.ui.activity.user.LoginActivity;
 import com.github2136.wardrobe.ui.adapter.MainAdapter;
 import com.github2136.wardrobe.ui.view.IMainView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,6 +30,12 @@ public class MainActivity extends BaseListActivity<ClothingInfo, MainPresenter> 
     private static final int REQUEST_EDIT = 288;
     @BindView(R.id.tb_title)
     Toolbar tbTitle;
+    private AlertDialog dialog;
+
+    private CheckBox cbSpring, cbSummer, cbAutumn, cbWinter;
+    private CheckBox cbType1, cbType2, cbType3, cbType4, cbType5, cbType6, cbType7, cbType8;
+
+    private List<String> season = new ArrayList<>(), type = new ArrayList<>();
 
     @Override
     protected MainPresenter getPresenter() {
@@ -57,7 +63,7 @@ public class MainActivity extends BaseListActivity<ClothingInfo, MainPresenter> 
 
     @Override
     protected void getListData() {
-        mPresenter.getClothing(mPageNumber);
+        mPresenter.getClothing(mPageNumber, season, type);
     }
 
     @Override
@@ -81,6 +87,75 @@ public class MainActivity extends BaseListActivity<ClothingInfo, MainPresenter> 
         switch (item.getItemId()) {
             case R.id.menu_title_add:
                 startActivityForResult(new Intent(mContext, AddClothingActivity.class), REQUEST_ADD);
+                break;
+            case R.id.menu_title_filter:
+                if (dialog == null) {
+                    View dialogView = getLayoutInflater().inflate(R.layout.dialog_filter, null);
+                    cbSpring = (CheckBox) dialogView.findViewById(R.id.cb_spring);
+                    cbSummer = (CheckBox) dialogView.findViewById(R.id.cb_summer);
+                    cbAutumn = (CheckBox) dialogView.findViewById(R.id.cb_autumn);
+                    cbWinter = (CheckBox) dialogView.findViewById(R.id.cb_winter);
+
+                    cbType1 = (CheckBox) dialogView.findViewById(R.id.cb_ty1);
+                    cbType2 = (CheckBox) dialogView.findViewById(R.id.cb_ty2);
+                    cbType3 = (CheckBox) dialogView.findViewById(R.id.cb_ty3);
+                    cbType4 = (CheckBox) dialogView.findViewById(R.id.cb_ty4);
+                    cbType5 = (CheckBox) dialogView.findViewById(R.id.cb_ty5);
+                    cbType6 = (CheckBox) dialogView.findViewById(R.id.cb_ty6);
+                    cbType7 = (CheckBox) dialogView.findViewById(R.id.cb_ty7);
+                    cbType8 = (CheckBox) dialogView.findViewById(R.id.cb_ty8);
+                    dialog = new AlertDialog
+                            .Builder(this)
+                            .setTitle("过滤")
+                            .setView(dialogView)
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    season.clear();
+                                    if (cbSpring.isChecked()) {
+                                        season.add("春");
+                                    }
+                                    if (cbSummer.isChecked()) {
+                                        season.add("夏");
+                                    }
+                                    if (cbAutumn.isChecked()) {
+                                        season.add("秋");
+                                    }
+                                    if (cbWinter.isChecked()) {
+                                        season.add("冬");
+                                    }
+                                    type.clear();
+                                    if (cbType1.isChecked()) {
+                                        type.add("外套");
+                                    }
+                                    if (cbType2.isChecked()) {
+                                        type.add("上装");
+                                    }
+                                    if (cbType3.isChecked()) {
+                                        type.add("下装");
+                                    }
+                                    if (cbType4.isChecked()) {
+                                        type.add("内搭");
+                                    }
+                                    if (cbType5.isChecked()) {
+                                        type.add("鞋");
+                                    }
+                                    if (cbType6.isChecked()) {
+                                        type.add("套装");
+                                    }
+                                    if (cbType7.isChecked()) {
+                                        type.add("裙装");
+                                    }
+                                    if (cbType8.isChecked()) {
+                                        type.add("其他");
+                                    }
+                                    srContent.setRefreshing(true);
+                                    getFirstPage();
+                                }
+                            })
+                            .create();
+                }
+                dialog.show();
                 break;
             case R.id.menu_title_logout:
                 new AlertDialog.Builder(mContext)

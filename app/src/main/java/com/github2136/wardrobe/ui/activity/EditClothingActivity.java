@@ -61,8 +61,6 @@ public class EditClothingActivity extends BaseActivity<EditClothingPresenter> im
     Toolbar tbTitle;
     @BindView(R.id.sp_type)
     Spinner spType;
-    @BindView(R.id.sp_color)
-    Spinner spColor;
     @BindView(R.id.cb_spring)
     CheckBox cbSpring;
     @BindView(R.id.cb_summer)
@@ -116,8 +114,6 @@ public class EditClothingActivity extends BaseActivity<EditClothingPresenter> im
             }
             int typeIndex = Arrays.asList(getResources().getStringArray(R.array.arr_clothing_type)).indexOf(mClothingInfo.getCiType());
             spType.setSelection(typeIndex);
-            int colorIndex = Arrays.asList(getResources().getStringArray(R.array.arr_clothing_color)).indexOf(mClothingInfo.getCiColor());
-            spColor.setSelection(colorIndex);
             if (mClothingInfo.getCiSeason().contains("春")) {
                 cbSpring.setChecked(true);
             }

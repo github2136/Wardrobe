@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_title_add"
         android:icon="@drawable/ic_title_add"
         android:title="添加"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_title_filter"
+        android:title="过滤"
+        app:showAsAction="never" />
     <item
         android:id="@+id/menu_title_logout"
         android:title="注销"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 </menu>

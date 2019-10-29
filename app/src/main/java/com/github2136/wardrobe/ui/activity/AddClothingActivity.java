@@ -55,8 +55,6 @@ public class AddClothingActivity extends BaseActivity<AddClothingPresenter> impl
     Toolbar tbTitle;
     @BindView(R.id.sp_type)
     Spinner spType;
-    @BindView(R.id.sp_color)
-    Spinner spColor;
     @BindView(R.id.cb_spring)
     CheckBox cbSpring;
     @BindView(R.id.cb_summer)

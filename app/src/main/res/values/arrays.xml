@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="arr_clothing_type">
-        <item>套装</item>
         <item>外套</item>
-        <item>裙装</item>
-        <item>内搭</item>
+        <item>上装</item>
         <item>下装</item>
+        <item>内搭</item>
         <item>鞋</item>
+        <item>套装</item>
+        <item>裙装</item>
         <item>其他</item>
     </string-array>
-    <string-array name="arr_clothing_color">
-        <item>红</item>
-        <item>橙</item>
-        <item>黄</item>
-        <item>绿</item>
-        <item>青</item>
-        <item>蓝</item>
-        <item>紫</item>
-        <item>黑</item>
-        <item>灰</item>
-        <item>白</item>
+    <string-array name="arr_clothing_season">
+        <item>春</item>
+        <item>夏</item>
+        <item>秋</item>
+        <item>冬</item>
     </string-array>
 </resources>

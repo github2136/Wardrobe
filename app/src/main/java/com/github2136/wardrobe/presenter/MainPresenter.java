@@ -11,7 +11,10 @@ import com.github2136.wardrobe.model.util.HttpCallback;
 import com.github2136.wardrobe.model.util.Results;
 import com.github2136.wardrobe.ui.view.IMainView;
 import com.github2136.wardrobe.util.Constant;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Response;
@@ -28,10 +31,34 @@ public class MainPresenter extends BaseMVPPresenter<IMainView> {
         mClothingInfoModel = new ClothingInfoModel(activity);
     }
 
-    public void getClothing(int pageNumber) {
+    public void getClothing(int pageNumber, List<String> season, List<String> type) {
         ArrayMap<String, Object> where = new ArrayMap<>();
         where.put(ClothingInfo_.DATA_userId, mSpUtil.getString(Constant.SP_OBJECT_ID));
         where.put(ClothingInfo_.DATA_valid, true);
+
+        if (season != null && !season.isEmpty()) {
+            StringBuilder sb = new StringBuilder("[");
+            for (String s : season) {
+                sb.append(s).append(",");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            sb.append("]");
+            JsonObject obj = new JsonObject();
+            obj.addProperty("$regex", sb.toString());
+            where.put(ClothingInfo_.DATA_ciSeason, obj);
+        }
+
+        if (type != null && !type.isEmpty()) {
+            StringBuilder sb = new StringBuilder("[");
+            for (String s : type) {
+                sb.append(s).append(",");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            sb.append("]");
+            JsonObject obj = new JsonObject();
+            obj.addProperty("$regex", sb.toString());
+            where.put(ClothingInfo_.DATA_ciType, obj);
+        }
 
         mClothingInfoModel.getClothing_rest(
                 mJsonUtil.toJsonStr(where),
