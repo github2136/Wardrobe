@@ -37,24 +37,22 @@ public class MainPresenter extends BaseMVPPresenter<IMainView> {
         where.put(ClothingInfo_.DATA_valid, true);
 
         if (season != null && !season.isEmpty()) {
-            StringBuilder sb = new StringBuilder("[");
+            StringBuilder sb = new StringBuilder();
             for (String s : season) {
-                sb.append(s).append(",");
+                sb.append(s).append("|");
             }
             sb.deleteCharAt(sb.length() - 1);
-            sb.append("]");
             JsonObject obj = new JsonObject();
             obj.addProperty("$regex", sb.toString());
             where.put(ClothingInfo_.DATA_ciSeason, obj);
         }
 
         if (type != null && !type.isEmpty()) {
-            StringBuilder sb = new StringBuilder("[");
+            StringBuilder sb = new StringBuilder();
             for (String s : type) {
-                sb.append(s).append(",");
+                sb.append(s).append("|");
             }
             sb.deleteCharAt(sb.length() - 1);
-            sb.append("]");
             JsonObject obj = new JsonObject();
             obj.addProperty("$regex", sb.toString());
             where.put(ClothingInfo_.DATA_ciType, obj);
