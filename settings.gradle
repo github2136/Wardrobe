@@ -1,1 +1,2 @@
+include ':basemvvm'
 include ':app'

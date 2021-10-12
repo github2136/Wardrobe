@@ -3,5 +3,5 @@
     <color name="primaryColor">#1565c0</color>
     <color name="primaryDarkColor">#003c8f</color>
     <color name="secondaryColor">#668bfa</color>
-
+    <color name="colorEditOutline">#B3B3B3</color>
 </resources>

@@ -1,121 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="8dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp">
 
-        <CheckBox
-            android:id="@+id/cb_spring"
-            android:layout_width="0dp"
+        <TextView
+            style="@style/TxtMedium"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="春" />
+            android:text="季节" />
 
-        <CheckBox
-            android:id="@+id/cb_summer"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="夏" />
+            android:orientation="horizontal">
 
-        <CheckBox
-            android:id="@+id/cb_autumn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="秋" />
+            <CheckBox
+                android:id="@+id/cbSpring"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="春" />
 
-        <CheckBox
-            android:id="@+id/cb_winter"
-            android:layout_width="0dp"
+            <CheckBox
+                android:id="@+id/cbSummer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="夏" />
+
+            <CheckBox
+                android:id="@+id/cbAutumn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="秋" />
+
+            <CheckBox
+                android:id="@+id/cbWinter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="冬" />
+        </LinearLayout>
+
+        <TextView
+            style="@style/TxtMedium"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="冬" />
+            android:layout_marginTop="8dp"
+            android:text="类型" />
+
+        <com.google.android.material.internal.FlowLayout
+            android:id="@+id/flType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></com.google.android.material.internal.FlowLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <CheckBox
-            android:id="@+id/cb_ty1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="外套" />
-
-        <CheckBox
-            android:id="@+id/cb_ty2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="上装" />
-
-        <CheckBox
-            android:id="@+id/cb_ty3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="下装" />
-
-        <CheckBox
-            android:id="@+id/cb_ty4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="内搭" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <CheckBox
-            android:id="@+id/cb_ty5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="鞋" />
-
-        <CheckBox
-            android:id="@+id/cb_ty6"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="套装" />
-
-        <CheckBox
-            android:id="@+id/cb_ty7"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="裙装" />
-
-        <CheckBox
-            android:id="@+id/cb_ty8"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="其他" />
-    </LinearLayout>
-</LinearLayout>
+</layout>
