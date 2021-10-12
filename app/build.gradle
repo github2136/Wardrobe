@@ -1,61 +1,93 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlin-android-extensions'
+}
+def version = rootProject.ext.android
+def lib = rootProject.ext.dependencies
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+
+    compileSdkVersion version.compileSdkVersion
+
     defaultConfig {
         applicationId "com.github2136.wardrobe"
-        minSdkVersion 14
-        targetSdkVersion 25
+        minSdkVersion version.minSdkVersion
+        targetSdkVersion version.targetSdkVersion
         versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
+        versionName "1.0.0"
+        ndk {
+            abiFilters "armeabi-v7a"
+        }
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    dataBinding {
+        enabled = true
     }
     buildTypes {
         release {
-            buildConfigField 'String' , 'APP_ID','"c6DtXIFY5bVgUE1PoL2OpADl-gzGzoHsz"'
-            buildConfigField 'String' , 'APP_KEY','"jvu3zeRhzIHFPqj2oQSnXpoM"'
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        debug{
-            applicationIdSuffix ".debug"
-            buildConfigField 'String' , 'APP_ID','"c6DtXIFY5bVgUE1PoL2OpADl-gzGzoHsz"'
-            buildConfigField 'String' , 'APP_KEY','"jvu3zeRhzIHFPqj2oQSnXpoM"'
+        debug {
+            versionNameSuffix ".debug"
         }
     }
-    packagingOptions{
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE.txt'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
-    lintOptions {
-        abortOnError false
+    kotlinOptions { jvmTarget = JavaVersion.VERSION_1_8 }
+
+    androidExtensions {
+        experimental = true
+    }
+    android.applicationVariants.all { var ->
+        var.outputs.all {
+            outputFileName = "Wardrobe-${var.buildType.name}-${var.versionName}-${var.versionCode}-${releaseTime()}.apk"
+        }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support.constraint:constraint-layout:1.1.0'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    // LeanCloud 基础包
-    compile ('cn.leancloud.android:avoscloud-sdk:v4.6.4')
-    compile 'com.squareup.okhttp3:okhttp:3.10.0'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.jakewharton:butterknife:8.4.0'
-    compile 'com.github.github2136.SQLite-util:sqlite-util:5a8f7fad4b'
-    compile 'com.github.github2136:Android-utils:0.1.2'
-    compile 'com.github.chrisbanes:PhotoView:2.1.3'
-    compile 'com.wefika:flowlayout:0.4.1'
-    compile 'com.github.github2136:PicturePicker:3dc73e2a2a'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.google.code.gson:gson:2.8.2'
-    compile 'com.github.bumptech.glide:glide:4.3.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
-    testCompile 'junit:junit:4.12'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
-    annotationProcessor 'com.github.github2136.SQLite-util:sqlite-util-compiler:5a8f7fad4b'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(path: ':basemvvm')
+
+    implementation lib['kotlin-stdlib']
+    implementation lib['android-appcompat']
+    implementation lib["android-constraintlayout"]
+    implementation lib["android-coordinatorlayout"]
+    implementation lib["android-cardview"]
+    //协程
+    implementation lib["android-coroutines"]
+    implementation lib["android-viewmodel-ktx"]
+    implementation lib["android-lifecycle-ktx"]
+    //workManager
+    implementation lib["android-work"]
+    implementation lib["android-work-ktx"]
+
+    //sqlite数据库
+    implementation lib["android-room"]
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    kapt lib["android-room-compiler"]
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation lib["android-room-ktx"]
+    // optional - Test helpers
+    testImplementation lib["android-room-test"]
+    //图片查看选择器
+    implementation lib["photoPicker"]
+    implementation lib["photoView"]
+    //图片加载
+    implementation lib["glide"]
+    kapt lib["glide-compiler"]
+
+    androidTestImplementation lib["android-test"]
+    androidTestImplementation lib["android-ext"]
+    testImplementation lib["junit"]
+    androidTestImplementation lib["espresso"]
+}
+
+static def releaseTime() {
+    return new Date().format("yyMMdd", TimeZone.getTimeZone("GMT+08"))
 }

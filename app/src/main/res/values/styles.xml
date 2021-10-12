@@ -7,31 +7,46 @@
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/secondaryColor</item>
         <item name="android:actionBarSize">56dp</item>
-        <item name="android:textViewStyle">@style/DefTextView</item>
-        <item name="android:spinnerItemStyle">@style/SpStype</item>
+        <item name="android:spinnerItemStyle">@style/SpType</item>
+        <item name="android:spinnerDropDownItemStyle">@style/SpType</item>
     </style>
 
-    <style name="DefTextView" parent="@android:style/Widget.TextView">
+    <!--默认单行单行-->
+    <style name="EtNormal">
+        <item name="android:inputType">text</item>
+        <item name="android:lines">1</item>
+        <item name="android:background">@drawable/sha_outlinebox</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/colorTextPrimaryLight</item>
-        <item name="android:textSize">@dimen/text_size_body</item>
+        <item name="android:textColorHint">@color/colorTextDisableLight</item>
     </style>
-
-    <style name="EditTextMulti" parent="Base.Widget.AppCompat.EditText">
-        <item name="android:background">@drawable/bg_edit_multi</item>
+    <!--多行编辑框-->
+    <style name="EtNormalMulti">
+        <item name="android:gravity">top</item>
+        <item name="android:inputType">textMultiLine</item>
+        <item name="android:minLines">5</item>
+        <item name="android:background">@drawable/sha_outlinebox</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorTextPrimaryLight</item>
+        <item name="android:textColorHint">@color/colorTextDisableLight</item>
     </style>
 
     <style name="ToolBar.Theme" parent="@style/ThemeOverlay.AppCompat.Dark">
         <item name="android:tint">@android:color/white</item>
     </style>
 
-    <style name="ToolBar.PopTheme" parent="@style/ThemeOverlay.AppCompat.Light">
+    <style name="ToolBar.PopTheme" parent="@style/ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="SpType" parent="TxtMedium">
+        <item name="android:padding">8dp</item>
     </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
-
-    <style name="SpStype" parent="Widget.AppCompat.TextView.SpinnerItem">
-        <item name="android:textSize">18sp</item>
+    <!--Dialog样式Activity-->
+    <style name="Dialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="windowNoTitle">true</item>　　　　　　　
     </style>
 </resources>

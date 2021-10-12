@@ -1,0 +1,59 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+
+def lib = rootProject.ext.dependencies
+def version = rootProject.ext.android
+
+android {
+    compileSdkVersion version.compileSdkVersion
+    defaultConfig {
+        minSdkVersion version.minSdkVersion
+        targetSdkVersion version.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    dataBinding {
+        enabled = true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    api lib["kotlin-stdlib"]
+    api lib["kotlin-ktx"]
+
+    api lib["logger"]
+
+    api lib["okhttp"]
+    api lib["okhttp-retrofit"]
+    api lib["okhttp-gson"]
+
+    api lib["android-appcompat"]
+    api lib["android-material"]
+    api lib["android-recyclerview"]
+    api lib["android-swiperefreshlayout"]
+
+    api lib["gson"]
+
+    api lib["android-util"]
+
+    androidTestImplementation lib["android-test"]
+    testImplementation lib["junit"]
+    androidTestImplementation lib["espresso"]
+}
+repositories {
+    mavenCentral()
+}

@@ -1,61 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.github2136.wardrobe">
+    package="com.github2136.wardrobe">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:name=".base.BaseApplication"
+        android:name=".base.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data
-            android:name="util_project_path"
-            android:value="wardrobe"/>
-        <meta-data
-            android:name="util_sp_name"
-            android:value="wardrobe"/>
-        <meta-data
-            android:name="picture_picker_path"
-            android:value="wardrobe/photo"/>
-        <meta-data
-            android:name="com.github2136.wardrobe.util.glide.GlideLoader"
-            android:value="picker_image_loader"/>
-
-        <!-- 登录 -->
         <activity
-            android:name=".ui.activity.user.LoginActivity"
+            android:name=".view.activity.clothing.ClothingEditActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.clothing.ClothingAddActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.dialog.MediaDialog"
+            android:screenOrientation="portrait"
+            android:theme="@style/Dialog" />
+        <activity
+            android:name=".view.activity.clothing.ClothingListActivity"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- 主页 -->
-        <activity
-            android:name=".ui.activity.MainActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        <!-- 添加服装 -->
-        <activity
-            android:name=".ui.activity.AddClothingActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
-        </activity>
-        <activity
-            android:name=".ui.activity.EditClothingActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
-        </activity>
-        <activity android:name=".ui.activity.user.RegisteredActivity">
-        </activity>
+
+        <meta-data
+            android:name="com.github2136.wardrobe.common.ImageLoader"
+            android:value="picker_image_loader" />
+        <meta-data
+            android:name="util_project_path"
+            android:value="Wardrobe" />
+        <meta-data
+            android:name="util_sp_name"
+            android:value="Wardrobe" />
+        <meta-data
+            android:name="picture_picker_path"
+            android:value="Wardrobe/Photo" />
     </application>
 
 </manifest>
