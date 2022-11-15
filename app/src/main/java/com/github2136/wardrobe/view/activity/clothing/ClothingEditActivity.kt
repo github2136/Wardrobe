@@ -12,13 +12,17 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import com.github2136.basemvvm.BaseActivity
+import com.github2136.util.DateUtil
 import com.github2136.util.FileUtil
 import com.github2136.util.dp2px
+import com.github2136.util.str
 import com.github2136.wardrobe.R
 import com.github2136.wardrobe.common.Other
 import com.github2136.wardrobe.databinding.ActivityClothingEditBinding
+import com.github2136.wardrobe.view.dialog.DateTimePickerDialog
 import com.github2136.wardrobe.view.dialog.MediaDialog
 import com.github2136.wardrobe.vm.clothing.ClothingEditVM
+import java.util.*
 
 /**
  * Created by YB on 2021/10/11
@@ -27,10 +31,17 @@ import com.github2136.wardrobe.vm.clothing.ClothingEditVM
 class ClothingEditActivity : BaseActivity<ClothingEditVM, ActivityClothingEditBinding>() {
     override fun getLayoutId() = R.layout.activity_clothing_edit
     val mediaWidth by lazy { (resources.displayMetrics.widthPixels - ((8 * 2 + 20f * 3).dp2px)) / 4 }
-    val mediaUris = mutableListOf<Uri>()
-
-    //旧添加的媒体文件
-    val oldMedia = mutableListOf<String>()
+    val medias = mutableListOf<String>()
+    val dateDialog by lazy {
+        DateTimePickerDialog(
+            vm.dateCalendar.get(Calendar.YEAR),
+            vm.dateCalendar.get(Calendar.MONTH),
+            vm.dateCalendar.get(Calendar.DAY_OF_MONTH)
+        ) { year, monthOfYear, dayOfMonth ->
+            vm.dateCalendar.set(year, monthOfYear, dayOfMonth)
+            vm.dateLD.value = vm.dateCalendar.time.str(DateUtil.DATE_PATTERN_YMD)
+        }.setTitle("选择购买时间")
+    }
     override fun initData(savedInstanceState: Bundle?) {
         bind.view = this
         bind.vm = vm
@@ -58,6 +69,7 @@ class ClothingEditActivity : BaseActivity<ClothingEditVM, ActivityClothingEditBi
                 } else {
                     vm.clothingLD.value?.apply {
                         ciType = bind.spType.selectedItem.toString()
+                        createdAt = vm.dateCalendar.time
                         val season = mutableListOf<String>()
                         if (bind.cbSpring.isChecked) {
                             season.add("春")
@@ -72,9 +84,7 @@ class ClothingEditActivity : BaseActivity<ClothingEditVM, ActivityClothingEditBi
                             season.add("冬")
                         }
                         ciSeason = season.joinToString { it }
-                        ciPicture.clear()
-                        ciPicture.addAll(oldMedia)
-                        ciPicture.addAll(mediaUris.map { FileUtil.getFileAbsolutePath(this@ClothingEditActivity, it)!! }.toMutableList())
+                        ciPicture = medias
                     }
                     vm.edit()
                 }
@@ -94,6 +104,9 @@ class ClothingEditActivity : BaseActivity<ClothingEditVM, ActivityClothingEditBi
 
     fun onClick(view: View) {
         when (view.id) {
+            R.id.tvDate -> {
+                dateDialog.show(supportFragmentManager)
+            }
             R.id.ibAddMedia -> {
                 if (bind.flMedia.childCount < 8) {
                     val intent = Intent(this, MediaDialog::class.java)
@@ -113,7 +126,7 @@ class ClothingEditActivity : BaseActivity<ClothingEditVM, ActivityClothingEditBi
                 REQUEST_ADD_MEDIA -> {
                     data?.run {
                         val uri = getParcelableExtra<Uri>(MediaDialog.RESULT_URI)
-                        Other.getMediaUri(this@ClothingEditActivity, layoutInflater, uri, mediaWidth, bind.flMedia, mediaUris)
+                        Other.getMediaPath(this@ClothingEditActivity, layoutInflater, medias, FileUtil.getFileAbsolutePath(this@ClothingEditActivity, uri)!!, mediaWidth, bind.flMedia, true)
                     }
                 }
             }
@@ -138,8 +151,10 @@ class ClothingEditActivity : BaseActivity<ClothingEditVM, ActivityClothingEditBi
             val typeIndex = resources.getStringArray(R.array.arr_clothing_type).indexOf(it.ciType)
             bind.spType.setSelection(typeIndex)
             it.ciPicture.forEach {
-                Other.getMediaPath(this, layoutInflater, it, mediaWidth, bind.flMedia, oldMedia, true)
+                Other.getMediaPath(this@ClothingEditActivity, layoutInflater, medias, it, mediaWidth, bind.flMedia, true)
             }
+            bind.tvDate.text = it.createdAt.str(DateUtil.DATE_PATTERN_YMD)
+            vm.dateCalendar.time = it.createdAt
         })
         vm.addLD.observe(this, Observer {
             setResult(Activity.RESULT_OK)

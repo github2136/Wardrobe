@@ -18,7 +18,14 @@ class ClothingAddVM(val app: Application) : BaseVM(app) {
     private val clothingRepository by lazy { ClothingRepository(app) }
 
     val clothingLD = MutableLiveData<Clothing>().apply { value = Clothing() }
+    val dateLD = MutableLiveData<String>()
     val addLD = MutableLiveData<String>()
+
+    val dateCalendar = Calendar.getInstance().apply {
+        set(Calendar.HOUR_OF_DAY, 0)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
+    }
 
     fun save() {
         viewModelScope.launch {

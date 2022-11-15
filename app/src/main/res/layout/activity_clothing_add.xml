@@ -101,6 +101,15 @@
                         android:text="冬" />
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/tvDate"
+                    style="@style/EtNormal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:onClick="@{view::onClick}"
+                    android:text="@={vm.dateLD}" />
+
                 <com.google.android.material.internal.FlowLayout
                     android:id="@+id/flMedia"
                     android:layout_width="match_parent"
@@ -115,6 +124,7 @@
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:onClick="@{view::onClick}"
+                        android:scaleType="fitCenter"
                         android:src="@drawable/ripple_btn_add_media" />
 
                 </com.google.android.material.internal.FlowLayout>

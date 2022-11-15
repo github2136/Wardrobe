@@ -11,13 +11,17 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import com.github2136.basemvvm.BaseActivity
+import com.github2136.util.DateUtil
 import com.github2136.util.FileUtil
 import com.github2136.util.dp2px
+import com.github2136.util.str
 import com.github2136.wardrobe.R
 import com.github2136.wardrobe.common.Other
 import com.github2136.wardrobe.databinding.ActivityClothingAddBinding
+import com.github2136.wardrobe.view.dialog.DateTimePickerDialog
 import com.github2136.wardrobe.view.dialog.MediaDialog
 import com.github2136.wardrobe.vm.clothing.ClothingAddVM
+import java.util.*
 
 /**
  * Created by YB on 2021/10/11
@@ -26,7 +30,18 @@ import com.github2136.wardrobe.vm.clothing.ClothingAddVM
 class ClothingAddActivity : BaseActivity<ClothingAddVM, ActivityClothingAddBinding>() {
     override fun getLayoutId() = R.layout.activity_clothing_add
     val mediaWidth by lazy { (resources.displayMetrics.widthPixels - ((8 * 2 + 20f * 3).dp2px)) / 4 }
-    val mediaUris = mutableListOf<Uri>()
+    val medias = mutableListOf<String>()
+
+    val dateDialog by lazy {
+        DateTimePickerDialog(
+            vm.dateCalendar.get(Calendar.YEAR),
+            vm.dateCalendar.get(Calendar.MONTH),
+            vm.dateCalendar.get(Calendar.DAY_OF_MONTH)
+        ) { year, monthOfYear, dayOfMonth ->
+            vm.dateCalendar.set(year, monthOfYear, dayOfMonth)
+            vm.dateLD.value = vm.dateCalendar.time.str(DateUtil.DATE_PATTERN_YMD)
+        }.setTitle("选择购买时间")
+    }
 
     override fun initData(savedInstanceState: Bundle?) {
         bind.view = this
@@ -35,6 +50,7 @@ class ClothingAddActivity : BaseActivity<ClothingAddVM, ActivityClothingAddBindi
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         title = "添加"
         bind.ibAddMedia.layoutParams = ViewGroup.LayoutParams(mediaWidth, mediaWidth)
+        vm.dateLD.value = vm.dateCalendar.time.str(DateUtil.DATE_PATTERN_YMD)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -46,12 +62,13 @@ class ClothingAddActivity : BaseActivity<ClothingAddVM, ActivityClothingAddBindi
         when (item.itemId) {
             android.R.id.home -> finish()
             R.id.menu_ok -> {
-                if (mediaUris.isEmpty()) {
+                if (medias.isEmpty()) {
                     showToast("请至少添加一张图片")
                 } else if (!bind.cbSpring.isChecked && !bind.cbSummer.isChecked && !bind.cbAutumn.isChecked && !bind.cbWinter.isChecked) {
                     showToast("请至少选择一个季节")
                 } else {
                     vm.clothingLD.value?.apply {
+                        createdAt = vm.dateCalendar.time
                         ciType = bind.spType.selectedItem.toString()
                         val season = mutableListOf<String>()
                         if (bind.cbSpring.isChecked) {
@@ -67,7 +84,7 @@ class ClothingAddActivity : BaseActivity<ClothingAddVM, ActivityClothingAddBindi
                             season.add("冬")
                         }
                         ciSeason = season.joinToString { it }
-                        ciPicture = mediaUris.map { FileUtil.getFileAbsolutePath(this@ClothingAddActivity, it)!! }.toMutableList()
+                        ciPicture = medias
                     }
                     vm.save()
                 }
@@ -78,6 +95,9 @@ class ClothingAddActivity : BaseActivity<ClothingAddVM, ActivityClothingAddBindi
 
     fun onClick(view: View) {
         when (view.id) {
+            R.id.tvDate -> {
+                dateDialog.show(supportFragmentManager)
+            }
             R.id.ibAddMedia -> {
                 if (bind.flMedia.childCount < 8) {
                     val intent = Intent(this, MediaDialog::class.java)
@@ -97,7 +117,7 @@ class ClothingAddActivity : BaseActivity<ClothingAddVM, ActivityClothingAddBindi
                 REQUEST_ADD_MEDIA -> {
                     data?.run {
                         val uri = getParcelableExtra<Uri>(MediaDialog.RESULT_URI)
-                        Other.getMediaUri(this@ClothingAddActivity, layoutInflater, uri, mediaWidth, bind.flMedia, mediaUris)
+                        Other.getMediaPath(this@ClothingAddActivity, layoutInflater, medias, FileUtil.getFileAbsolutePath(this@ClothingAddActivity, uri)!!, mediaWidth, bind.flMedia, true)
                     }
                 }
             }
