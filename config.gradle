@@ -55,10 +55,8 @@ ext {
         "amap-navi"                 : "com.amap.api:navi-3dmap:7.2.0_3dmap7.2.0",
         "arcgis"                    : "com.esri.arcgisruntime:arcgis-android:100.10.0",
         "arcgis-tool"               : "com.esri.arcgisruntime:arcgis-android-toolkit:100.10.0",
-        //
-        "eventbus"                  : "org.greenrobot:eventbus:3.1.1",
         //图片选择器
-        "photoPicker"               : "com.github.github2136:PhotoPicker:40896fc287",
+        "photoPicker"               : "com.github.github2136:PhotoPicker:6d4e7af7ad",
         //图片查看控件
         "photoView"                 : "com.github.chrisbanes:PhotoView:2.1.3",
         //图片查看器

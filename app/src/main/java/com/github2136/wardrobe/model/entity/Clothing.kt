@@ -15,7 +15,7 @@ import java.util.*
 data class Clothing(
     @PrimaryKey(autoGenerate = true)
     var ciId: Long = 0,
-    var createdAt: Date = Date(),
+    var createdAt: Date = Date(),//购买时间
     var ciType: String = "", //服装类型
     var ciSeason: String = "", //季节
     var ciRemark: String = "", //备注

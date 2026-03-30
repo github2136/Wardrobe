@@ -263,50 +263,18 @@ object Other {
     fun getImageLocalPath(context: Context) =
         FileUtil.getExternalStorageProjectPath(context) + "/${Constants.DIR_IMAGE}/" + FileUtil.createFileName(".jpg")
 
-
     /**
-     * 添加本地Uri媒体文件地址到布局
-     * @param mediaType 文件类型，具体查看MediaDialog
-     * @param viewGroup 添加的布局
-     * @param mediaUris 路径集合
+     * 将媒体文件添加到指定控件中
+     * @param context Context
+     * @param layoutInflater LayoutInflater
+     * @param mediaPaths MutableList<String> 媒体路径集合
+     * @param url String 媒体文件路径
+     * @param mediaWidth Int 图片宽高
+     * @param viewGroup ViewGroup 添加的父控件
+     * @param del Boolean 是否有删除功能
      */
-    fun getMediaUri(context: Context, layoutInflater: LayoutInflater, uri: Uri, mediaWidth: Int, viewGroup: ViewGroup, mediaUris: MutableList<Uri>) {
-        mediaUris.add(uri)
-        val v = layoutInflater.inflate(R.layout.view_media, viewGroup, false)
-        v.layoutParams = ViewGroup.LayoutParams(mediaWidth, mediaWidth)
-        val iv: ImageView = v.findViewById(R.id.ivMedia)
-        val ibDelete: ImageButton = v.findViewById(R.id.ibDelete)
-        ibDelete.visibility = View.VISIBLE
-        viewGroup.addView(v, viewGroup.childCount - 1)
-
-        ibDelete.setOnClickListener {
-            AlertDialog.Builder(context).setTitle("提示")
-                .setMessage("是否删除该文件")
-                .setPositiveButton("删除") { _, _ ->
-                    viewGroup.removeView(v)
-                    mediaUris.remove(uri)
-                }
-                .show()
-        }
-
-        v.setOnClickListener {
-            val intent = Intent(context, PhotoViewActivity::class.java)
-            intent.putStringArrayListExtra(PhotoViewActivity.ARG_PHOTOS, arrayListOf(FileUtil.getFileAbsolutePath(context, uri)))
-            context.startActivity(intent)
-
-        }
-        GlideApp.with(context)
-            .load(uri)
-            .apply(glideOptionsCenterCrop)
-            .into(iv)
-    }
-
-
-    /**
-     * 添加本地真实路径或网络路径媒体文件地址到布局
-     */
-    fun getMediaPath(context: Context, layoutInflater: LayoutInflater, url: String, mediaWidth: Int, viewGroup: ViewGroup, mediaPaths: MutableList<String>? = null, del: Boolean = false) {
-        mediaPaths?.add(url)
+    fun getMediaPath(context: Context, layoutInflater: LayoutInflater, mediaPaths: MutableList<String>, url: String, mediaWidth: Int, viewGroup: ViewGroup, del: Boolean = false) {
+        mediaPaths.add(url)
         val v = layoutInflater.inflate(R.layout.view_media, viewGroup, false)
         v.layoutParams = ViewGroup.LayoutParams(mediaWidth, mediaWidth)
         val iv: ImageView = v.findViewById(R.id.ivMedia)
@@ -319,7 +287,7 @@ object Other {
                     .setMessage("是否删除该文件")
                     .setPositiveButton("删除") { _, _ ->
                         viewGroup.removeView(v)
-                        mediaPaths?.remove(url)
+                        mediaPaths.remove(url)
                     }
                     .show()
             }
@@ -329,10 +297,11 @@ object Other {
 
         v.setOnClickListener {
             val intent = Intent(context, PhotoViewActivity::class.java)
-            intent.putStringArrayListExtra(PhotoViewActivity.ARG_PHOTOS, arrayListOf(url.getFilePath()))
+            val paths = arrayListOf<String>().apply { addAll(mediaPaths.asSequence().map { it.getFilePath() }) }
+            intent.putStringArrayListExtra(PhotoViewActivity.ARG_PHOTOS, paths)
+            intent.putExtra(PhotoViewActivity.ARG_CURRENT_INDEX, paths.indexOf(url.getFilePath()))
             context.startActivity(intent)
         }
-
         GlideApp.with(context)
             .load(url.getFilePath())
             .apply(glideOptionsCenterCrop)
