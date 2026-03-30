@@ -1,20 +1,20 @@
 plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
-    id 'kotlin-android-extensions'
+    alias libs.plugins.android.application
+    alias libs.plugins.kotlin.android
+    alias libs.plugins.kotlin.kapt
+    alias libs.plugins.kotlin.ksp
+    alias libs.plugins.kotlin.compose
+    alias libs.plugins.kotlin.serialization
+    alias libs.plugins.parrcelize
 }
-def version = rootProject.ext.android
-def lib = rootProject.ext.dependencies
 
 android {
-
-    compileSdkVersion version.compileSdkVersion
-
+    compileSdkVersion libs.versions.compileSdkVersion.get().toInteger()
+    namespace "com.github2136.wardrobe"
     defaultConfig {
         applicationId "com.github2136.wardrobe"
-        minSdkVersion version.minSdkVersion
-        targetSdkVersion version.targetSdkVersion
+        minSdkVersion libs.versions.minSdkVersion.get().toInteger()
+        targetSdkVersion libs.versions.targetSdkVersion.get().toInteger()
         versionCode 1
         versionName "1.0.0"
         ndk {
@@ -22,8 +22,9 @@ android {
         }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        buildConfig = true
+        dataBinding = true
     }
     buildTypes {
         release {
@@ -35,13 +36,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
-    kotlinOptions { jvmTarget = JavaVersion.VERSION_1_8 }
-
-    androidExtensions {
-        experimental = true
+    kotlinOptions { jvmTarget = "11" }
+    buildFeatures {
+        compose = true
     }
     android.applicationVariants.all { var ->
         var.outputs.all {
@@ -52,40 +52,54 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(path: ':basemvvm')
 
-    implementation lib['kotlin-stdlib']
-    implementation lib['android-appcompat']
-    implementation lib["android-constraintlayout"]
-    implementation lib["android-coordinatorlayout"]
-    implementation lib["android-cardview"]
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.lifecycle.ktx
+    implementation libs.androidx.viewmodel.ktx
+    // activity
+    implementation libs.androidx.activity.ktx
+    implementation libs.androidx.activity.compose
+    implementation(platform libs.androidx.compose.bom)
+    implementation libs.androidx.compose.ui
+    implementation libs.androidx.compose.ui.graphics
+    // 预览使用的库
+    implementation libs.androidx.compose.ui.tooling.preview
+    // Material Design 3
+    implementation libs.androidx.compose.material3
+
+    implementation libs.androidx.compose.livedata
+
+    implementation libs.androidx.viewmodel.ktx
+    implementation libs.androidx.lifecycle.ktx
     //协程
-    implementation lib["android-coroutines"]
-    implementation lib["android-viewmodel-ktx"]
-    implementation lib["android-lifecycle-ktx"]
+    implementation libs.android.coroutines
+    //serialization
+    implementation libs.serialization
+
+    //logcat日志打印
+    implementation libs.logger
+    //okhttp
+    implementation libs.okhttp.okhttp3
+    implementation libs.okhttp.retrofit
+    implementation libs.okhttp.serialization
     //workManager
-    implementation lib["android-work"]
-    implementation lib["android-work-ktx"]
-
+    implementation libs.androidx.work.runtime
+    implementation libs.androidx.work.ktx
     //sqlite数据库
-    implementation lib["android-room"]
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    kapt lib["android-room-compiler"]
+    implementation libs.androidx.room.runtime
+    ksp libs.androidx.room.compiler
     // optional - Kotlin Extensions and Coroutines support for Room
-    implementation lib["android-room-ktx"]
+    implementation libs.androidx.room.ktx
     // optional - Test helpers
-    testImplementation lib["android-room-test"]
-    //图片查看选择器
-    implementation lib["photoPicker"]
-    implementation lib["photoView"]
-    //图片加载
-    implementation lib["glide"]
-    kapt lib["glide-compiler"]
+    testImplementation libs.androidx.room.test
 
-    androidTestImplementation lib["android-test"]
-    androidTestImplementation lib["android-ext"]
-    testImplementation lib["junit"]
-    androidTestImplementation lib["espresso"]
+
+    implementation libs.permissionx
+
+    androidTestImplementation libs.android.test.runner
+    androidTestImplementation libs.android.test.ext
+    testImplementation libs.junit
+    androidTestImplementation libs.espresso
 }
 
 static def releaseTime() {

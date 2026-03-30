@@ -7,18 +7,18 @@
 
         <variable
             name="view"
-            type="com.github2136.wardrobe.view.activity.clothing.ClothingEditActivity" />
+            type="com.github2136.wardrobe.view.activity.clothing.colthing_edit.ClothingEditActivity" />
 
         <variable
             name="vm"
-            type="com.github2136.wardrobe.vm.clothing.ClothingEditVM" />
+            type="com.github2136.wardrobe.view.activity.clothing.colthing_edit.ClothingEditVM" />
     </data>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.activity.clothing.ClothingEditActivity">
+        tools:context=".view.activity.clothing.colthing_edit.ClothingEditActivity">
 
         <include
             android:id="@+id/title"

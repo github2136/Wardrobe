@@ -13,17 +13,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".view.activity.clothing.ClothingEditActivity"
+            android:name=".view.activity.clothing.colthing_edit.ClothingEditActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.clothing.ClothingAddActivity"
+            android:name=".view.activity.clothing.colthing_add.ClothingAddActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.dialog.MediaDialog"
             android:screenOrientation="portrait"
             android:theme="@style/Dialog" />
         <activity
-            android:name=".view.activity.clothing.ClothingListActivity"
+            android:name=".view.activity.clothing.colthing_list.ClothingListActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

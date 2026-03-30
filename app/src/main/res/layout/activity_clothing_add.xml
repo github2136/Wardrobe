@@ -7,11 +7,11 @@
 
         <variable
             name="view"
-            type="com.github2136.wardrobe.view.activity.clothing.ClothingAddActivity" />
+            type="com.github2136.wardrobe.view.activity.clothing.colthing_add.ClothingAddActivity" />
 
         <variable
             name="vm"
-            type="com.github2136.wardrobe.vm.clothing.ClothingAddVM" />
+            type="com.github2136.wardrobe.view.activity.clothing.colthing_add.ClothingAddVM" />
 
     </data>
 
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".view.activity.clothing.ClothingAddActivity">
+        tools:context=".view.activity.clothing.colthing_add.ClothingAddActivity">
 
         <include
             android:id="@+id/title"
