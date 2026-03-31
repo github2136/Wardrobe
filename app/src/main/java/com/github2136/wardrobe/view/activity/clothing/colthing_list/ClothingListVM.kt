@@ -1,19 +1,11 @@
 package com.github2136.wardrobe.view.activity.clothing.colthing_list
 
 import android.app.Application
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.github2136.wardrobe.R
-import com.github2136.wardrobe.model.entity.Clothing
-import com.github2136.wardrobe.model.entity.ResultRepo
-import com.github2136.wardrobe.repository.ClothingRepository
-import com.github2136.wardrobe.view.activity.clothing.colthing_list.ClothingAdapter
-import kotlinx.coroutines.launch
 
 /**
  * Created by YB on 2021/10/9
  */
-class ClothingListVM(app: Application) : BaseLoadMoreVM<Clothing>(app) {
+class ClothingListVM(app: Application)/* : BaseLoadMoreVM<Clothing>(app) {
     private val clothingInfoRepository by lazy { ClothingRepository(app) }
     val seasonLD = MutableLiveData<MutableList<String>>().apply { value = mutableListOf("春", "夏", "秋", "冬") }
     val typeLD = MutableLiveData<MutableList<String>>().apply { value = app.resources.getStringArray(R.array.arr_clothing_type).toMutableList() }
@@ -47,4 +39,4 @@ class ClothingListVM(app: Application) : BaseLoadMoreVM<Clothing>(app) {
     }
 
     override fun initAdapter() = ClothingAdapter()
-}
+}*/

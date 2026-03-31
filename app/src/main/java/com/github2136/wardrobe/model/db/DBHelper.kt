@@ -8,7 +8,6 @@ import androidx.room.TypeConverters
 import com.github2136.wardrobe.common.Constants
 import com.github2136.wardrobe.model.entity.Clothing
 
-
 @Database(
         entities = [
             Clothing::class

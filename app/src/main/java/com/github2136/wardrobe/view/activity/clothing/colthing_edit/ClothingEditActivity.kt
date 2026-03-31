@@ -1,25 +1,10 @@
 package com.github2136.wardrobe.view.activity.clothing.colthing_edit
 
-import android.app.Activity
-import android.content.Intent
-import android.net.Uri
-import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import androidx.lifecycle.Observer
-import com.github2136.wardrobe.R
-import com.github2136.wardrobe.common.Other
-import com.github2136.wardrobe.databinding.ActivityClothingEditBinding
-import com.github2136.wardrobe.view.dialog.MediaDialog
-import com.github2136.wardrobe.view.activity.clothing.colthing_edit.ClothingEditVM
-
 /**
  * Created by YB on 2021/10/11
  * 编辑
  */
-class ClothingEditActivity : BaseActivity<ClothingEditVM, ActivityClothingEditBinding>() {
+class ClothingEditActivity /*: BaseActivity<ClothingEditVM, ActivityClothingEditBinding>() {
 
     val mediaWidth by lazy { (resources.displayMetrics.widthPixels - ((8 * 2 + 20f * 3).dp2px)) / 4 }
     val mediaUris = mutableListOf<Uri>()
@@ -146,4 +131,4 @@ class ClothingEditActivity : BaseActivity<ClothingEditVM, ActivityClothingEditBi
         const val REQUEST_ADD_MEDIA = 806
         const val ARG_CLOTHING = "CLOTHING"
     }
-}
+}*/

@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import java.util.*
 
@@ -17,6 +18,7 @@ import java.util.*
 data class Clothing(
     @PrimaryKey(autoGenerate = true)
     var ciId: Long = 0,
+    @Contextual
     var createdAt: Date = Date(),//购买时间
     var ciType: String = "", //服装类型
     var ciSeason: String = "", //季节

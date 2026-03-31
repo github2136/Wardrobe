@@ -3,8 +3,10 @@ package com.github2136.wardrobe.view.activity.clothing.colthing_list
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.github2136.wardrobe.base.ui.theme.AppTheme
 
@@ -17,6 +19,7 @@ class ClothingListActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AppTheme {
+                MaterialTheme.colorScheme
                 ClothingListScreen()
             }
         }
@@ -140,7 +143,7 @@ class ClothingListActivity : ComponentActivity() {
 fun ClothingListScreen() {
     Text("xxx")
 }
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun ClothingListScreenPreview() {
     AppTheme {

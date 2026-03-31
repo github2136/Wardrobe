@@ -1,9 +1,10 @@
 package com.github2136.wardrobe.base
 
-import com.github2136.basemvvm.BaseApplication
+import android.app.Application
+
 
 /**
  * Created by YB on 2021/4/14
  */
-class App : BaseApplication() {
+class App : Application() {
 }

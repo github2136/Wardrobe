@@ -1,0 +1,70 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "28c02b9d7480798a91e3e1fcc727722c",
+    "entities": [
+      {
+        "tableName": "Clothing",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ciId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `createdAt` TEXT NOT NULL, `ciType` TEXT NOT NULL, `ciSeason` TEXT NOT NULL, `ciRemark` TEXT NOT NULL, `ciPicture` TEXT NOT NULL, `valid` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "ciId",
+            "columnName": "ciId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ciType",
+            "columnName": "ciType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ciSeason",
+            "columnName": "ciSeason",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ciRemark",
+            "columnName": "ciRemark",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ciPicture",
+            "columnName": "ciPicture",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "valid",
+            "columnName": "valid",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "ciId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '28c02b9d7480798a91e3e1fcc727722c')"
+    ]
+  }
+}

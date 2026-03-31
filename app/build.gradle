@@ -21,6 +21,9 @@ android {
             abiFilters "armeabi-v7a"
         }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
     }
     buildFeatures {
         buildConfig = true
@@ -93,12 +96,16 @@ dependencies {
     testImplementation libs.androidx.room.test
 
 
+
     implementation libs.permissionx
 
     androidTestImplementation libs.android.test.runner
     androidTestImplementation libs.android.test.ext
     testImplementation libs.junit
     androidTestImplementation libs.espresso
+    // 预览使用的库
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
 
 static def releaseTime() {

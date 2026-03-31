@@ -7,14 +7,14 @@ import java.util.Date
 
 class Converters {
     @TypeConverter
-    fun fromTimestamp(value: String?) = Json.encodeToString(value)
+    fun fromTimestamp(value: String) = Json.decodeFromString<Date>(value)
 
     @TypeConverter
     fun fromDate(date: Date?) = Json.encodeToString(date)
     //
     @TypeConverter
-    fun fromList(value: List<String>) = value.let { Json.encodeToString(it) }
+    fun fromList(value: MutableList<String>?) = Json.encodeToString(value)
 
     @TypeConverter
-    fun fromListStr(value: String) = value.let { Json.encodeToString(it) }
+    fun fromListStr(value: String) = Json.decodeFromString<MutableList<String>>(value)
 }

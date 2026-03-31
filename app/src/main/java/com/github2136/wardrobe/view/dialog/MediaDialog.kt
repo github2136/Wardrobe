@@ -1,20 +1,10 @@
 package com.github2136.wardrobe.view.dialog
 
-import android.app.Activity
-import android.content.Intent
-import android.net.Uri
-import android.os.Bundle
-import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import com.github2136.photopicker.activity.CaptureActivity
-import com.github2136.photopicker.activity.PhotoPickerActivity
-
 /**
  * Created by YB on 2020/4/9
  * 媒体文件添加
  */
-class MediaDialog : AppCompatActivity() {
+class MediaDialog /*: AppCompatActivity() {
     var mediaType: Int = 0
     private val photo_picker = "本地图片"
     private val capture = "拍照"
@@ -95,4 +85,4 @@ class MediaDialog : AppCompatActivity() {
         const val RESULT_MEDIA_TYPE = "MEDIA_TYPE"
         const val RESULT_URI = "URI"
     }
-}
+}*/

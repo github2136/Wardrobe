@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.github2136.wardrobe.R
 import com.github2136.wardrobe.common.Other
-import com.github2136.wardrobe.databinding.ActivityClothingAddBinding
 import com.github2136.wardrobe.view.dialog.MediaDialog
 import com.github2136.wardrobe.view.activity.clothing.colthing_add.ClothingAddVM
 
@@ -19,7 +18,7 @@ import com.github2136.wardrobe.view.activity.clothing.colthing_add.ClothingAddVM
  * Created by YB on 2021/10/11
  * 添加
  */
-class ClothingAddActivity : BaseActivity<ClothingAddVM, ActivityClothingAddBinding>() {
+class ClothingAddActivity/* : BaseActivity<ClothingAddVM, ActivityClothingAddBinding>() {
     val mediaWidth by lazy { (resources.displayMetrics.widthPixels - ((8 * 2 + 20f * 3).dp2px)) / 4 }
     val mediaUris = mutableListOf<Uri>()
 
@@ -110,4 +109,4 @@ class ClothingAddActivity : BaseActivity<ClothingAddVM, ActivityClothingAddBindi
     companion object {
         const val REQUEST_ADD_MEDIA = 806
     }
-}
+}*/
