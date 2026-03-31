@@ -3,7 +3,8 @@ package com.github2136.wardrobe.model.entity
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.util.*
 
 /**
@@ -12,6 +13,7 @@ import java.util.*
  */
 @Parcelize
 @Entity
+@Serializable
 data class Clothing(
     @PrimaryKey(autoGenerate = true)
     var ciId: Long = 0,

@@ -1,24 +1,20 @@
 package com.github2136.wardrobe.model.db
 
 import androidx.room.TypeConverter
-import com.github2136.util.JsonUtil
-import com.github2136.util.date
-import com.github2136.util.str
-import com.google.gson.reflect.TypeToken
-import java.util.*
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import java.util.Date
 
 class Converters {
-    private val mJsonUtil by lazy { JsonUtil.instance }
+    @TypeConverter
+    fun fromTimestamp(value: String?) = Json.encodeToString(value)
 
     @TypeConverter
-    fun fromTimestamp(value: String?) = value?.date()
+    fun fromDate(date: Date?) = Json.encodeToString(date)
+    //
+    @TypeConverter
+    fun fromList(value: List<String>) = value.let { Json.encodeToString(it) }
 
     @TypeConverter
-    fun fromDate(date: Date?) = date?.str()
-
-    @TypeConverter
-    fun fromList(value: List<String>) = value.let { mJsonUtil.getGson().toJson(it) }
-
-    @TypeConverter
-    fun fromListStr(value: String) = value.let { mJsonUtil.getObjectByStr<List<String>>(it, object : TypeToken<List<String>>() {}.type) }
+    fun fromListStr(value: String) = value.let { Json.encodeToString(it) }
 }

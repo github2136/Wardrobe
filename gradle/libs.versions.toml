@@ -1,5 +1,5 @@
 [versions]
-compileSdkVersion = "33"
+compileSdkVersion = "36"
 minSdkVersion = "23"
 targetSdkVersion = "30"
 agp = "8.13.2"
@@ -109,11 +109,11 @@ androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-te
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
 #序列表
-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 # 图片加载相关库
-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coilCompose" }
 # 动画相关库
-lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
+lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottieCompose" }
 #日志打印
 logger = { group = "com.orhanobut", name = "logger", version.ref = "logger" }
 #网络请求

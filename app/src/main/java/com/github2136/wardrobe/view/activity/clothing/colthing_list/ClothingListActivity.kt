@@ -1,27 +1,12 @@
 package com.github2136.wardrobe.view.activity.clothing.colthing_list
 
-import android.Manifest
-import android.app.Activity
-import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.CheckBox
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.collection.ArrayMap
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.databinding.DataBindingUtil
-import com.github2136.wardrobe.R
 import com.github2136.wardrobe.base.ui.theme.AppTheme
-import com.github2136.wardrobe.databinding.ActivityClothingListBinding
-import com.github2136.wardrobe.databinding.DialogFilterBinding
-import com.github2136.wardrobe.view.activity.clothing.colthing_edit.ClothingEditActivity
-import com.github2136.wardrobe.view.activity.clothing.colthing_add.ClothingAddActivity
-import com.github2136.wardrobe.view.activity.clothing.colthing_list.ClothingListVM
 
 /**
  * Created by YB on 2021/10/9

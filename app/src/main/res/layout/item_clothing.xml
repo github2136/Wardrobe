@@ -19,7 +19,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
-            android:src="@{data.firstPic}" />
+        />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -31,28 +31,25 @@
 
             <TextView
                 android:id="@+id/tv_clothing"
-                style="@style/TxtLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text='@{"类型：" + data.ciType}'
+
                 tools:text="类型：xx" />
 
             <TextView
-                style="@style/TxtMediumSecondary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text='@{"季节：" + data.ciSeason}'
+
                 tools:text="季节：xx" />
 
             <TextView
-                style="@style/TxtSmallSecondary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text='@{"备注：" + data.ciRemark}'
+
                 tools:text="备注：xxxx" />
 
         </LinearLayout>

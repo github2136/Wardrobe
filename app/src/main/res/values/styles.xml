@@ -17,8 +17,8 @@
         <item name="android:lines">1</item>
         <item name="android:background">@drawable/sha_outlinebox</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/colorTextPrimaryLight</item>
-        <item name="android:textColorHint">@color/colorTextDisableLight</item>
+<!--        <item name="android:textColor">@color/colorTextPrimaryLight</item>-->
+<!--        <item name="android:textColorHint">@color/colorTextDisableLight</item>-->
     </style>
     <!--多行编辑框-->
     <style name="EtNormalMulti">
@@ -27,8 +27,8 @@
         <item name="android:minLines">5</item>
         <item name="android:background">@drawable/sha_outlinebox</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/colorTextPrimaryLight</item>
-        <item name="android:textColorHint">@color/colorTextDisableLight</item>
+<!--        <item name="android:textColor">@color/colorTextPrimaryLight</item>-->
+<!--        <item name="android:textColorHint">@color/colorTextDisableLight</item>-->
     </style>
 
     <style name="ToolBar.Theme" parent="@style/ThemeOverlay.AppCompat.Dark">
@@ -41,7 +41,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="SpType" parent="TxtMedium">
+    <style name="SpType" ><!--parent="TxtMedium"-->
         <item name="android:padding">8dp</item>
     </style>
     <!--Dialog样式Activity-->

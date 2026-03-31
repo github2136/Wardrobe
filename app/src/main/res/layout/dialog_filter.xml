@@ -12,7 +12,6 @@
         android:padding="8dp">
 
         <TextView
-            style="@style/TxtMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="季节" />
@@ -56,15 +55,14 @@
         </LinearLayout>
 
         <TextView
-            style="@style/TxtMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="类型" />
 
-        <com.google.android.material.internal.FlowLayout
-            android:id="@+id/flType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></com.google.android.material.internal.FlowLayout>
+<!--        <com.google.android.material.internal.FlowLayout-->
+<!--            android:id="@+id/flType"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"></com.google.android.material.internal.FlowLayout>-->
     </LinearLayout>
 </layout>
