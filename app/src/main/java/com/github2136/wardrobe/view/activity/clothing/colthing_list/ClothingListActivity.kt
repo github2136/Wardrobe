@@ -141,7 +141,7 @@ class ClothingListActivity : ComponentActivity() {
 }
 @Composable
 fun ClothingListScreen() {
-    Text("xxx")
+    Text("000000")
 }
 @Preview(showBackground = true)
 @Composable
