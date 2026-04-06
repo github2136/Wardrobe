@@ -12,18 +12,22 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".view.activity.clothing.colthing_edit.ClothingEditActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".view.activity.clothing.colthing_add.ClothingAddActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".view.dialog.MediaDialog"
-            android:screenOrientation="portrait"
-            android:theme="@style/Dialog" />
+<!--        <activity-->
+<!--            android:name=".view.activity.clothing.colthing_edit.ClothingEditActivity"-->
+<!--            android:exported="true"-->
+<!--            android:screenOrientation="portrait" />-->
+<!--        <activity-->
+<!--            android:name=".view.activity.clothing.colthing_add.ClothingAddActivity"-->
+<!--            android:exported="true"-->
+<!--            android:screenOrientation="portrait" />-->
+<!--        <activity-->
+<!--            android:name=".view.dialog.MediaDialog"-->
+<!--            android:exported="true"-->
+<!--            android:screenOrientation="portrait"-->
+<!--            android:theme="@style/Dialog" />-->
         <activity
             android:name=".view.activity.clothing.colthing_list.ClothingListActivity"
+            android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

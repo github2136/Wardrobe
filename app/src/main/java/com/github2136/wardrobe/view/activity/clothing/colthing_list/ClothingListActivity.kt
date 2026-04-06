@@ -3,11 +3,13 @@ package com.github2136.wardrobe.view.activity.clothing.colthing_list
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.view.WindowCompat
 import com.github2136.wardrobe.base.ui.theme.AppTheme
 
 /**
@@ -17,9 +19,9 @@ import com.github2136.wardrobe.base.ui.theme.AppTheme
 class ClothingListActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             AppTheme {
-                MaterialTheme.colorScheme
                 ClothingListScreen()
             }
         }
@@ -141,7 +143,8 @@ class ClothingListActivity : ComponentActivity() {
 }
 @Composable
 fun ClothingListScreen() {
-    Text("000000")
+
+    Text("00000\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0")
 }
 @Preview(showBackground = true)
 @Composable
