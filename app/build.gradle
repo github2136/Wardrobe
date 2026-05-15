@@ -68,6 +68,7 @@ dependencies {
     implementation libs.androidx.compose.livedata
     // Material Design 3
     implementation libs.androidx.compose.material3
+    implementation libs.androidx.compose.icons.extended
     // 预览使用的库
     implementation libs.androidx.compose.ui.tooling.preview
     debugImplementation libs.androidx.compose.ui.tooling
@@ -80,9 +81,11 @@ dependencies {
     androidTestImplementation libs.androidx.espresso.core
 
     //协程
-    implementation libs.android.coroutines
+    implementation libs.androidx.coroutines
     //serialization
     implementation libs.serialization
+
+    implementation libs.androidx.splashscreen
 
     //logcat日志打印
     implementation libs.logger
