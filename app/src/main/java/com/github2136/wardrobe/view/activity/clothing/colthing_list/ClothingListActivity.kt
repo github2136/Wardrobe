@@ -6,14 +6,20 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.FilterAlt
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,10 +33,17 @@ import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github2136.wardrobe.base.ui.theme.AppTheme
 
 /**
@@ -44,7 +57,7 @@ class ClothingListActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                ClothingListScreen()
+                ClothingListScreen(viewModel())
             }
         }
     }
@@ -162,7 +175,7 @@ class ClothingListActivity : ComponentActivity() {
     //     const val REQUEST_ADD = 474
     //     const val REQUEST_EDIT = 62
     // }
-    val refreshResult=registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+    val refreshResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == RESULT_OK) {
 
         }
@@ -170,7 +183,29 @@ class ClothingListActivity : ComponentActivity() {
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ClothingListScreen() {
+fun ClothingListScreen(viewModel: ClothingListVM) {
+    val items by viewModel.items.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val hasMoreData by viewModel.hasMoreData.collectAsState()
+
+    val listState = rememberLazyListState()
+
+    // 监听滚动到底部，加载更多数据
+    val shouldLoadMore by remember {
+        derivedStateOf {
+            val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()
+            lastVisibleItem != null &&
+                lastVisibleItem.index >= items.size - 5 &&
+                !isLoading &&
+                hasMoreData
+        }
+    }
+
+    LaunchedEffect(shouldLoadMore) {
+        if (shouldLoadMore) {
+            viewModel.loadNextPage()
+        }
+    }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -206,16 +241,68 @@ fun ClothingListScreen() {
                 }
             )
         }) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .consumeWindowInsets(innerPadding)
-        ) {
-            item {
-                Text("00000\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0\n0")
+        if (items.isEmpty() && !isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("暂无数据")
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .consumeWindowInsets(innerPadding),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+
+                items(
+                    items = items,
+                    key = { item -> item.ciId }
+                ) { item ->
+                    // WardrobeItemCard(
+                    //     item = item,
+                    //     onDelete = { viewModel.deleteItem(item.id) }
+                    // )
+                }
+
+                // 加载更多指示器
+                if (isLoading) {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
+                }
+
+                // 没有更多数据时显示提示
+                if (!hasMoreData && items.isNotEmpty()) {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "没有更多数据了",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
             }
         }
+
     }
 
 }
@@ -223,6 +310,6 @@ fun ClothingListScreen() {
 @Composable
 private fun ClothingListScreenPreview() {
     AppTheme {
-        ClothingListScreen()
+        ClothingListScreen( viewModel())
     }
 }

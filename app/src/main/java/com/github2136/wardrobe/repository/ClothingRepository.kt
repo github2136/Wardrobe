@@ -37,7 +37,6 @@ class ClothingRepository(context: Context) {
             val query = SimpleSQLiteQuery(sb.toString(), arrayOf((page - 1) * count, count))
             return ResultRepo.Success(clothingDao.queryClothingList(query))
         } catch (e: Exception) {
-            //文件提交失败
             return ResultRepo.Error(1, "数据获取失败", e)
         }
     }

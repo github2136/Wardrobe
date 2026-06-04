@@ -52,16 +52,13 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": true,
           "columnNames": [
             "ciId"
-          ],
-          "autoGenerate": true
-        },
-        "indices": [],
-        "foreignKeys": []
+          ]
+        }
       }
     ],
-    "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
       "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '28c02b9d7480798a91e3e1fcc727722c')"
