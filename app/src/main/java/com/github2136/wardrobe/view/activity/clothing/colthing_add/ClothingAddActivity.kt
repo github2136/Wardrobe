@@ -8,17 +8,36 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Observer
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github2136.wardrobe.R
+import com.github2136.wardrobe.base.ui.theme.AppTheme
 import com.github2136.wardrobe.common.Other
 import com.github2136.wardrobe.view.dialog.MediaDialog
 import com.github2136.wardrobe.view.activity.clothing.colthing_add.ClothingAddVM
+import com.github2136.wardrobe.view.activity.clothing.colthing_list.ClothingListScreen
 
 /**
  * Created by YB on 2021/10/11
  * 添加
  */
-class ClothingAddActivity/* : BaseActivity<ClothingAddVM, ActivityClothingAddBinding>() {
+class ClothingAddActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            AppTheme {
+                // ClothingListScreen(viewModel())
+            }
+        }
+    }
+}
+
+/* : BaseActivity<ClothingAddVM, ActivityClothingAddBinding>() {
     val mediaWidth by lazy { (resources.displayMetrics.widthPixels - ((8 * 2 + 20f * 3).dp2px)) / 4 }
     val mediaUris = mutableListOf<Uri>()
 

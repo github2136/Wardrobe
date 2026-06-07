@@ -1,12 +1,13 @@
 package com.github2136.wardrobe.view.activity.clothing.colthing_add
 
 import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import com.github2136.wardrobe.base.AppBaseVM
 
 /**
  * Created by YB on 2021/10/11
  */
-class ClothingAddVM(val app: Application) : AppBaseVM(app) {
+class ClothingAddVM(val app: Application)  : AndroidViewModel(app) {
     // private val clothingRepository by lazy { ClothingRepository(app) }
     //
     // val clothingLD = MutableLiveData<Clothing>().apply { value = Clothing() }

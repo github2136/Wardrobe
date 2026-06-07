@@ -2,6 +2,7 @@ package com.github2136.wardrobe.view.activity.clothing.colthing_list
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,8 +20,11 @@ import kotlinx.coroutines.launch
  */
 class ClothingListVM(app: Application) : AndroidViewModel(app) {
     private val clothingInfoRepository by lazy { ClothingRepository(app) }
-    val seasonLD = MutableLiveData<MutableList<String>>().apply { value = mutableListOf("春", "夏", "秋", "冬") }
-    val typeLD = MutableLiveData<MutableList<String>>().apply { value = app.resources.getStringArray(R.array.arr_clothing_type).toMutableList() }
+    private val _season = MutableStateFlow(mutableListOf("春", "夏", "秋", "冬"))
+    val season = _season.asStateFlow()
+
+    private val _type = MutableStateFlow(app.resources.getStringArray(R.array.arr_clothing_type).toMutableList())
+    val type = _type.asStateFlow()
 
     private val _items = MutableStateFlow<List<Clothing>>(emptyList())
     val items: StateFlow<List<Clothing>> = _items.asStateFlow()
@@ -33,6 +37,14 @@ class ClothingListVM(app: Application) : AndroidViewModel(app) {
     private var currentPage = 0
     private val pageSize = 20
 
+    init {
+
+        // 初始化示例数据
+        viewModelScope.launch {
+            loadInitialData()
+        }
+    }
+
     private suspend fun loadInitialData() {
         _items.value = emptyList()
         currentPage = 0
@@ -44,14 +56,18 @@ class ClothingListVM(app: Application) : AndroidViewModel(app) {
 
         viewModelScope.launch {
             _isLoading.value = true
-            val newItems = clothingInfoRepository.getClothingList(seasonLD.value!!, typeLD.value!!, currentPage, pageSize)
+            val clothings = mutableListOf<Clothing>()
+            repeat(20) { i ->
+                clothings.add(Clothing(currentPage * pageSize + i.toLong()))
+            }
+            val newItems = ResultRepo.Success(clothings) // clothingInfoRepository.getClothingList(_season.value, _type.value, currentPage, pageSize)
 
             when (newItems) {
                 is ResultRepo.Success -> {
                     if (newItems.data.isEmpty()) {
                         _hasMoreData.value = false
                     } else {
-                        _items.value = _items.value + newItems.data
+                        _items.value += newItems.data
                         currentPage++
 
                         // 检查是否还有更多数据
@@ -76,7 +92,7 @@ class ClothingListVM(app: Application) : AndroidViewModel(app) {
     fun getData() {
         viewModelScope.launch {
 
-            val resultRepo = clothingInfoRepository.getClothingList(seasonLD.value!!, typeLD.value!!, 1, 10)
+            val resultRepo = clothingInfoRepository.getClothingList(season.value, type.value, 1, 10)
         }
     }
 }

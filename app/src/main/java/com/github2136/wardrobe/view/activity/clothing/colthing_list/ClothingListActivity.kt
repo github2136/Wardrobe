@@ -1,6 +1,8 @@
 package com.github2136.wardrobe.view.activity.clothing.colthing_list
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -8,17 +10,20 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.FilterAlt
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -37,14 +42,19 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github2136.wardrobe.base.ui.theme.AppTheme
+import com.github2136.wardrobe.view.activity.clothing.colthing_add.ClothingAddActivity
 
 /**
  * Created by YB on 2021/10/9
@@ -189,23 +199,27 @@ fun ClothingListScreen(viewModel: ClothingListVM) {
     val hasMoreData by viewModel.hasMoreData.collectAsState()
 
     val listState = rememberLazyListState()
-
+    Log.e("List", "init1")
     // 监听滚动到底部，加载更多数据
     val shouldLoadMore by remember {
         derivedStateOf {
             val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()
-            lastVisibleItem != null &&
+            val temp = lastVisibleItem != null &&
                 lastVisibleItem.index >= items.size - 5 &&
                 !isLoading &&
                 hasMoreData
+            Log.e("List", "derivedStateOf $temp")
+            temp
         }
     }
-
+    Log.e("List", "init2")
     LaunchedEffect(shouldLoadMore) {
+        Log.e("List", "shouldLoadMore $shouldLoadMore")
         if (shouldLoadMore) {
             viewModel.loadNextPage()
         }
     }
+    val context = LocalContext.current
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -220,7 +234,7 @@ fun ClothingListScreen(viewModel: ClothingListVM) {
                         state = rememberTooltipState()
                     ) {
                         IconButton(onClick = {
-
+                            context.startActivity(Intent(context, ClothingAddActivity::class.java))
                         }) {
                             Icon(imageVector = Icons.Filled.Add, "添加")
 
@@ -252,17 +266,20 @@ fun ClothingListScreen(viewModel: ClothingListVM) {
             }
         } else {
             LazyColumn(
+                state = listState,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
                     .consumeWindowInsets(innerPadding),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
+
             ) {
 
                 items(
                     items = items,
                     key = { item -> item.ciId }
                 ) { item ->
+                    Text("${item.ciId}")
                     // WardrobeItemCard(
                     //     item = item,
                     //     onDelete = { viewModel.deleteItem(item.id) }
@@ -310,6 +327,6 @@ fun ClothingListScreen(viewModel: ClothingListVM) {
 @Composable
 private fun ClothingListScreenPreview() {
     AppTheme {
-        ClothingListScreen( viewModel())
+        ClothingListScreen(viewModel())
     }
 }
