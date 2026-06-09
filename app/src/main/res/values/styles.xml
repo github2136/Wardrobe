@@ -1,10 +1,14 @@
 <resources>
 
     <style name="SplashScreenTheme" parent="Theme.SplashScreen">
+        <!--是否是亮色主题-->
+        <item name="isLightTheme">true</item>
         <!--纯色背景-->
-        <item name="windowSplashScreenBackground">#DDDDDD</item>
+        <item name="windowSplashScreenBackground">#ffffff</item>
         <!--中间图标 api32可以设置为AnimationDrawable 和 AnimatedVectorDrawable动画时长使用windowSplashScreenAnimationDuration控制，api33及以上则会自动推算 -->
         <item name="windowSplashScreenAnimatedIcon">@drawable/img_splash</item>
+        <!--图标背景色-->
+        <item name="windowSplashScreenIconBackgroundColor">#ffffff</item>
         <!--普通Activity使用的主题-->
         <item name="postSplashScreenTheme">@style/AppTheme</item>
     </style>

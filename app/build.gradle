@@ -18,7 +18,7 @@ android {
         versionCode 1
         versionName "1.0.0"
         ndk {
-            abiFilters "armeabi-v7a"
+            abiFilters "armeabi-v7a", "arm64-v8a"
         }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ksp {
@@ -46,8 +46,10 @@ android {
         compose = true
     }
     android.applicationVariants.all { var ->
-        var.outputs.all {
-            outputFileName = "Wardrobe-${var.buildType.name}-${var.versionName}-${var.versionCode}-${releaseTime()}.apk"
+        var.outputs.all { output ->
+            def abi = output.getFilter(com.android.build.OutputFile.ABI)
+            if (abi == null) abi = "all"
+            outputFileName = "Wardrobe-${var.productFlavors.name}-${abi}-${var.buildType.name}-${var.versionName}-${var.versionCode}-${releaseTime()}.apk"
         }
     }
 }

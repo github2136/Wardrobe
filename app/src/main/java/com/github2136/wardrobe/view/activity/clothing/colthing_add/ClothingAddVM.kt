@@ -24,23 +24,23 @@ class ClothingAddVM(val app: Application)  : AndroidViewModel(app) {
     // }
     //
     fun save() {
-        viewModelScope.launch {
-            dialogLD.value = DialogData(loadingStr)
-            val parent = FileUtil.getExternalStorageProjectPath(app) + "/.media"
-            val f = mutableListOf<String>()
-            clothingLD.value?.apply {
-                ciPicture.forEach {
-                    val target = File(parent, UUID.randomUUID().toString() + ".jpg")
-                    File(it).copyTo(target)
-                    f.add(target.absolutePath)
-                }
-                ciPicture.clear()
-                ciPicture.addAll(f)
-            }
-            clothingRepository.postClothing(clothingLD.value!!)
-            toastLD.value = "添加成功"
-            addLD.value = ""
-            dialogLD.value = null
-        }
+        // viewModelScope.launch {
+        //     dialogLD.value = DialogData(loadingStr)
+        //     val parent = FileUtil.getExternalStorageProjectPath(app) + "/.media"
+        //     val f = mutableListOf<String>()
+        //     clothingLD.value?.apply {
+        //         ciPicture.forEach {
+        //             val target = File(parent, UUID.randomUUID().toString() + ".jpg")
+        //             File(it).copyTo(target)
+        //             f.add(target.absolutePath)
+        //         }
+        //         ciPicture.clear()
+        //         ciPicture.addAll(f)
+        //     }
+        //     clothingRepository.postClothing(clothingLD.value!!)
+        //     toastLD.value = "添加成功"
+        //     addLD.value = ""
+        //     dialogLD.value = null
+        // }
     }
 }
