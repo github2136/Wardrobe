@@ -2,14 +2,12 @@ package com.github2136.wardrobe.view.activity.clothing.colthing_list
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github2136.wardrobe.R
 import com.github2136.wardrobe.model.entity.Clothing
 import com.github2136.wardrobe.model.entity.ResultRepo
 import com.github2136.wardrobe.repository.ClothingRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,72 +27,82 @@ class ClothingListVM(app: Application) : AndroidViewModel(app) {
     private val _items = MutableStateFlow<List<Clothing>>(emptyList())
     val items: StateFlow<List<Clothing>> = _items.asStateFlow()
 
-    private val _isLoading = MutableStateFlow(false)
+    private val _isLoading = MutableStateFlow(false) //正在加载更多
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
-    private val _hasMoreData = MutableStateFlow(true)
+    private val _isRefreshing = MutableStateFlow(false) //刷新获取新数据
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
+
+    private val _hasMoreData = MutableStateFlow(true) //是否有更多数据
     val hasMoreData: StateFlow<Boolean> = _hasMoreData.asStateFlow()
     private var currentPage = 0
-    private val pageSize = 20
+    private val pageSize = 50
 
     init {
-
         // 初始化示例数据
-        viewModelScope.launch {
-            loadInitialData()
+        initData()
+    }
+
+    private suspend fun getData() {
+        delay(5000)
+        val clothings = mutableListOf<Clothing>()
+        repeat(20) { i ->
+            clothings.add(Clothing(currentPage * pageSize + i.toLong()))
+        }
+        val newItems = ResultRepo.Success(clothings) // clothingInfoRepository.getClothingList(_season.value, _type.value, currentPage, pageSize)
+
+        when (newItems) {
+            is ResultRepo.Success -> {
+                if (newItems.data.isEmpty()) {
+                    _hasMoreData.value = false
+                } else {
+                    _items.value += newItems.data
+                    currentPage++
+                    // 检查是否还有更多数据
+                    _hasMoreData.value = (newItems.data.size == pageSize)
+                }
+            }
+            is ResultRepo.Error -> {
+                ""
+            }
         }
     }
 
-    private suspend fun loadInitialData() {
-        _items.value = emptyList()
-        currentPage = 0
-        loadNextPage()
+    fun initData() {
+        viewModelScope.launch {
+            _hasMoreData.value = true
+            _isRefreshing.value = true
+            currentPage = 0
+            getData()
+            _isRefreshing.value = false
+        }
     }
 
-    fun loadNextPage() {
-        if (_isLoading.value || !_hasMoreData.value) return
-
+    fun loadMoreData() {
         viewModelScope.launch {
             _isLoading.value = true
-            val clothings = mutableListOf<Clothing>()
-            repeat(20) { i ->
-                clothings.add(Clothing(currentPage * pageSize + i.toLong()))
-            }
-            val newItems = ResultRepo.Success(clothings) // clothingInfoRepository.getClothingList(_season.value, _type.value, currentPage, pageSize)
-
-            when (newItems) {
-                is ResultRepo.Success -> {
-                    if (newItems.data.isEmpty()) {
-                        _hasMoreData.value = false
-                    } else {
-                        _items.value += newItems.data
-                        currentPage++
-
-                        // 检查是否还有更多数据
-                        _hasMoreData.value = (newItems.data.size == pageSize)
-                    }
-                }
-                is ResultRepo.Error -> {
-                    ""
-                }
-            }
-
+            getData()
             _isLoading.value = false
         }
     }
 
-    fun refresh() {
+
+    fun refreshTet() {
         viewModelScope.launch {
-            loadInitialData()
+
+            _isRefreshing.value = true
+            delay(5000)
+            _isRefreshing.value = false
         }
     }
 
-    fun getData() {
-        viewModelScope.launch {
 
-            val resultRepo = clothingInfoRepository.getClothingList(season.value, type.value, 1, 10)
-        }
-    }
+    // fun getData() {
+    //     viewModelScope.launch {
+    //
+    //         val resultRepo = clothingInfoRepository.getClothingList(season.value, type.value, 1, 10)
+    //     }
+    // }
 }
 
 /* : BaseLoadMoreVM<Clothing>(app) {
