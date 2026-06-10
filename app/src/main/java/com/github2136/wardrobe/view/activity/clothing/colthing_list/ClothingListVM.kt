@@ -46,7 +46,7 @@ class ClothingListVM(app: Application) : AndroidViewModel(app) {
     private suspend fun getData() {
         delay(5000)
         val clothings = mutableListOf<Clothing>()
-        repeat(20) { i ->
+        repeat(pageSize) { i ->
             clothings.add(Clothing(currentPage * pageSize + i.toLong()))
         }
         val newItems = ResultRepo.Success(clothings) // clothingInfoRepository.getClothingList(_season.value, _type.value, currentPage, pageSize)
@@ -89,7 +89,6 @@ class ClothingListVM(app: Application) : AndroidViewModel(app) {
 
     fun refreshTet() {
         viewModelScope.launch {
-
             _isRefreshing.value = true
             delay(5000)
             _isRefreshing.value = false
