@@ -68,7 +68,7 @@ class ClothingListActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                test(viewModel())
+                ClothingListScreen(viewModel())
             }
         }
     }
@@ -194,91 +194,6 @@ class ClothingListActivity : ComponentActivity() {
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun test(viewModel: ClothingListVM) {
-    val items by viewModel.items.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-    val isRefreshing by viewModel.isRefreshing.collectAsState()
-    val hasMoreData by viewModel.hasMoreData.collectAsState()
-
-    val listState = rememberLazyListState()
-
-    val state = rememberPullToRefreshState()
-    val coroutineScope = rememberCoroutineScope()
-    val onRefresh: () -> Unit = {
-        viewModel.refreshTet()
-        // isRefreshing = true
-        // coroutineScope.launch {
-        //     delay(5000)
-        //     itemCount += 5
-        //     isRefreshing = false
-        // }
-    }
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Title") },
-                // Provide an accessible alternative to trigger refresh.
-                actions = {
-                    IconButton(onClick = onRefresh) {
-                        Icon(Icons.Filled.Refresh, "Trigger Refresh")
-                    }
-                },
-            )
-        }
-    ) {
-        PullToRefreshBox(
-            modifier = Modifier.padding(it),
-            state = state,
-            isRefreshing = isRefreshing,
-            onRefresh = onRefresh,
-        ) {
-            LazyColumn(Modifier.fillMaxSize()) {
-
-
-                items(
-                    items = items,
-                    key = { item -> item.ciId }
-                ) { item ->
-                    Text("${item.ciId}")
-                }
-
-                // 加载更多指示器
-                if (isLoading) {
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator()
-                        }
-                    }
-                }
-                // 没有更多数据时显示提示
-                if (!hasMoreData && items.isNotEmpty()) {
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = "没有更多数据了",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
 fun ClothingListScreen(viewModel: ClothingListVM) {
     val items by viewModel.items.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -299,7 +214,7 @@ fun ClothingListScreen(viewModel: ClothingListVM) {
     }
     LaunchedEffect(shouldLoadMore) {
         if (shouldLoadMore) {
-            viewModel.refreshTet()
+            viewModel.loadMoreData()
         }
     }
     val context = LocalContext.current
@@ -340,6 +255,7 @@ fun ClothingListScreen(viewModel: ClothingListVM) {
             )
         }) { innerPadding ->
         PullToRefreshBox(
+            modifier=Modifier.padding(innerPadding),
             isRefreshing = isRefreshing,
             onRefresh = {
                 viewModel.initData()
@@ -347,8 +263,7 @@ fun ClothingListScreen(viewModel: ClothingListVM) {
             if (items.isEmpty() && !isLoading) {
                 Box(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
+                        .fillMaxSize() ,
                     contentAlignment = Alignment.Center
                 ) {
                     Text("暂无数据")
@@ -357,9 +272,7 @@ fun ClothingListScreen(viewModel: ClothingListVM) {
                 LazyColumn(
                     state = listState,
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .consumeWindowInsets(innerPadding),
+                        .fillMaxSize() ,
                     verticalArrangement = Arrangement.spacedBy(12.dp)
 
                 ) {
