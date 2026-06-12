@@ -24,19 +24,23 @@ class ClothingListVM(app: Application) : AndroidViewModel(app) {
     private val _type = MutableStateFlow(app.resources.getStringArray(R.array.arr_clothing_type).toMutableList())
     val type = _type.asStateFlow()
 
-    private val _items = MutableStateFlow<List<Clothing>>(emptyList())
+    private val _items = MutableStateFlow<List<Clothing>>(emptyList()) //列表数据
     val items: StateFlow<List<Clothing>> = _items.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false) //正在加载更多
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
-    private val _isRefreshing = MutableStateFlow(false) //刷新获取新数据
+    private val _isRefreshing = MutableStateFlow(false) //正在刷新数据
     val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
 
     private val _hasMoreData = MutableStateFlow(true) //是否有更多数据
     val hasMoreData: StateFlow<Boolean> = _hasMoreData.asStateFlow()
-    private var currentPage = 0
-    private val pageSize = 50
+
+    private val _isSuccess = MutableStateFlow(true) //数据获取是否成功
+    val isSuccess = _isSuccess.asStateFlow()
+
+    var pageIndex = 1 //页码
+    var pageCount = 20 //每页数量
 
     init {
         // 初始化示例数据
@@ -46,33 +50,33 @@ class ClothingListVM(app: Application) : AndroidViewModel(app) {
     private suspend fun getData() {
         delay(5000)
         val clothings = mutableListOf<Clothing>()
-        repeat(pageSize) { i ->
-            clothings.add(Clothing(currentPage * pageSize + i.toLong()))
+        repeat(pageCount) { i ->
+            clothings.add(Clothing(pageIndex * pageCount + i.toLong()))
         }
-        val newItems = ResultRepo.Success(clothings) // clothingInfoRepository.getClothingList(_season.value, _type.value, currentPage, pageSize)
+        val newItems = ResultRepo.Success(clothings) // clothingInfoRepository.getClothingList(_season.value, _type.value, pageIndex, pageCount)
 
         when (newItems) {
             is ResultRepo.Success -> {
+                _isSuccess.value = true
                 if (newItems.data.isEmpty()) {
                     _hasMoreData.value = false
                 } else {
                     _items.value += newItems.data
-                    currentPage++
+                    pageIndex++
                     // 检查是否还有更多数据
-                    _hasMoreData.value = (newItems.data.size == pageSize)
+                    _hasMoreData.value = (newItems.data.size == pageCount)
                 }
             }
             is ResultRepo.Error -> {
-                ""
+                _isSuccess.value = false
             }
         }
     }
 
     fun initData() {
         viewModelScope.launch {
-            _hasMoreData.value = true
             _isRefreshing.value = true
-            currentPage = 0
+            pageIndex = 0
             getData()
             _isRefreshing.value = false
         }
