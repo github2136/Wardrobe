@@ -8,22 +8,22 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.FilterAlt
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
@@ -33,19 +33,13 @@ import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
-import androidx.compose.material3.pulltorefresh.pullToRefresh
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -55,8 +49,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github2136.wardrobe.base.ui.theme.AppTheme
 import com.github2136.wardrobe.view.activity.clothing.colthing_add.ClothingAddActivity
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 /**
  * Created by YB on 2021/10/9
@@ -199,6 +191,7 @@ fun ClothingListScreen(viewModel: ClothingListVM) {
     val items by viewModel.items.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val isRefreshing by viewModel.isRefreshing.collectAsState()
+    val isSuccess by viewModel.isSuccess.collectAsState()
     val hasMoreData by viewModel.hasMoreData.collectAsState()
 
     val listState = rememberLazyListState()
@@ -255,28 +248,34 @@ fun ClothingListScreen(viewModel: ClothingListVM) {
             )
         }) { innerPadding ->
         PullToRefreshBox(
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize(),
             isRefreshing = isRefreshing,
             onRefresh = {
                 viewModel.initData()
             }) {
-            if(items.isEmpty()&&isRefreshing){
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("暂无数据")
-                }
-            }
-
-            if (items.isEmpty() && !isLoading) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("暂无数据")
+            if (items.isEmpty()) {
+                if (isSuccess) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .fillMaxHeight() // 明确告诉 Box 要占满高度
+                            .verticalScroll(rememberScrollState()),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("暂无数据")
+                    }
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .fillMaxHeight() // 明确告诉 Box 要占满高度
+                            .verticalScroll(rememberScrollState()),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("获取失败")
+                    }
                 }
             } else {
                 LazyColumn(

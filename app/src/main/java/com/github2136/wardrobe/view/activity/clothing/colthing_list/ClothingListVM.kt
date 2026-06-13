@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 /**
  * Created by YB on 2021/10/9
@@ -53,7 +54,11 @@ class ClothingListVM(app: Application) : AndroidViewModel(app) {
         repeat(pageCount) { i ->
             clothings.add(Clothing(pageIndex * pageCount + i.toLong()))
         }
-        val newItems = ResultRepo.Success(clothings) // clothingInfoRepository.getClothingList(_season.value, _type.value, pageIndex, pageCount)
+        val newItems = if (Random.nextInt(10) > 5) {
+            ResultRepo.Success(clothings) // clothingInfoRepository.getClothingList(_season.value, _type.value, pageIndex, pageCount)
+        } else {
+            ResultRepo.Error(0, "失败")
+        }
 
         when (newItems) {
             is ResultRepo.Success -> {
