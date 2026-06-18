@@ -11,6 +11,32 @@ import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipAnchorPosition
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberTooltipState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -20,6 +46,7 @@ import com.github2136.wardrobe.common.Other
 import com.github2136.wardrobe.view.dialog.MediaDialog
 import com.github2136.wardrobe.view.activity.clothing.colthing_add.ClothingAddVM
 import com.github2136.wardrobe.view.activity.clothing.colthing_list.ClothingListScreen
+import com.github2136.wardrobe.view.activity.clothing.colthing_list.ClothingListVM
 
 /**
  * Created by YB on 2021/10/11
@@ -31,7 +58,7 @@ class ClothingAddActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                // ClothingListScreen(viewModel())
+                ClothingAddScreen(viewModel())
             }
         }
     }
@@ -129,3 +156,47 @@ class ClothingAddActivity : ComponentActivity() {
         const val REQUEST_ADD_MEDIA = 806
     }
 }*/
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ClothingAddScreen(viewModel: ClothingAddVM) {
+
+
+    val context = LocalContext.current
+
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(
+                title = { Text("添加") },
+                actions = {
+                    TooltipBox(
+                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Left),
+                        tooltip = {
+                            PlainTooltip { Text("保存") }
+                        },
+                        state = rememberTooltipState()
+                    ) {
+                        IconButton(onClick = {
+
+                        }) {
+                            Icon(imageVector = Icons.Filled.Check, "保存")
+                        }
+                    }
+                }
+            )
+        }) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+        ) {
+
+        }
+    }
+}
+@Preview
+@Composable
+private fun ClothingAddScreenPreview() {
+    ClothingAddScreen(viewModel())
+}

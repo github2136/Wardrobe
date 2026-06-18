@@ -15,8 +15,15 @@ import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 /**
- * Created by YB on 2021/10/9
+ * Created by 44569 on 2026/6/16
+ * 列表状态
  */
+sealed interface ClothingListUiState{
+    val isLoading: Boolean
+
+
+}
+
 class ClothingListVM(app: Application) : AndroidViewModel(app) {
     private val clothingInfoRepository by lazy { ClothingRepository(app) }
     private val _season = MutableStateFlow(mutableListOf("春", "夏", "秋", "冬"))
