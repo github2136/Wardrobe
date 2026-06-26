@@ -7,6 +7,7 @@ import com.github2136.wardrobe.model.entity.Clothing
 import com.github2136.wardrobe.model.entity.ResultRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import okhttp3.Dispatcher
@@ -21,7 +22,7 @@ class ClothingRepository(context: Context) {
     /**
      * 服饰列表
      */
-    fun getClothingList(season: MutableList<String>, type: MutableList<String>, page: Int, count: Int): Flow<List<Clothing>?> = flow {
+    fun getClothingList(season: MutableList<String>, type: MutableList<String>, page: Int, count: Int): Flow<ResultRepo<List<Clothing>>> = flow {
         try {
             val sb = StringBuilder()
             sb.append("select * from clothing where (")
@@ -40,12 +41,14 @@ class ClothingRepository(context: Context) {
             }
             sb.append(")order by ciId desc limit ?,?")
             val query = SimpleSQLiteQuery(sb.toString(), arrayOf((page - 1) * count, count))
-            emit(clothingDao.queryClothingList(query))
+            emit(ResultRepo.Success(clothingDao.queryClothingList(query)))
         } catch (e: Exception) {
-            emit(null)
+            emit(ResultRepo.Error(1, "数据获取失败", e))
         }
 
-    }.flowOn(Dispatchers.IO)
+    }.flowOn(Dispatchers.IO).catch {e->
+        emit(ResultRepo.Error(1, "数据获取失败", e))
+    }
 
     //
     // : ResultRepo<MutableList<Clothing>> {
