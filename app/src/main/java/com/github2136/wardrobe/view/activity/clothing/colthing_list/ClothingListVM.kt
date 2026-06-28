@@ -18,12 +18,6 @@ import kotlin.random.Random
  * Created by 44569 on 2026/6/16
  * 列表状态
  */
-sealed interface ClothingListUiState{
-    val isLoading: Boolean
-
-
-}
-
 class ClothingListVM(app: Application) : AndroidViewModel(app) {
     private val clothingInfoRepository by lazy { ClothingRepository(app) }
     private val _season = MutableStateFlow(mutableListOf("春", "夏", "秋", "冬"))
@@ -35,8 +29,8 @@ class ClothingListVM(app: Application) : AndroidViewModel(app) {
     private val _items = MutableStateFlow<List<Clothing>>(emptyList()) //列表数据
     val items: StateFlow<List<Clothing>> = _items.asStateFlow()
 
-    private val _isLoading = MutableStateFlow(false) //正在加载更多
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+    private val _isLoadingMore = MutableStateFlow(false) //正在加载更多
+    val isLoadingMore: StateFlow<Boolean> = _isLoadingMore.asStateFlow()
 
     private val _isRefreshing = MutableStateFlow(false) //正在刷新数据
     val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
@@ -96,9 +90,9 @@ class ClothingListVM(app: Application) : AndroidViewModel(app) {
 
     fun loadMoreData() {
         viewModelScope.launch {
-            _isLoading.value = true
+            _isLoadingMore.value = true
             getData()
-            _isLoading.value = false
+            _isLoadingMore.value = false
         }
     }
 
