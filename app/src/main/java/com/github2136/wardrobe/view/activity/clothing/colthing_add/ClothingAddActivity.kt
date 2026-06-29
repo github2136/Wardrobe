@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Layout
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -11,18 +12,25 @@ import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalIconToggleButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
@@ -34,9 +42,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -58,7 +69,8 @@ class ClothingAddActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                ClothingAddScreen(viewModel())
+                val viewModel: ClothingAddVM = viewModel()
+                ClothingAddScreen()
             }
         }
     }
@@ -159,7 +171,7 @@ class ClothingAddActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ClothingAddScreen(viewModel: ClothingAddVM) {
+fun ClothingAddScreen() {
 
 
     val context = LocalContext.current
@@ -192,11 +204,21 @@ fun ClothingAddScreen(viewModel: ClothingAddVM) {
                 .fillMaxSize()
         ) {
 
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()) {
+                Text("类型")
+                TextButton(onClick = {},modifier=Modifier.fillMaxWidth()) {
+                    Text("请选择")
+                    Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "")
+                }
+            }
+
         }
     }
 }
 @Preview
 @Composable
 private fun ClothingAddScreenPreview() {
-    ClothingAddScreen(viewModel())
+    ClothingAddScreen()
 }

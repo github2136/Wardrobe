@@ -1,8 +1,11 @@
 package com.github2136.wardrobe.view.activity.clothing.colthing_list
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -111,7 +114,11 @@ fun ClothingListScreen(
         }
     }
     val context = LocalContext.current
+    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
 
+        }
+    }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -126,10 +133,9 @@ fun ClothingListScreen(
                         state = rememberTooltipState()
                     ) {
                         IconButton(onClick = {
-                            context.startActivity(Intent(context, ClothingAddActivity::class.java))
+                            launcher.launch(Intent(context, ClothingAddActivity::class.java))
                         }) {
                             Icon(imageVector = Icons.Filled.Add, "添加")
-
                         }
                     }
                     TooltipBox(
