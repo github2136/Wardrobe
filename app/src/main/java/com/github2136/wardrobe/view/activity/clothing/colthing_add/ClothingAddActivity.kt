@@ -9,17 +9,22 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Space
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowColumn
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Lock
@@ -27,8 +32,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconToggleButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MultiChoiceSegmentedButtonRow
+import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TooltipAnchorPosition
@@ -41,6 +50,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion
@@ -175,7 +185,8 @@ fun ClothingAddScreen() {
 
 
     val context = LocalContext.current
-
+    val seasons = listOf("春", "夏", "秋", "冬")
+    val seasonCheckedList = remember { mutableStateListOf<Int>() }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -204,16 +215,63 @@ fun ClothingAddScreen() {
                 .fillMaxSize()
         ) {
 
-            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth()) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+            ) {
                 Text("类型")
-                TextButton(onClick = {},modifier=Modifier.fillMaxWidth()) {
+                Spacer(modifier = Modifier.width(16.dp))
+                TextButton(onClick = {}, modifier = Modifier.fillMaxWidth()) {
                     Text("请选择")
                     Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "")
                 }
             }
+            Row(
+                verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+            ) {
+                Text("季节")
+                Spacer(modifier = Modifier.width(16.dp))
+                MultiChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+                    seasons.forEachIndexed { index, label ->
+                        SegmentedButton(
+                            shape = SegmentedButtonDefaults.itemShape(index = index, count = seasons.size),
+                            onCheckedChange = {
+                                if (index in seasonCheckedList) {
+                                    seasonCheckedList.remove(index)
+                                } else {
+                                    seasonCheckedList.add(index)
+                                }
+                            },
+                            checked = index in seasonCheckedList,
+                        ) {
+                            Text(label)
+                        }
+                    }
+                }
+            }
+            Column(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+            ) {
+                Text("图片")
+                FlowColumn {
+                    OutlinedIconButton(onClick = {}) {
+                        Icon(imageVector = Icons.Default.Add, "添加")
+                    }
+                }
+            }
+            Column(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+            ) {
+                Text("备注")
 
+            }
         }
     }
 }
