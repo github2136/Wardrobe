@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Space
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
@@ -24,7 +25,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Lock
@@ -182,9 +185,8 @@ class ClothingAddActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ClothingAddScreen() {
-
-
     val context = LocalContext.current
+    val activity = LocalActivity.current
     val seasons = listOf("春", "夏", "秋", "冬")
     val seasonCheckedList = remember { mutableStateListOf<Int>() }
     Scaffold(
@@ -192,6 +194,21 @@ fun ClothingAddScreen() {
         topBar = {
             TopAppBar(
                 title = { Text("添加") },
+                navigationIcon = {
+                    TooltipBox(
+                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Left),
+                        tooltip = {
+                            PlainTooltip { Text("返回") }
+                        },
+                        state = rememberTooltipState()
+                    ) {
+                        IconButton(onClick = {
+                            activity?.finish()
+                        }) {
+                            Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, "返回")
+                        }
+                    }
+                },
                 actions = {
                     TooltipBox(
                         positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Left),
@@ -238,6 +255,7 @@ fun ClothingAddScreen() {
                     seasons.forEachIndexed { index, label ->
                         SegmentedButton(
                             shape = SegmentedButtonDefaults.itemShape(index = index, count = seasons.size),
+                            icon = {},
                             onCheckedChange = {
                                 if (index in seasonCheckedList) {
                                     seasonCheckedList.remove(index)
