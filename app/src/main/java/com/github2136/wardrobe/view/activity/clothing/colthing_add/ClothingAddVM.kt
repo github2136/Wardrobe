@@ -1,17 +1,33 @@
 package com.github2136.wardrobe.view.activity.clothing.colthing_add
 
 import android.app.Application
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.github2136.wardrobe.base.AppBaseVM
 import com.github2136.wardrobe.repository.ClothingRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 /**
  * Created by YB on 2021/10/11
  */
-class ClothingAddVM(val app: Application)  : AndroidViewModel(app) {
+class ClothingAddVM(val app: Application) : AndroidViewModel(app) {
     private val clothingRepository by lazy { ClothingRepository(app) }
+    private val _seasonCheckedList = MutableStateFlow(mutableListOf<Int>())
+    val seasonCheckedList = _seasonCheckedList.asStateFlow()
+
+    fun addSeasonChecked(i: Int) {
+        _seasonCheckedList.value.add(i)
+    }
+
+    fun removeSeasonChecked(i: Int) {
+        _seasonCheckedList.value.remove(i)
+    }
+    // private val _type = MutableStateFlow(mutableListOf("外套", "上装", "下装", "内搭", "鞋", "套装", "其他"))
+    // val type = _type.asStateFlow()
     //
     // val clothingLD = MutableLiveData<Clothing>().apply { value = Clothing() }
     // val dateLD = MutableLiveData<String>()

@@ -1,20 +1,10 @@
 package com.github2136.wardrobe.view.activity.clothing.colthing_add
 
-import android.app.Activity
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.text.Layout
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Space
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowColumn
 import androidx.compose.foundation.layout.Row
@@ -23,17 +13,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalIconToggleButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MultiChoiceSegmentedButtonRow
@@ -45,35 +30,24 @@ import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.Observer
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.github2136.wardrobe.R
 import com.github2136.wardrobe.base.ui.theme.AppTheme
-import com.github2136.wardrobe.common.Other
-import com.github2136.wardrobe.view.dialog.MediaDialog
-import com.github2136.wardrobe.view.activity.clothing.colthing_add.ClothingAddVM
-import com.github2136.wardrobe.view.activity.clothing.colthing_list.ClothingListScreen
-import com.github2136.wardrobe.view.activity.clothing.colthing_list.ClothingListVM
 
 /**
  * Created by YB on 2021/10/11
@@ -86,7 +60,8 @@ class ClothingAddActivity : ComponentActivity() {
         setContent {
             AppTheme {
                 val viewModel: ClothingAddVM = viewModel()
-                ClothingAddScreen()
+                val seasonCheckedList by viewModel.seasonCheckedList.collectAsState()
+                ClothingAddScreen(seasonCheckedList)
             }
         }
     }
@@ -187,11 +162,11 @@ class ClothingAddActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ClothingAddScreen() {
+fun ClothingAddScreen(seasonCheckedList: MutableList<Int>) {
     val context = LocalContext.current
     val activity = LocalActivity.current
     val seasons = listOf("春", "夏", "秋", "冬")
-    val seasonCheckedList = remember { mutableStateListOf<Int>() }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -234,7 +209,6 @@ fun ClothingAddScreen() {
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-
             Row(
                 verticalAlignment = Alignment.CenterVertically, modifier = Modifier
                     .padding(8.dp)
@@ -242,7 +216,9 @@ fun ClothingAddScreen() {
             ) {
                 Text("类型")
                 Spacer(modifier = Modifier.width(16.dp))
-                TextButton(onClick = {}, modifier = Modifier.fillMaxWidth()) {
+                TextButton(onClick = {
+                    //选择类型
+                }, modifier = Modifier.fillMaxWidth()) {
                     Text("请选择")
                     Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "")
                 }
@@ -261,6 +237,7 @@ fun ClothingAddScreen() {
                             icon = {},
                             onCheckedChange = {
                                 if (index in seasonCheckedList) {
+                                    vm.
                                     seasonCheckedList.remove(index)
                                 } else {
                                     seasonCheckedList.add(index)
@@ -291,9 +268,7 @@ fun ClothingAddScreen() {
                     .fillMaxWidth()
             ) {
                 Text("备注")
-
-                TextField("aaa", onValueChange = {})
-                OutlinedTextField("aaaa", onValueChange = {})
+                OutlinedTextField("aaaa", modifier = Modifier.fillMaxWidth(), onValueChange = {})
             }
         }
     }
@@ -301,5 +276,5 @@ fun ClothingAddScreen() {
 @Preview
 @Composable
 private fun ClothingAddScreenPreview() {
-    ClothingAddScreen()
+    ClothingAddScreen(mutableListOf())
 }

@@ -46,6 +46,7 @@ androidRoom = "2.8.4"
 androidWork = "2.9.0"
 permissionx = "1.6.0"
 junit = "4.12"
+material3 = "1.4.0"
 [libraries]
 #Android View支持库
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidAppcompat" }
@@ -123,6 +124,7 @@ permissionx = { group = "com.guolindev.permissionx", name = "permissionx", versi
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
