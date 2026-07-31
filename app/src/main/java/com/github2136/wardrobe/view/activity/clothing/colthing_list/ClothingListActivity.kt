@@ -95,8 +95,6 @@ fun ClothingListScreen(
     hasMoreData: Boolean = false,
     loadMoreData: () -> Unit = {},
 ) {
-
-
     val listState = rememberLazyListState()
 
     // 监听滚动到底部，加载更多数据

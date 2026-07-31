@@ -18,7 +18,12 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MultiChoiceSegmentedButtonRow
@@ -30,6 +35,7 @@ import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
@@ -61,7 +67,16 @@ class ClothingAddActivity : ComponentActivity() {
             AppTheme {
                 val viewModel: ClothingAddVM = viewModel()
                 val seasonCheckedList by viewModel.seasonCheckedList.collectAsState()
-                ClothingAddScreen(seasonCheckedList)
+                val remake by viewModel.remake.collectAsState()
+                val expanded by viewModel.expanded.collectAsState()
+                val optionText by viewModel.optionText.collectAsState()
+                ClothingAddScreen(
+                    seasonCheckedList, remake, expanded, optionText,
+                    onCheckedChange = viewModel::onCheckedChange,
+                    onValueChange = viewModel::updateRemark,
+                    onExpandedChange = viewModel::onExpandedChange,
+                    onOptionSelected = viewModel::onOptionSelected,
+                )
             }
         }
     }
@@ -162,10 +177,17 @@ class ClothingAddActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ClothingAddScreen(seasonCheckedList: MutableList<Int>) {
+fun ClothingAddScreen(
+    seasonCheckedList: List<Int> = listOf(), remake: String = "", expanded: Boolean = false, optionText: String = "请选择",
+    onCheckedChange: (index: Int) -> Unit = {},
+    onValueChange: (String) -> Unit = {},
+    onExpandedChange: (Boolean) -> Unit = {},
+    onOptionSelected: (String) -> Unit = {},
+) {
     val context = LocalContext.current
     val activity = LocalActivity.current
     val seasons = listOf("春", "夏", "秋", "冬")
+    val types = listOf("外套", "上装", "下装", "内搭", "鞋", "套装", "其他")
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -216,11 +238,26 @@ fun ClothingAddScreen(seasonCheckedList: MutableList<Int>) {
             ) {
                 Text("类型")
                 Spacer(modifier = Modifier.width(16.dp))
-                TextButton(onClick = {
-                    //选择类型
-                }, modifier = Modifier.fillMaxWidth()) {
-                    Text("请选择")
-                    Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "")
+                ExposedDropdownMenuBox(
+                    expanded = expanded, onExpandedChange = onExpandedChange,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Button(onClick = { onExpandedChange.invoke(true) }, modifier = Modifier.exposedDropdownSize()) { Text(optionText) }
+                    ExposedDropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { onExpandedChange.invoke(false) },
+                        modifier = Modifier.exposedDropdownSize()
+                    ) {
+                        types.forEach { selectionOption ->
+                            DropdownMenuItem(
+                                text = { Text(text = selectionOption, modifier = Modifier.fillMaxWidth()) },
+                                onClick = {
+                                    onOptionSelected.invoke(selectionOption)
+                                    onExpandedChange.invoke(false)
+                                }
+                            )
+                        }
+                    }
                 }
             }
             Row(
@@ -236,12 +273,7 @@ fun ClothingAddScreen(seasonCheckedList: MutableList<Int>) {
                             shape = SegmentedButtonDefaults.itemShape(index = index, count = seasons.size),
                             icon = {},
                             onCheckedChange = {
-                                if (index in seasonCheckedList) {
-                                    vm.
-                                    seasonCheckedList.remove(index)
-                                } else {
-                                    seasonCheckedList.add(index)
-                                }
+                                onCheckedChange.invoke(index)
                             },
                             checked = index in seasonCheckedList,
                         ) {
@@ -268,7 +300,7 @@ fun ClothingAddScreen(seasonCheckedList: MutableList<Int>) {
                     .fillMaxWidth()
             ) {
                 Text("备注")
-                OutlinedTextField("aaaa", modifier = Modifier.fillMaxWidth(), onValueChange = {})
+                OutlinedTextField(remake, modifier = Modifier.fillMaxWidth(), onValueChange = onValueChange)
             }
         }
     }
@@ -276,5 +308,5 @@ fun ClothingAddScreen(seasonCheckedList: MutableList<Int>) {
 @Preview
 @Composable
 private fun ClothingAddScreenPreview() {
-    ClothingAddScreen(mutableListOf())
+    ClothingAddScreen()
 }

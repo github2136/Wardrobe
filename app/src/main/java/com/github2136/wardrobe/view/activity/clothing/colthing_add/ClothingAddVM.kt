@@ -1,30 +1,53 @@
 package com.github2136.wardrobe.view.activity.clothing.colthing_add
 
 import android.app.Application
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
-import com.github2136.wardrobe.base.AppBaseVM
 import com.github2136.wardrobe.repository.ClothingRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 
 /**
  * Created by YB on 2021/10/11
  */
 class ClothingAddVM(val app: Application) : AndroidViewModel(app) {
     private val clothingRepository by lazy { ClothingRepository(app) }
-    private val _seasonCheckedList = MutableStateFlow(mutableListOf<Int>())
-    val seasonCheckedList = _seasonCheckedList.asStateFlow()
 
-    fun addSeasonChecked(i: Int) {
-        _seasonCheckedList.value.add(i)
+    //List不要使用可变的使用add或remove方法时不会处罚重绘，需要使用.value= 赋值处罚重绘
+    private val _seasonCheckedList = MutableStateFlow(listOf<Int>())
+    val seasonCheckedList = _seasonCheckedList.asStateFlow()
+    //在viewmodel中添加一个可变对象用来添加
+    private var seasonCheckedTempList = mutableListOf<Int>()
+    private val _remake = MutableStateFlow("")
+    val remake = _remake.asStateFlow()
+    private val _expanded = MutableStateFlow(false)
+    val expanded = _expanded.asStateFlow()
+    private val _optionText = MutableStateFlow("请选择")
+    val optionText = _optionText.asStateFlow()
+
+    init {
+        _seasonCheckedList.value = seasonCheckedTempList.toList()
     }
 
-    fun removeSeasonChecked(i: Int) {
-        _seasonCheckedList.value.remove(i)
+    fun onCheckedChange(index: Int) {
+        if (index in seasonCheckedTempList) {
+            seasonCheckedTempList.remove(index)
+            _seasonCheckedList.value = seasonCheckedTempList.toList()
+        } else {
+            seasonCheckedTempList.add(index)
+            _seasonCheckedList.value = seasonCheckedTempList.toList()
+        }
+    }
+
+    fun updateRemark(str: String) {
+        _remake.value = str
+    }
+
+    fun onExpandedChange(expanded: Boolean) {
+        _expanded.value = expanded
+    }
+
+    fun onOptionSelected(optionText: String) {
+        _optionText.value = optionText
     }
     // private val _type = MutableStateFlow(mutableListOf("外套", "上装", "下装", "内搭", "鞋", "套装", "其他"))
     // val type = _type.asStateFlow()
