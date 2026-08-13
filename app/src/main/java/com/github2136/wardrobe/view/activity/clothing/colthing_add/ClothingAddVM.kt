@@ -1,18 +1,23 @@
 package com.github2136.wardrobe.view.activity.clothing.colthing_add
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.github2136.wardrobe.repository.ClothingRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 /**
  * Created by YB on 2021/10/11
  */
 class ClothingAddVM(val app: Application) : AndroidViewModel(app) {
     private val clothingRepository by lazy { ClothingRepository(app) }
+    val seasons = listOf("春", "夏", "秋", "冬")
+    val types = listOf("外套", "上装", "下装", "内搭", "鞋", "套装", "其他")
 
-    //List不要使用可变的使用add或remove方法时不会处罚重绘，需要使用.value= 赋值处罚重绘
+    //List不要使用可变的使用add或remove方法时不会触发重绘，需要使用.value = 赋值触发重绘
     private val _seasonCheckedList = MutableStateFlow(listOf<Int>())
     val seasonCheckedList = _seasonCheckedList.asStateFlow()
     //在viewmodel中添加一个可变对象用来添加
@@ -49,6 +54,7 @@ class ClothingAddVM(val app: Application) : AndroidViewModel(app) {
     fun onOptionSelected(optionText: String) {
         _optionText.value = optionText
     }
+
     // private val _type = MutableStateFlow(mutableListOf("外套", "上装", "下装", "内搭", "鞋", "套装", "其他"))
     // val type = _type.asStateFlow()
     //
@@ -63,7 +69,10 @@ class ClothingAddVM(val app: Application) : AndroidViewModel(app) {
     // }
     //
     fun save() {
-        // viewModelScope.launch {
+        viewModelScope.launch {
+            Log.e("save",_seasonCheckedList.value.joinToString { it.toString() })
+            Log.e("save",_optionText.value)
+            _seasonCheckedList.value
         //     dialogLD.value = DialogData(loadingStr)
         //     val parent = FileUtil.getExternalStorageProjectPath(app) + "/.media"
         //     val f = mutableListOf<String>()
@@ -80,6 +89,6 @@ class ClothingAddVM(val app: Application) : AndroidViewModel(app) {
         //     toastLD.value = "添加成功"
         //     addLD.value = ""
         //     dialogLD.value = null
-        // }
+        }
     }
 }
