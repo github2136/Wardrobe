@@ -7,8 +7,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowColumn
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -42,6 +44,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -203,21 +206,21 @@ fun ClothingAddScreen(
                         }
                     }
                 },
-                actions = {
-                    TooltipBox(
-                        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Left),
-                        tooltip = {
-                            PlainTooltip { Text("保存") }
-                        },
-                        state = rememberTooltipState()
-                    ) {
-                        IconButton(onClick = {
-                            save.invoke()
-                        }) {
-                            Icon(imageVector = Icons.Filled.Check, "保存")
-                        }
-                    }
-                }
+                // actions = {
+                //     TooltipBox(
+                //         positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Left),
+                //         tooltip = {
+                //             PlainTooltip { Text("保存") }
+                //         },
+                //         state = rememberTooltipState()
+                //     ) {
+                //         IconButton(onClick = {
+                //             save.invoke()
+                //         }) {
+                //             Icon(imageVector = Icons.Filled.Check, "保存")
+                //         }
+                //     }
+                // }
             )
         }) { innerPadding ->
         Column(
@@ -225,11 +228,88 @@ fun ClothingAddScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
+
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                Text("服饰图片", fontWeight = FontWeight.Bold)
+
+                FlowRow(maxItemsInEachRow = 4) {
+                    OutlinedIconButton(
+                        onClick = {}, modifier = Modifier
+                            .fillMaxWidth(0.25f)
+                            .aspectRatio(1f)
+                            .padding(6.dp)
+                    ) {
+                        Icon(imageVector = Icons.Default.Add, "添加")
+                    }
+                    OutlinedIconButton(
+                        onClick = {}, modifier = Modifier
+                            .fillMaxWidth(0.25f)
+                            .aspectRatio(1f)
+                            .padding(6.dp)
+                    ) {
+                        Icon(imageVector = Icons.Default.Add, "添加")
+                    }
+                    OutlinedIconButton(
+                        onClick = {}, modifier = Modifier
+                            .fillMaxWidth(0.25f)
+                            .aspectRatio(1f)
+                            .padding(6.dp)
+                    ) {
+                        Icon(imageVector = Icons.Default.Add, "添加")
+                    }
+                    OutlinedIconButton(
+                        onClick = {}, modifier = Modifier
+                            .fillMaxWidth(0.25f)
+                            .aspectRatio(1f)
+                            .padding(6.dp)
+                    ) {
+                        Icon(imageVector = Icons.Default.Add, "添加")
+                    }
+                    OutlinedIconButton(
+                        onClick = {}, modifier = Modifier
+                            .fillMaxWidth(0.25f)
+                            .aspectRatio(1f)
+                            .padding(6.dp)
+                    ) {
+                        Icon(imageVector = Icons.Default.Add, "添加")
+                    }
+                    OutlinedIconButton(
+                        onClick = {}, modifier = Modifier
+                            .fillMaxWidth(0.25f)
+                            .aspectRatio(1f)
+                            .padding(6.dp)
+                    ) {
+                        Icon(imageVector = Icons.Default.Add, "添加")
+                    }
+                    OutlinedIconButton(
+                        onClick = {}, modifier = Modifier
+                            .fillMaxWidth(0.25f)
+                            .aspectRatio(1f)
+                            .padding(6.dp)
+                    ) {
+                        Icon(imageVector = Icons.Default.Add, "添加")
+                    }
+                    OutlinedIconButton(
+                        onClick = {}, modifier = Modifier
+                            .fillMaxWidth(0.25f)
+                            .aspectRatio(1f)
+                            .padding(6.dp)
+                    ) {
+                        Icon(imageVector = Icons.Default.Add, "添加")
+                    }
+
+                }
+            }
             Row(
                 verticalAlignment = Alignment.CenterVertically, modifier = Modifier
                     .padding(8.dp)
                     .fillMaxWidth()
             ) {
+
                 Text("类型")
                 Spacer(modifier = Modifier.width(16.dp))
                 ExposedDropdownMenuBox(
@@ -276,18 +356,7 @@ fun ClothingAddScreen(
                     }
                 }
             }
-            Column(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth()
-            ) {
-                Text("图片")
-                FlowColumn {
-                    OutlinedIconButton(onClick = {}) {
-                        Icon(imageVector = Icons.Default.Add, "添加")
-                    }
-                }
-            }
+
             Column(
                 modifier = Modifier
                     .padding(8.dp)
