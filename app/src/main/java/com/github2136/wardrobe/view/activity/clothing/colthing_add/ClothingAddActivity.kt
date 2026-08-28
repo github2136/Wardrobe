@@ -6,19 +6,20 @@ import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowColumn
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -222,148 +223,141 @@ fun ClothingAddScreen(
                 //     }
                 // }
             )
-        }) { innerPadding ->
+        },
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-
             Column(
                 modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    .weight(1f)
+                    .fillMaxSize()
             ) {
-                Text("服饰图片", fontWeight = FontWeight.Bold)
-
-                FlowRow(maxItemsInEachRow = 4) {
-                    OutlinedIconButton(
-                        onClick = {}, modifier = Modifier
-                            .fillMaxWidth(0.25f)
-                            .aspectRatio(1f)
-                            .padding(6.dp)
-                    ) {
-                        Icon(imageVector = Icons.Default.Add, "添加")
-                    }
-                    OutlinedIconButton(
-                        onClick = {}, modifier = Modifier
-                            .fillMaxWidth(0.25f)
-                            .aspectRatio(1f)
-                            .padding(6.dp)
-                    ) {
-                        Icon(imageVector = Icons.Default.Add, "添加")
-                    }
-                    OutlinedIconButton(
-                        onClick = {}, modifier = Modifier
-                            .fillMaxWidth(0.25f)
-                            .aspectRatio(1f)
-                            .padding(6.dp)
-                    ) {
-                        Icon(imageVector = Icons.Default.Add, "添加")
-                    }
-                    OutlinedIconButton(
-                        onClick = {}, modifier = Modifier
-                            .fillMaxWidth(0.25f)
-                            .aspectRatio(1f)
-                            .padding(6.dp)
-                    ) {
-                        Icon(imageVector = Icons.Default.Add, "添加")
-                    }
-                    OutlinedIconButton(
-                        onClick = {}, modifier = Modifier
-                            .fillMaxWidth(0.25f)
-                            .aspectRatio(1f)
-                            .padding(6.dp)
-                    ) {
-                        Icon(imageVector = Icons.Default.Add, "添加")
-                    }
-                    OutlinedIconButton(
-                        onClick = {}, modifier = Modifier
-                            .fillMaxWidth(0.25f)
-                            .aspectRatio(1f)
-                            .padding(6.dp)
-                    ) {
-                        Icon(imageVector = Icons.Default.Add, "添加")
-                    }
-                    OutlinedIconButton(
-                        onClick = {}, modifier = Modifier
-                            .fillMaxWidth(0.25f)
-                            .aspectRatio(1f)
-                            .padding(6.dp)
-                    ) {
-                        Icon(imageVector = Icons.Default.Add, "添加")
-                    }
-                    OutlinedIconButton(
-                        onClick = {}, modifier = Modifier
-                            .fillMaxWidth(0.25f)
-                            .aspectRatio(1f)
-                            .padding(6.dp)
-                    ) {
-                        Icon(imageVector = Icons.Default.Add, "添加")
-                    }
-
-                }
-            }
-            Row(
-                verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth()
-            ) {
-
-                Text("类型")
-                Spacer(modifier = Modifier.width(16.dp))
-                ExposedDropdownMenuBox(
-                    expanded = expanded, onExpandedChange = onExpandedChange,
-                    modifier = Modifier.fillMaxWidth()
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
                 ) {
-                    Button(onClick = { onExpandedChange.invoke(true) }, modifier = Modifier.exposedDropdownSize()) { Text(optionText) }
-                    ExposedDropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { onExpandedChange.invoke(false) },
-                        modifier = Modifier.exposedDropdownSize()
-                    ) {
-                        types.forEach { selectionOption ->
-                            DropdownMenuItem(
-                                text = { Text(text = selectionOption, modifier = Modifier.fillMaxWidth()) },
-                                onClick = {
-                                    onOptionSelected.invoke(selectionOption)
-                                    onExpandedChange.invoke(false)
-                                }
-                            )
-                        }
-                    }
-                }
-            }
-            Row(
-                verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth()
-            ) {
-                Text("季节")
-                Spacer(modifier = Modifier.width(16.dp))
-                MultiChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
-                    seasons.forEachIndexed { index, label ->
-                        SegmentedButton(
-                            shape = SegmentedButtonDefaults.itemShape(index = index, count = seasons.size),
-                            icon = {},
-                            onCheckedChange = {
-                                onCheckedChange.invoke(index)
-                            },
-                            checked = index in seasonCheckedList,
+                    Text("服饰图片", fontWeight = FontWeight.Bold)
+                    FlowRow(modifier = Modifier.padding(top = 8.dp), maxItemsInEachRow = 4) {
+                        OutlinedIconButton(
+                            onClick = {}, modifier = Modifier
+                                .fillMaxWidth(0.25f)
+                                .aspectRatio(1f)
+                                .padding(6.dp)
                         ) {
-                            Text(label)
+                            Icon(imageVector = Icons.Default.Add, "添加")
+                        }
+
+
+                    }
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text("类型")
+                    Spacer(modifier = Modifier.width(16.dp))
+                    ExposedDropdownMenuBox(
+                        expanded = expanded, onExpandedChange = onExpandedChange,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Button(onClick = { onExpandedChange.invoke(true) }, modifier = Modifier.exposedDropdownSize()) { Text(optionText) }
+                        ExposedDropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { onExpandedChange.invoke(false) },
+                            modifier = Modifier.exposedDropdownSize()
+                        ) {
+                            types.forEach { selectionOption ->
+                                DropdownMenuItem(
+                                    text = { Text(text = selectionOption, modifier = Modifier.fillMaxWidth()) },
+                                    onClick = {
+                                        onOptionSelected.invoke(selectionOption)
+                                        onExpandedChange.invoke(false)
+                                    }
+                                )
+                            }
                         }
                     }
                 }
-            }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text("季节")
+                    Spacer(modifier = Modifier.width(16.dp))
+                    MultiChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+                        seasons.forEachIndexed { index, label ->
+                            SegmentedButton(
+                                shape = SegmentedButtonDefaults.itemShape(index = index, count = seasons.size),
+                                icon = {},
+                                onCheckedChange = {
+                                    onCheckedChange.invoke(index)
+                                },
+                                checked = index in seasonCheckedList,
+                            ) {
+                                Text(label)
+                            }
+                        }
+                    }
+                }
 
-            Column(
+                Column(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text("备注")
+                    OutlinedTextField(
+                        remake, modifier = Modifier
+                            .padding(top = 4.dp)
+                            .fillMaxWidth(), onValueChange = onValueChange
+                    )
+                    OutlinedTextField(
+                        remake, modifier = Modifier
+                            .padding(top = 4.dp)
+                            .fillMaxWidth(), onValueChange = onValueChange
+                    )
+                    OutlinedTextField(
+                        remake, modifier = Modifier
+                            .padding(top = 4.dp)
+                            .fillMaxWidth(), onValueChange = onValueChange
+                    )
+                    OutlinedTextField(
+                        remake, modifier = Modifier
+                            .padding(top = 4.dp)
+                            .fillMaxWidth(), onValueChange = onValueChange
+                    )
+                    OutlinedTextField(
+                        remake, modifier = Modifier
+                            .padding(top = 4.dp)
+                            .fillMaxWidth(), onValueChange = onValueChange
+                    )
+                    OutlinedTextField(
+                        remake, modifier = Modifier
+                            .padding(top = 4.dp)
+                            .fillMaxWidth(), onValueChange = onValueChange
+                    )
+                    OutlinedTextField(
+                        remake, modifier = Modifier
+                            .padding(top = 4.dp)
+                            .fillMaxWidth(), onValueChange = onValueChange
+                    )
+                }
+            }
+            Button(
+                onClick = { /* ... */ },
                 modifier = Modifier
-                    .padding(8.dp)
                     .fillMaxWidth()
+                    .imePadding()
+                    .padding(16.dp)
             ) {
-                Text("备注")
-                OutlinedTextField(remake, modifier = Modifier.fillMaxWidth(), onValueChange = onValueChange)
+                Text("固定按钮")
             }
         }
     }
