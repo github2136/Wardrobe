@@ -16,6 +16,10 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.input.InputTransformation
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.maxLength
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -40,8 +44,10 @@ import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -50,6 +56,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github2136.wardrobe.base.ui.theme.AppTheme
+import kotlinx.coroutines.flow.collectLatest
 
 /**
  * Created by YB on 2021/10/11
@@ -314,48 +321,47 @@ fun ClothingAddScreen(
                 ) {
                     Text("备注")
                     OutlinedTextField(
-                        remake, modifier = Modifier
+                        remake,
+                        onValueChange = {
+                            if (it.length <= 10) {
+                                onValueChange.invoke(it)
+                            }
+                        },
+                        minLines = 5,
+                        maxLines = 5,
+                        modifier = Modifier
                             .padding(top = 4.dp)
-                            .fillMaxWidth(), onValueChange = onValueChange
+                            .fillMaxWidth(),
                     )
-                    OutlinedTextField(
-                        remake, modifier = Modifier
-                            .padding(top = 4.dp)
-                            .fillMaxWidth(), onValueChange = onValueChange
-                    )
-                    OutlinedTextField(
-                        remake, modifier = Modifier
-                            .padding(top = 4.dp)
-                            .fillMaxWidth(), onValueChange = onValueChange
-                    )
-                    OutlinedTextField(
-                        remake, modifier = Modifier
-                            .padding(top = 4.dp)
-                            .fillMaxWidth(), onValueChange = onValueChange
-                    )
-                    OutlinedTextField(
-                        remake, modifier = Modifier
-                            .padding(top = 4.dp)
-                            .fillMaxWidth(), onValueChange = onValueChange
-                    )
-                    OutlinedTextField(
-                        remake, modifier = Modifier
-                            .padding(top = 4.dp)
-                            .fillMaxWidth(), onValueChange = onValueChange
-                    )
-                    OutlinedTextField(
-                        remake, modifier = Modifier
-                            .padding(top = 4.dp)
-                            .fillMaxWidth(), onValueChange = onValueChange
-                    )
+
+
+                    // val rr = rememberTextFieldState(remake)
+                    // OutlinedTextField(
+                    //     rr,
+                    //     inputTransformation = InputTransformation.maxLength(10),
+                    //     lineLimits = TextFieldLineLimits.MultiLine(minHeightInLines = 3, maxHeightInLines = 3),
+                    //     modifier = Modifier
+                    //         .padding(top = 4.dp)
+                    //         .fillMaxWidth(),
+                    // )
+                    // LaunchedEffect(rr) {
+                    //     snapshotFlow { rr.text.toString() }
+                    //         .collectLatest { newText ->
+                    //             if (newText != remake) {
+                    //                 onValueChange.invoke(newText)
+                    //             }
+                    //         }
+                    // }
                 }
             }
             Button(
-                onClick = { /* ... */ },
+                onClick = {
+                    save.invoke()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .imePadding()
-                    .padding(16.dp)
+                    .padding(8.dp)
             ) {
                 Text("固定按钮")
             }

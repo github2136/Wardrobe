@@ -72,6 +72,7 @@ class ClothingAddVM(val app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             Log.e("save",_seasonCheckedList.value.joinToString { it.toString() })
             Log.e("save",_optionText.value)
+            Log.e("save",_remake.value)
             _seasonCheckedList.value
         //     dialogLD.value = DialogData(loadingStr)
         //     val parent = FileUtil.getExternalStorageProjectPath(app) + "/.media"
