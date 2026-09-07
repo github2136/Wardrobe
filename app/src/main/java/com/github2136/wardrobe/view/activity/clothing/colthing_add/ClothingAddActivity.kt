@@ -16,10 +16,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.input.InputTransformation
-import androidx.compose.foundation.text.input.TextFieldLineLimits
-import androidx.compose.foundation.text.input.maxLength
-import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -44,19 +40,20 @@ import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github2136.wardrobe.base.ui.theme.AppTheme
-import kotlinx.coroutines.flow.collectLatest
 
 /**
  * Created by YB on 2021/10/11
@@ -320,11 +317,13 @@ fun ClothingAddScreen(
                         .fillMaxWidth()
                 ) {
                     Text("备注")
+                    var textFieldValue by remember { mutableStateOf(TextFieldValue(remake)) }
                     OutlinedTextField(
-                        remake,
-                        onValueChange = {
-                            if (it.length <= 10) {
-                                onValueChange.invoke(it)
+                        value = textFieldValue,
+                        onValueChange = { newValue ->
+                            if (newValue.text.length <= 10) {
+                                textFieldValue = newValue
+                                onValueChange.invoke(newValue.text)
                             }
                         },
                         minLines = 5,
@@ -332,9 +331,8 @@ fun ClothingAddScreen(
                         modifier = Modifier
                             .padding(top = 4.dp)
                             .fillMaxWidth(),
-                    )
 
-
+                        )
                     // val rr = rememberTextFieldState(remake)
                     // OutlinedTextField(
                     //     rr,
