@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -34,26 +36,37 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.substring
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github2136.wardrobe.base.ui.theme.AppTheme
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 /**
  * Created by YB on 2021/10/11
@@ -333,23 +346,6 @@ fun ClothingAddScreen(
                             .fillMaxWidth(),
 
                         )
-                    // val rr = rememberTextFieldState(remake)
-                    // OutlinedTextField(
-                    //     rr,
-                    //     inputTransformation = InputTransformation.maxLength(10),
-                    //     lineLimits = TextFieldLineLimits.MultiLine(minHeightInLines = 3, maxHeightInLines = 3),
-                    //     modifier = Modifier
-                    //         .padding(top = 4.dp)
-                    //         .fillMaxWidth(),
-                    // )
-                    // LaunchedEffect(rr) {
-                    //     snapshotFlow { rr.text.toString() }
-                    //         .collectLatest { newText ->
-                    //             if (newText != remake) {
-                    //                 onValueChange.invoke(newText)
-                    //             }
-                    //         }
-                    // }
                 }
             }
             Button(
@@ -361,7 +357,7 @@ fun ClothingAddScreen(
                     .imePadding()
                     .padding(8.dp)
             ) {
-                Text("固定按钮")
+                Text("保存")
             }
         }
     }
