@@ -1,6 +1,7 @@
 package com.github2136.wardrobe.view.activity.clothing.colthing_add
 
 import android.app.Application
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -28,7 +29,8 @@ class ClothingAddVM(val app: Application) : AndroidViewModel(app) {
     val expanded = _expanded.asStateFlow()
     private val _optionText = MutableStateFlow("请选择")
     val optionText = _optionText.asStateFlow()
-
+    private val _photoList = MutableStateFlow(listOf<Uri>())
+    val photoList = _photoList.asStateFlow()
     init {
         _seasonCheckedList.value = seasonCheckedTempList.toList()
     }

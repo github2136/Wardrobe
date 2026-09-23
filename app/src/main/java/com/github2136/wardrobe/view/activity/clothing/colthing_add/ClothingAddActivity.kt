@@ -1,10 +1,15 @@
 package com.github2136.wardrobe.view.activity.clothing.colthing_add
 
+import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
@@ -258,10 +263,23 @@ fun ClothingAddScreen(
                         .padding(16.dp)
                         .fillMaxWidth()
                 ) {
+                    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) { result ->
+                        Log.e("ssss", result.toString())
+                        // 3. 在回调中处理返回的结果
+                        // if (result.resultCode == Activity.RESULT_OK) {
+                        //     result.data?.getStringExtra("result_key")?.let {
+                        //         // resultText = it
+                        //     }
+                        // } else {
+                        //     // resultText = "操作取消或失败"
+                        // }
+                    }
                     Text("服饰图片", fontWeight = FontWeight.Bold)
                     FlowRow(modifier = Modifier.padding(top = 8.dp), maxItemsInEachRow = 4) {
                         OutlinedIconButton(
-                            onClick = {}, modifier = Modifier
+                            onClick = {
+                                launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                            }, modifier = Modifier
                                 .fillMaxWidth(0.25f)
                                 .aspectRatio(1f)
                                 .padding(6.dp)
